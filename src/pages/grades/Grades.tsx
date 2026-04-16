@@ -1,4 +1,3 @@
-import TopNav from '@/components/TopNav';
 import { BottomNav } from '../../components/BottomNav';
 import GradoSection from './components/GradeSection';
 import GradesHeader from './components/GradesHeader';

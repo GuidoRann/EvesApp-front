@@ -1,4 +1,3 @@
-import TopNav from '@/components/TopNav';
 
 
 interface ProfileHeaderProps {
@@ -20,7 +19,6 @@ export function ProfileHeader( { imageUrl }: ProfileHeaderProps ) {
           <div className="absolute top-14 left-[10%] h-1 w-1 rounded-full bg-purple-300" />
           <div className="absolute top-4 right-[40%] h-0.5 w-0.5 rounded-full bg-purple-200" />
         </div>
-        <TopNav />
       </div>
 
       {/* Profile picture */}

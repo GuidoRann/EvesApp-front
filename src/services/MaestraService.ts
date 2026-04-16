@@ -3,7 +3,7 @@ import axios from "axios";
 export default class MaestraService {
   static BASE_URL = "http://localhost:3000/api/maestra";
 
-  static async obtenerOCrearMaestra( token: string ) {
+  static async obtenerOCrearMaestra( token: string | null ) {
     try {
       const response = await axios.get( 
         `${ this.BASE_URL }/google`, 
@@ -20,7 +20,7 @@ export default class MaestraService {
     }
   }
 
-  static async obtenerMaestra( token: string, maestraId: string ){
+  static async obtenerMaestra( token:  string | null, maestraId: string ){
     try {
       const response = await axios.get( 
         `${ this.BASE_URL }/${ maestraId }`,
@@ -37,7 +37,7 @@ export default class MaestraService {
     }
   }
 
-  static async obtenerPerfil( token: string ){
+  static async obtenerPerfil( token:  string | null ){
     try {
       const response = await axios.get( 
         `${ this.BASE_URL }/maestra/me`,

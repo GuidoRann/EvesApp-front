@@ -37,6 +37,9 @@ export const useMaestraStore = create<MaestraStore>()(
       // Setters
       setMaestra: ( maestra: Maestra ) => set( { maestra } ),
       
+      // Clear
+      clearMaestra: () => set( { maestra: null } ),
+      
       // Add
       addNewMaestra: ( maestra: Maestra ) => 
         set(( state ) => ({ 
@@ -48,9 +51,6 @@ export const useMaestraStore = create<MaestraStore>()(
         set(( state ) => ({ 
           listaDeMaestras: state.listaDeMaestras.filter( maestra => maestra.maestraId !== maestraId )
          })),
-
-      // Clear
-      clearMaestra: () => set( { maestra: null } ),
     }),
     { name: "maestraStore" }
   )
