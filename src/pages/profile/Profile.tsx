@@ -4,27 +4,24 @@ import { EditProfileModal } from './components/EditProfileModal';
 import { ProfileDetails } from './components/ProfileDetails';
 import { ProfileHeader } from './components/ProfileHeader';
 import { ProfileInfo } from './components/ProfileInfo';
-import type { TeacherData } from './types/ProfileTypes';
+import { useMaestraStore } from '@/stores/Maestra.store';
 
 export default function Perfil() {
   const [isEditOpen, setIsEditOpen] = useState( false )
-  const [teacher, setTeacher] = useState<TeacherData>({
-    name: 'Evelyn',
-    lastname: 'Motkoski',
-    email: 'eve.mot@escuela.com',
-  })
 
-  function handleSave( data: TeacherData ) {
-    setTeacher( data ) 
-  }
+  const maestra = useMaestraStore( ( state ) => state.maestra! );
+
+  console.log("Esta es la data que llega de maestra en Perfil" ,maestra );
+  console.log("ESTE ES EL AVATAR URL: ", maestra?.avatar_url);
+
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto relative">
       <main className="pb-24">
-        <ProfileHeader imageUrl="/public/photo.jpg"/>
+        <ProfileHeader imageUrl={ maestra?.avatar_url ?? "" } />
         <ProfileInfo
-          nombre={ teacher.name }
-          apellido={ teacher.lastname }
+          nombre={ maestra?.nombre ?? "nombre" }
+          apellido={ maestra?.apellido ?? "apellido" }
           onEditClick={() => setIsEditOpen(true)}
         />
         <ProfileDetails />
@@ -33,8 +30,8 @@ export default function Perfil() {
       <EditProfileModal
         isOpen={ isEditOpen }
         onClose={ () => setIsEditOpen( false ) }
-        data={ teacher }
-        onSave={ handleSave }
+        data={ maestra }
+        onSave={ ( data ) => console.log( data ) } // TODO: Aca poner el update de datos de maestra
       />
     </div>
   )

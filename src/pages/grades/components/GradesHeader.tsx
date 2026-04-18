@@ -1,4 +1,3 @@
-import TopNav from '@/components/TopNav';
 
 export default function GradesHeader() {
   return (
@@ -13,7 +12,6 @@ export default function GradesHeader() {
         <div className='absolute top-14 left-[10%] h-1 w-1 rounded-full bg-purple-300' />
         <div className='absolute top-4 right-[40%] h-0.5 w-0.5 rounded-full bg-purple-200' />
       </div>
-      <TopNav />
       <h1 className="text-4xl font-bold text-center pt-8 pb-4">Mis Grados</h1>
     </div>
   );

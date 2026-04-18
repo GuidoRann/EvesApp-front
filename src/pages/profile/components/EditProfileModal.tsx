@@ -7,11 +7,12 @@ import {
   DrawerDescription,
   DrawerFooter,
 } from '@/components/ui/drawer'
-import type { EditProfileModalProps, TeacherData } from '../types/ProfileTypes';
+import type { EditProfileModalProps } from '../types/ProfileTypes';
+import type { MaestraType } from '@/types/MaestraTypes';
 
 
 export function EditProfileModal({ isOpen, onClose, data, onSave }: EditProfileModalProps) {
-  const [ form, setForm ] = useState<TeacherData>( data )
+  const [ form, setForm ] = useState<MaestraType>( data )
 
   useEffect(() => {
     if ( isOpen ) {
@@ -21,7 +22,7 @@ export function EditProfileModal({ isOpen, onClose, data, onSave }: EditProfileM
 
   if ( !isOpen ) return null
 
-  function handleChange( field: keyof TeacherData, value: string ) {
+  function handleChange( field: keyof MaestraType, value: string ) {
     setForm( prev => ({ ...prev, [ field ]: value }) )
   }
 
@@ -49,8 +50,8 @@ export function EditProfileModal({ isOpen, onClose, data, onSave }: EditProfileM
             <input
               id="nombre"
               type="text"
-              value={ form.name }
-              onChange={ e => handleChange( 'name', e.target.value ) }
+              value={ form.nombre }
+              onChange={ e => handleChange( 'nombre', e.target.value ) }
               className="w-full rounded-xl bg-[#110a24] border border-[#2a1f4e] px-4 py-3 text-white placeholder-[#5a4f78] outline-none focus:border-[#7c3aed] transition-colors"
               placeholder="Tu nombre"
             />
@@ -63,8 +64,8 @@ export function EditProfileModal({ isOpen, onClose, data, onSave }: EditProfileM
             <input
               id="apellido"
               type="text"
-              value={ form.lastname }
-              onChange={ e => handleChange( 'lastname', e.target.value ) }
+              value={ form.apellido }
+              onChange={ e => handleChange( 'apellido', e.target.value ) }
               className="w-full rounded-xl bg-[#110a24] border border-[#2a1f4e] px-4 py-3 text-white placeholder-[#5a4f78] outline-none focus:border-[#7c3aed] transition-colors"
               placeholder="Tu apellido"
             />

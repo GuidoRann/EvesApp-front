@@ -1,10 +1,19 @@
-
+import { useEffect, useState } from 'react';
 
 interface ProfileHeaderProps {
   imageUrl: string
 }
 
 export function ProfileHeader( { imageUrl }: ProfileHeaderProps ) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (imageUrl) {
+      const img = new Image();
+      img.src = imageUrl;
+    }
+  }, [imageUrl]);
+  
   return (
     <div className="relative">
       {/* Gradient background */}
@@ -24,12 +33,21 @@ export function ProfileHeader( { imageUrl }: ProfileHeaderProps ) {
       {/* Profile picture */}
       <div className="flex justify-center -mt-20 relative z-10">
         <div className="rounded-full p-0.75 bg-linear-to-b from-[#8b5cf6] to-[#4c1d95] shadow-lg shadow-purple-900/40">
-          <div className="rounded-full overflow-hidden h-32 w-32 border-[3px] border-[#1a0a3e]">
+          <div className="relative rounded-full overflow-hidden h-32 w-32 border-[3px] border-[#1a0a3e]">
             <img
               src={ imageUrl }
+              loading="eager"
+              fetchPriority="high"
               alt="Foto de perfil"
-              className="object-cover h-full w-full"
-            />
+              className={`object-cover h-full w-full transition-opacity duration-300 ${
+                loading ? "opacity-0" : "opacity-100"
+              }`}
+              onLoad={() => setLoading(false)}
+              />
+
+              { loading && (
+                <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-full" />
+              )}
           </div>
         </div>
       </div>

@@ -37,12 +37,8 @@ const AuthCallback = () => {
           throw new Error("Error al sincronizar usuario");
         }
 
-        console.log("Full Response from authCallback: ", response);
-
         // revisar como llegan los datos para obtener la maestra
         const maestra = response.data.body;
-
-        console.log("Asi llega maestra a authCallback: ", maestra);
 
 
         // acá poner la logica de zustand para guardar el usuario

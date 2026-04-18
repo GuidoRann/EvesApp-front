@@ -1,24 +1,18 @@
+import type { MaestraType } from '@/types/MaestraTypes';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface Maestra {
-  maestraId: string;
-  supabaseUserId: string;
-  nombre: string;
-  apellido: string;
-  email: string;
-}
 
 interface MaestraStore {
-  maestra: Maestra | null;
-  listaDeMaestras: Maestra[];
+  maestra: MaestraType | null;
+  listaDeMaestras: MaestraType[];
   loading: boolean;
 
   // setters
-  setMaestra: ( maestra: Maestra ) => void;
+  setMaestra: ( maestra: MaestraType ) => void;
 
   // adds
-  addNewMaestra: ( maestra: Maestra ) => void;
+  addNewMaestra: ( maestra: MaestraType ) => void;
   
   // deletes
   removeMaestra: ( maestraId: string ) => void;
@@ -35,13 +29,13 @@ export const useMaestraStore = create<MaestraStore>()(
       loading: false,
 
       // Setters
-      setMaestra: ( maestra: Maestra ) => set( { maestra } ),
+      setMaestra: ( maestra: MaestraType ) => set( { maestra } ),
       
       // Clear
       clearMaestra: () => set( { maestra: null } ),
       
       // Add
-      addNewMaestra: ( maestra: Maestra ) => 
+      addNewMaestra: ( maestra: MaestraType ) => 
         set(( state ) => ({ 
           listaDeMaestras: [ ...state.listaDeMaestras, maestra ]
          })),
