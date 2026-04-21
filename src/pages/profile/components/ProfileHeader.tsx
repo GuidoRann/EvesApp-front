@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface ProfileHeaderProps {
   imageUrl: string
@@ -7,13 +7,6 @@ interface ProfileHeaderProps {
 export function ProfileHeader( { imageUrl }: ProfileHeaderProps ) {
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (imageUrl) {
-      const img = new Image();
-      img.src = imageUrl;
-    }
-  }, [imageUrl]);
-  
   return (
     <div className="relative">
       {/* Gradient background */}
@@ -42,11 +35,11 @@ export function ProfileHeader( { imageUrl }: ProfileHeaderProps ) {
               className={`object-cover h-full w-full transition-opacity duration-300 ${
                 loading ? "opacity-0" : "opacity-100"
               }`}
-              onLoad={() => setLoading(false)}
+              onLoad={ () => setLoading( false ) }
               />
 
               { loading && (
-                <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-full" />
+                <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-full" style={{ opacity: loading ? 1 : 0 }} />
               )}
           </div>
         </div>
