@@ -20,7 +20,7 @@ export default class MaestraService {
     }
   }
 
-  static async obtenerMaestra( token:  string | null, maestraId: string ){
+  static async obtenerMaestra( token: string | null, maestraId: string ){
     try {
       const response = await axios.get( 
         `${ this.BASE_URL }/${ maestraId }`,
@@ -37,10 +37,29 @@ export default class MaestraService {
     }
   }
 
-  static async obtenerPerfil( token:  string | null ){
+  static async obtenerPerfil( token: string | null ){
     try {
       const response = await axios.get( 
         `${ this.BASE_URL }/maestra/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
+  // TODO: Revisar tipo de data para no enviar "any"
+  static async actualizarMaestra( token: string | null, maestraId: string, data: any ){
+    try {
+      const response = await axios.put( 
+        `${ this.BASE_URL }/${ maestraId }`,
+        data,
         {
           headers: {
             Authorization: `Bearer ${ token }`

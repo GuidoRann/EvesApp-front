@@ -17,8 +17,8 @@ formatterDate = formatterDate.charAt( 0 ).toUpperCase() + formatterDate.slice( 1
 
 export function DashboardHeader() {
   const maestra = useMaestraStore( ( state ) => state.maestra );
-  if ( !maestra ) return null;
-  const [ nombre, apellido ] = maestra?.nombre.split(" ");
+
+  const { nombre = "nombre", apellido = "apellido" } = maestra ?? {};
 
   return (
     <div className="flex items-center justify-between px-5 pt-26 pb-2">

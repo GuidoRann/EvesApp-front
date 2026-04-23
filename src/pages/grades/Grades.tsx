@@ -29,18 +29,6 @@ const normalGrades = [
     letter: "A",
     shift: "Turno Mixto",
     teacher: "Profra. Adjunta",
-  },
-  {
-    grade: "5°",
-    letter: "C",
-    shift: "Turno Matutino",
-    teacher: "Apoyo Académico",
-  },
-  {
-    grade: "6°",
-    letter: "A",
-    shift: "Turno Mixto",
-    teacher: "Profra. Adjunta",
   }
 ]
 

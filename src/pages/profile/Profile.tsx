@@ -5,15 +5,13 @@ import { ProfileDetails } from './components/ProfileDetails';
 import { ProfileHeader } from './components/ProfileHeader';
 import { ProfileInfo } from './components/ProfileInfo';
 import { useMaestraStore } from '@/stores/Maestra.store';
+import { useManagementProfile } from './hooks/useManagementProfile';
 
 export default function Perfil() {
-  const [isEditOpen, setIsEditOpen] = useState( false )
+  const [ isEditOpen, setIsEditOpen ] = useState( false )
+  const { updateMaestra } = useManagementProfile();
 
   const maestra = useMaestraStore( ( state ) => state.maestra! );
-
-  console.log("Esta es la data que llega de maestra en Perfil" ,maestra );
-  console.log("ESTE ES EL AVATAR URL: ", maestra?.avatar_url);
-
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto relative">
@@ -22,7 +20,7 @@ export default function Perfil() {
         <ProfileInfo
           nombre={ maestra?.nombre ?? "nombre" }
           apellido={ maestra?.apellido ?? "apellido" }
-          onEditClick={() => setIsEditOpen(true)}
+          onEditClick={ () => setIsEditOpen( true ) }
         />
         <ProfileDetails />
       </main>
@@ -31,7 +29,11 @@ export default function Perfil() {
         isOpen={ isEditOpen }
         onClose={ () => setIsEditOpen( false ) }
         data={ maestra }
-        onSave={ ( data ) => console.log( data ) } // TODO: Aca poner el update de datos de maestra
+        onSave={ 
+          ( data ) => {
+            updateMaestra( data.maestraId, data );
+          }
+         }
       />
     </div>
   )

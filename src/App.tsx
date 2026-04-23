@@ -7,7 +7,6 @@ import Schools from './pages/schools/Schools';
 import { AuthLogin } from './pages/auth/AuthLogin';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AuthCallback from './pages/auth/authCallback';
-// import GradesDetails from './pages/grades/components/GradesDetails';
 
 function App() {  
 
