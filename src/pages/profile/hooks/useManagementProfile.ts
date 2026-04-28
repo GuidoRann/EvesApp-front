@@ -58,7 +58,6 @@ export const useManagementProfile = () => {
       if ( !token ) return;
   
       const response =await MaestraService.actualizarMaestra( token, maestraId, maestra );
-      console.log("Este es el Response de useManagementProfile: ", response );
       setMaestra( response.body );
     } catch ( error ) {
       console.log( error );

@@ -9,7 +9,7 @@ interface MaestraStore {
   loading: boolean;
 
   // setters
-  setMaestra: ( maestra: MaestraType ) => void;
+  setMaestra: ( maestra: MaestraType | null ) => void;
 
   // adds
   addNewMaestra: ( maestra: MaestraType ) => void;
@@ -18,7 +18,7 @@ interface MaestraStore {
   removeMaestra: ( maestraId: string ) => void;
 
   // clears
-  clearMaestra: () => void;
+  clearAll: () => void;
 }
 
 export const useMaestraStore = create<MaestraStore>()(
@@ -29,10 +29,14 @@ export const useMaestraStore = create<MaestraStore>()(
       loading: false,
 
       // Setters
-      setMaestra: ( maestra: MaestraType ) => set( { maestra } ),
+      setMaestra: ( maestra: MaestraType | null ) => set( { maestra } ),
       
       // Clear
-      clearMaestra: () => set( { maestra: null } ),
+      clearAll: () => set({
+        maestra: null,
+        listaDeMaestras: [],
+        loading: false,
+      }),
       
       // Add
       addNewMaestra: ( maestra: MaestraType ) => 

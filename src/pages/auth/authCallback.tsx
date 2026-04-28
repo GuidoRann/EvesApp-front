@@ -37,11 +37,8 @@ const AuthCallback = () => {
           throw new Error("Error al sincronizar usuario");
         }
 
-        // revisar como llegan los datos para obtener la maestra
         const maestra = response.data.body;
 
-
-        // acá poner la logica de zustand para guardar el usuario
         setMaestra( maestra );
         navigate("/home");
 
