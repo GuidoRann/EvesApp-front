@@ -36,12 +36,12 @@ export default function Grades() {
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>
       <GradesHeader />
-      <main className='flex-1 overflow-y-auto px-4 scrollbar-hide'>
+      <main className='flex-1 overflow-y-auto px-4 scrollbar-hide pt-6'>
         <div className='flex flex-col gap-6 pt-4 h-1/3'>
           <GradoSection title='Grados como maestra titular' grades={ holderGrades } />
         </div>
         <div className='flex flex-col gap-6 pt-4 h-2/3'>
-          <GradoSection title='Grados como maestra normal' grades={ normalGrades } />
+          <GradoSection title='Grados como maestra' grades={ normalGrades } />
         </div>
       </main>
       <BottomNav />

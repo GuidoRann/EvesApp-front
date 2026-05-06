@@ -7,6 +7,7 @@ import Schools from './pages/schools/Schools';
 import { AuthLogin } from './pages/auth/AuthLogin';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AuthCallback from './pages/auth/authCallback';
+import CreateGradoForm from './pages/grades/components/CreateGradoForm';
 
 function App() {  
 
@@ -21,9 +22,17 @@ function App() {
 
           {/* Protegidas */}
           <Route element={<ProtectedRoute />}>
+          
+            {/* Vistas principales de la app */}
             <Route path="/home" element={<Home />} />
+
             <Route path="/profile" element={<Profile />} />
-            <Route path="/grades" element={<Grados />} />
+
+            <Route path="/grades">
+              <Route index element={<Grados />} />
+              <Route path="create" element={<CreateGradoForm />} />
+            </Route>
+
             <Route path="/schools" element={<Schools />} />
 
             {/* fallback protegido */}
