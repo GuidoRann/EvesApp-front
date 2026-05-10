@@ -43,8 +43,7 @@ export const useManagementProfile = () => {
   
       if ( !token ) return;
   
-      const response = await MaestraService.obtenerMaestra( token, maestraId );
-      setMaestra( response.body );
+      return await MaestraService.obtenerMaestra( token, maestraId );
     } catch ( error ) {
       console.log( error );
     }
@@ -64,10 +63,24 @@ export const useManagementProfile = () => {
     }
   };
 
+  const eliminarMaestra = async ( maestraId: string ) => {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+  
+      if ( !token ) return;
+  
+      await MaestraService.eliminarMaestra( token, maestraId );
+    } catch ( error ) {
+      console.log( error );
+    }
+  }
+
   return { 
     getOrCreateMaestra,
     fetchProfileInfo,
     obtenerMaestra,
-    updateMaestra 
+    updateMaestra,
+    eliminarMaestra
   };
 }

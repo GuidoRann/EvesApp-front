@@ -18,16 +18,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import type { Alumno } from './AlumnosListView'; // TODO: Cambiar el tipado de este objeto por el tipado real
 import AlumnosListView from './AlumnosListView';
 
 import { useNavigate } from 'react-router-dom';
+import type { AlumnoType } from '@/types/AlumnoTypes';
 
 // Data de muestra, cambiar por data real del backend
 const mockEscuelas = [
@@ -47,7 +47,7 @@ const mockMaestras = [
 ];
 
 interface CreateGradoFormProps {
-  onSubmit?: (data: GradoFormData) => void;
+  onSubmit?: ( data: GradoFormData ) => void;
 }
 
 interface GradoFormData {
@@ -58,13 +58,13 @@ interface GradoFormData {
   divisionAnual: string;
   maestraTitularId: string;
   maestrasIds: string[];
-  alumnos: Alumno[];
+  alumnos: AlumnoType[];
 }
 
 export default function CreateGradoForm({
   onSubmit,
 }: CreateGradoFormProps) {
-  const [formData, setFormData] = useState<GradoFormData>({
+  const [ formData, setFormData ] = useState<GradoFormData>({
     escuelaId: "",
     numero: "",
     letra: "",
@@ -76,32 +76,32 @@ export default function CreateGradoForm({
   });
 
   const navigate = useNavigate();
-  const [escuelaSearch, setEscuelaSearch] = useState("");
-  const [maestraSearch, setMaestraSearch] = useState("");
-  const [maestrasSearch, setMaestrasSearch] = useState("");
-  const [showEscuelaModal, setShowEscuelaModal] = useState(false);
-  const [showMaestraModal, setShowMaestraModal] = useState(false);
-  const [showMaestrasModal, setShowMaestrasModal] = useState(false);
-  const [showAlumnosView, setShowAlumnosView] = useState(false);
+  const [ escuelaSearch, setEscuelaSearch ] = useState("");
+  const [ maestraSearch, setMaestraSearch ] = useState("");
+  const [ maestrasSearch, setMaestrasSearch ] = useState("");
+  const [ showEscuelaDrawer, setShowEscuelaDrawer ] = useState(false);
+  const [ showMaestraDrawer, setShowMaestraDrawer ] = useState(false);
+  const [ showMaestrasDrawer, setShowMaestrasDrawer ] = useState(false);
+  const [ showAlumnosView, setShowAlumnosView ] = useState(false);
 
-  const selectedEscuela = mockEscuelas.find((e) => e.id === formData.escuelaId);
+  const selectedEscuela = mockEscuelas.find( ( e ) => e.id === formData.escuelaId );
   const selectedMaestra = mockMaestras.find(
-    (m) => m.id === formData.maestraTitularId
+    ( m ) => m.id === formData.maestraTitularId
   );
-  const selectedMaestras = mockMaestras.filter((m) =>
-    formData.maestrasIds.includes(m.id)
-  );
-
-  const filteredEscuelas = mockEscuelas.filter((e) =>
-    e.nombre.toLowerCase().includes(escuelaSearch.toLowerCase())
+  const selectedMaestras = mockMaestras.filter(( m ) =>
+    formData.maestrasIds.includes( m.id )
   );
 
-  const filteredMaestras = mockMaestras.filter((m) =>
-    m.nombre.toLowerCase().includes(maestraSearch.toLowerCase())
+  const filteredEscuelas = mockEscuelas.filter(( e ) =>
+    e.nombre.toLowerCase().includes( escuelaSearch.toLowerCase() )
   );
 
-  const filteredMaestrasMultiple = mockMaestras.filter((m) =>
-    m.nombre.toLowerCase().includes(maestrasSearch.toLowerCase())
+  const filteredMaestras = mockMaestras.filter(( m ) =>
+    m.nombre.toLowerCase().includes( maestraSearch.toLowerCase() )
+  );
+
+  const filteredMaestrasMultiple = mockMaestras.filter(( m ) =>
+    m.nombre.toLowerCase().includes( maestrasSearch.toLowerCase() )
   );
 
   const isFormValid =
@@ -113,27 +113,27 @@ export default function CreateGradoForm({
     formData.maestraTitularId;
 
   const handleSubmit = () => {
-    if (isFormValid && onSubmit) {
-      onSubmit(formData);
+    if ( isFormValid && onSubmit ) {
+      onSubmit( formData );
     }
   };
 
-  const toggleMaestraSelection = (maestraId: string) => {
-    setFormData((prev) => ({
+  const toggleMaestraSelection = ( maestraId: string ) => {
+    setFormData(( prev ) => ({
       ...prev,
-      maestrasIds: prev.maestrasIds.includes(maestraId)
-        ? prev.maestrasIds.filter((id) => id !== maestraId)
-        : [...prev.maestrasIds, maestraId],
+      maestrasIds: prev.maestrasIds.includes( maestraId )
+        ? prev.maestrasIds.filter( ( id ) => id !== maestraId )
+        : [ ...prev.maestrasIds, maestraId ],
     }));
   };
 
   // Si estamos en la vista de alumnos, mostrar esa vista
-  if (showAlumnosView) {
+  if ( showAlumnosView ) {
     return (
       <AlumnosListView
-        alumnos={formData.alumnos}
-        onBack={() => setShowAlumnosView(false)}
-        onSave={(alumnos: any) => setFormData({ ...formData, alumnos })}
+        alumnos={ formData.alumnos }
+        onBack={() => setShowAlumnosView( false )}
+        onSave={( alumnos: any ) => setFormData({ ...formData, alumnos })}
       />
     );
   }
@@ -153,7 +153,7 @@ export default function CreateGradoForm({
 
         <div className="relative px-4">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate( -1 )}
             className="mb-4 flex items-center gap-1 text-purple-200 transition-colors hover:text-white"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -174,7 +174,7 @@ export default function CreateGradoForm({
             <FieldLabel className="text-purple-100">Escuela *</FieldLabel>
             <button
               type="button"
-              onClick={() => setShowEscuelaModal(true)}
+              onClick={() => setShowEscuelaDrawer( true )}
               className="flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-3 text-left transition-colors hover:bg-purple-900/30"
             >
               <div className="flex items-center gap-3">
@@ -184,7 +184,7 @@ export default function CreateGradoForm({
                     selectedEscuela ? "text-white" : "text-purple-300/50"
                   }
                 >
-                  {selectedEscuela?.nombre || "Seleccionar escuela"}
+                  { selectedEscuela?.nombre || "Seleccionar escuela" }
                 </span>
               </div>
               <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
@@ -196,8 +196,8 @@ export default function CreateGradoForm({
             <Field>
               <FieldLabel className="text-purple-100">Grado *</FieldLabel>
               <Select
-                value={formData.numero}
-                onValueChange={(value) =>
+                value={ formData.numero }
+                onValueChange={( value ) =>
                   setFormData({ ...formData, numero: value })
                 }
               >
@@ -205,13 +205,13 @@ export default function CreateGradoForm({
                   <SelectValue placeholder="Numero" />
                 </SelectTrigger>
                 <SelectContent className="border-purple-500/30 bg-[#1a0a2e]">
-                  {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                  {[ "1°", "2°", "3°", "4°", "5°", "6°", "7°" ].map(( num ) => (
                     <SelectItem
-                      key={num}
-                      value={num.toString()}
+                      key={ num }
+                      value={ num }
                       className="text-white focus:bg-purple-800/50 focus:text-white"
                     >
-                      {num}°
+                      { num }
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -221,8 +221,8 @@ export default function CreateGradoForm({
             <Field>
               <FieldLabel className="text-purple-100">Grupo *</FieldLabel>
               <Select
-                value={formData.letra}
-                onValueChange={(value) =>
+                value={ formData.letra }
+                onValueChange={( value ) =>
                   setFormData({ ...formData, letra: value })
                 }
               >
@@ -230,13 +230,13 @@ export default function CreateGradoForm({
                   <SelectValue placeholder="Letra" />
                 </SelectTrigger>
                 <SelectContent className="border-purple-500/30 bg-[#1a0a2e]">
-                  {["A", "B", "C", "D", "E"].map((letra) => (
+                  {[ "A", "B", "C", "D", "E" ].map(( letra ) => (
                     <SelectItem
-                      key={letra}
-                      value={letra}
+                      key={ letra }
+                      value={ letra }
                       className="text-white focus:bg-purple-800/50 focus:text-white"
                     >
-                      {letra}
+                      { letra }
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -248,8 +248,8 @@ export default function CreateGradoForm({
           <Field>
             <FieldLabel className="text-purple-100">Turno *</FieldLabel>
             <Select
-              value={formData.turno}
-              onValueChange={(value) =>
+              value={ formData.turno }
+              onValueChange={( value ) =>
                 setFormData({ ...formData, turno: value })
               }
             >
@@ -279,8 +279,8 @@ export default function CreateGradoForm({
               Division Anual *
             </FieldLabel>
             <Select
-              value={formData.divisionAnual}
-              onValueChange={(value) =>
+              value={ formData.divisionAnual }
+              onValueChange={( value ) =>
                 setFormData({ ...formData, divisionAnual: value })
               }
             >
@@ -311,7 +311,7 @@ export default function CreateGradoForm({
             </FieldLabel>
             <button
               type="button"
-              onClick={() => setShowMaestraModal(true)}
+              onClick={() => setShowMaestraDrawer(true)}
               className="flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-3 text-left transition-colors hover:bg-purple-900/30"
             >
               <div className="flex items-center gap-3">
@@ -321,7 +321,7 @@ export default function CreateGradoForm({
                     selectedMaestra ? "text-white" : "text-purple-300/50"
                   }
                 >
-                  {selectedMaestra?.nombre || "Seleccionar maestra"}
+                  { selectedMaestra?.nombre || "Seleccionar maestra" }
                 </span>
               </div>
               <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
@@ -338,7 +338,7 @@ export default function CreateGradoForm({
           {/* Maestras Adicionales */}
           <button
             type="button"
-            onClick={() => setShowMaestrasModal(true)}
+            onClick={() => setShowMaestrasDrawer( true )}
             className="flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
           >
             <div className="flex items-center gap-3">
@@ -348,9 +348,9 @@ export default function CreateGradoForm({
               <div>
                 <p className="font-medium text-white">Maestras Adicionales</p>
                 <p className="text-sm text-purple-300/60">
-                  {selectedMaestras.length > 0
-                    ? `${selectedMaestras.length} maestra${selectedMaestras.length > 1 ? "s" : ""} seleccionada${selectedMaestras.length > 1 ? "s" : ""}`
-                    : "Agregar otras maestras al grado"}
+                  { selectedMaestras.length > 0
+                    ? `${ selectedMaestras.length } maestra${ selectedMaestras.length > 1 ? "s" : "" } seleccionada${ selectedMaestras.length > 1 ? "s" : "" }`
+                    : "Agregar otras maestras al grado" }
                 </p>
               </div>
             </div>
@@ -360,7 +360,7 @@ export default function CreateGradoForm({
           {/* Lista de Alumnos */}
           <button
             type="button"
-            onClick={() => setShowAlumnosView(true)}
+            onClick={() => setShowAlumnosView( true )}
             className="flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
           >
             <div className="flex items-center gap-3">
@@ -370,8 +370,8 @@ export default function CreateGradoForm({
               <div>
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
-                  {formData.alumnos.length > 0
-                    ? `${formData.alumnos.length} alumno${formData.alumnos.length > 1 ? "s" : ""} agregado${formData.alumnos.length > 1 ? "s" : ""}`
+                  { formData.alumnos.length > 0
+                    ? `${ formData.alumnos.length } alumno${ formData.alumnos.length > 1 ? "s" : "" } agregado${ formData.alumnos.length > 1 ? "s" : "" }`
                     : "Crear lista de alumnos del grado"}
                 </p>
               </div>
@@ -384,8 +384,8 @@ export default function CreateGradoForm({
       {/* Submit Button */}
       <div className="fixed bottom-0 left-0 right-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm">
         <Button
-          onClick={handleSubmit}
-          disabled={!isFormValid}
+          onClick={ handleSubmit }
+          disabled={ !isFormValid }
           className="w-full bg-linear-to-r from-purple-600 to-purple-500 py-6 text-base font-semibold text-white hover:from-purple-500 hover:to-purple-400 disabled:opacity-50"
         >
           Crear Grado
@@ -393,30 +393,32 @@ export default function CreateGradoForm({
       </div>
 
       {/* Escuela Modal */}
-      <Dialog open={showEscuelaModal} onOpenChange={setShowEscuelaModal}>
-        <DialogContent className="max-h-[80vh] border-purple-500/30 bg-[#110a24]">
-          <DialogHeader>
-            <DialogTitle className="text-white">
+      <Drawer open={ showEscuelaDrawer } onOpenChange={ setShowEscuelaDrawer }>
+        <DrawerContent className="border-purple-500/30 bg-[#110a24]">
+          <DrawerHeader>
+            <DrawerTitle className="text-white">
               Seleccionar Escuela
-            </DialogTitle>
-          </DialogHeader>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
-            <Input
-              placeholder="Buscar escuela..."
-              value={escuelaSearch}
-              onChange={(e) => setEscuelaSearch(e.target.value)}
-              className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
-            />
+            </DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
+              <Input
+                placeholder="Buscar escuela..."
+                value={ escuelaSearch }
+                onChange={( e ) => setEscuelaSearch( e.target.value )}
+                className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
+              />
+            </div>
           </div>
-          <div className="max-h-[50vh] space-y-2 overflow-y-auto">
-            {filteredEscuelas.map((escuela) => (
+          <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
+            {filteredEscuelas.map(( escuela ) => (
               <button
-                key={escuela.id}
+                key={ escuela.id }
                 onClick={() => {
                   setFormData({ ...formData, escuelaId: escuela.id });
-                  setShowEscuelaModal(false);
-                  setEscuelaSearch("");
+                  setShowEscuelaDrawer( false );
+                  setEscuelaSearch( "" );
                 }}
                 className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
                   formData.escuelaId === escuela.id
@@ -426,41 +428,43 @@ export default function CreateGradoForm({
               >
                 <div className="flex items-center gap-3">
                   <School className="h-5 w-5 text-purple-400" />
-                  <span className="text-white">{escuela.nombre}</span>
+                  <span className="text-white">{ escuela.nombre }</span>
                 </div>
-                {formData.escuelaId === escuela.id && (
+                { formData.escuelaId === escuela.id && (
                   <Check className="h-5 w-5 text-purple-400" />
-                )}
+                ) }
               </button>
             ))}
           </div>
-        </DialogContent>
-      </Dialog>
+        </DrawerContent>
+      </Drawer>
 
       {/* Maestra Titular Modal */}
-      <Dialog open={showMaestraModal} onOpenChange={setShowMaestraModal}>
-        <DialogContent className="max-h-[80vh] border-purple-500/30 bg-[#110a24]">
-          <DialogHeader>
-            <DialogTitle className="text-white">
+      <Drawer open={ showMaestraDrawer } onOpenChange={ setShowMaestraDrawer }>
+        <DrawerContent className="border-purple-500/30 bg-[#110a24]">
+          <DrawerHeader>
+            <DrawerTitle className="text-white">
               Seleccionar Maestra Titular
-            </DialogTitle>
-          </DialogHeader>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
-            <Input
-              placeholder="Buscar por nombre..."
-              value={maestraSearch}
-              onChange={(e) => setMaestraSearch(e.target.value)}
-              className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
-            />
+            </DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
+              <Input
+                placeholder="Buscar por nombre..."
+                value={ maestraSearch }
+                onChange={( e ) => setMaestraSearch( e.target.value )}
+                className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
+              />
+            </div>
           </div>
-          <div className="max-h-[50vh] space-y-2 overflow-y-auto">
-            {filteredMaestras.map((maestra) => (
+          <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
+            {filteredMaestras.map(( maestra ) => (
               <button
-                key={maestra.id}
+                key={ maestra.id }
                 onClick={() => {
                   setFormData({ ...formData, maestraTitularId: maestra.id });
-                  setShowMaestraModal(false);
+                  setShowMaestraDrawer(false);
                   setMaestraSearch("");
                 }}
                 className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
@@ -474,46 +478,48 @@ export default function CreateGradoForm({
                     <User className="h-5 w-5 text-purple-200" />
                   </div>
                   <div>
-                    <p className="font-medium text-white">{maestra.nombre}</p>
-                    <p className="text-sm text-purple-300/60">{maestra.email}</p>
+                    <p className="font-medium text-white">{ maestra.nombre }</p>
+                    <p className="text-sm text-purple-300/60">{ maestra.email }</p>
                   </div>
                 </div>
-                {formData.maestraTitularId === maestra.id && (
+                { formData.maestraTitularId === maestra.id && (
                   <Check className="h-5 w-5 text-purple-400" />
-                )}
+                ) }
               </button>
             ))}
           </div>
-        </DialogContent>
-      </Dialog>
+        </DrawerContent>
+      </Drawer>
 
       {/* Maestras Multiples Modal */}
-      <Dialog open={showMaestrasModal} onOpenChange={setShowMaestrasModal}>
-        <DialogContent className="max-h-[80vh] border-purple-500/30 bg-[#110a24]">
-          <DialogHeader>
-            <DialogTitle className="text-white">
+      <Drawer open={ showMaestrasDrawer } onOpenChange={ setShowMaestrasDrawer }>
+        <DrawerContent className="border-purple-500/30 bg-[#110a24]">
+          <DrawerHeader>
+            <DrawerTitle className="text-white">
               Seleccionar Maestras
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-purple-300/60">
+            </DrawerTitle>
+          </DrawerHeader>
+          <p className="px-4 pb-4 text-sm text-purple-300/60">
             Selecciona las maestras adicionales para este grado
           </p>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
-            <Input
-              placeholder="Buscar por nombre..."
-              value={maestrasSearch}
-              onChange={(e) => setMaestrasSearch(e.target.value)}
-              className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
-            />
+          <div className="px-4 pb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
+              <Input
+                placeholder="Buscar por nombre..."
+                value={ maestrasSearch }
+                onChange={( e ) => setMaestrasSearch( e.target.value )}
+                className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
+              />
+            </div>
           </div>
-          <div className="max-h-[50vh] space-y-2 overflow-y-auto">
-            {filteredMaestrasMultiple.map((maestra) => {
-              const isSelected = formData.maestrasIds.includes(maestra.id);
+          <div className="max-h-[40vh] space-y-2 overflow-y-auto px-4">
+            { filteredMaestrasMultiple.map(( maestra ) => {
+              const isSelected = formData.maestrasIds.includes( maestra.id );
               return (
                 <button
-                  key={maestra.id}
-                  onClick={() => toggleMaestraSelection(maestra.id)}
+                  key={ maestra.id }
+                  onClick={() => toggleMaestraSelection( maestra.id )}
                   className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
                     isSelected
                       ? "border-purple-500 bg-purple-600/30"
@@ -525,36 +531,35 @@ export default function CreateGradoForm({
                       <User className="h-5 w-5 text-purple-200" />
                     </div>
                     <div>
-                      <p className="font-medium text-white">{maestra.nombre}</p>
+                      <p className="font-medium text-white">{ maestra.nombre }</p>
                       <p className="text-sm text-purple-300/60">
-                        {maestra.email}
+                        { maestra.email }
                       </p>
                     </div>
                   </div>
                   <div
                     className={`flex h-6 w-6 items-center justify-center rounded border ${
                       isSelected
-                        ? "border-purple-400 bg-purple-600"
-                        : "border-purple-500/30 bg-transparent"
+                        ? "border-purple-500 bg-purple-600"
+                        : "border-purple-500/30"
                     }`}
                   >
-                    {isSelected && <Check className="h-4 w-4 text-white" />}
+                    { isSelected && <Check className="h-4 w-4 text-white" /> }
                   </div>
                 </button>
               );
             })}
           </div>
-          <Button
-            onClick={() => {
-              setShowMaestrasModal(false);
-              setMaestrasSearch("");
-            }}
-            className="w-full bg-purple-600 text-white hover:bg-purple-500"
-          >
-            Confirmar ({formData.maestrasIds.length} seleccionadas)
-          </Button>
-        </DialogContent>
-      </Dialog>
+          <div className="border-t border-purple-500/20 p-4">
+            <Button
+              onClick={() => setShowMaestrasDrawer( false )}
+              className="w-full bg-purple-600 text-white hover:bg-purple-500"
+            >
+              Confirmar ({ formData.maestrasIds.length } seleccionadas)
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }
