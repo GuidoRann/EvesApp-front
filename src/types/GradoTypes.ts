@@ -19,6 +19,4 @@ export interface CreateGradoDTO {
   turno: string;
   divisionAnual: string;
   maestraTitularId: string;
-  maestrasIds?: string[];
-  alumnos: AlumnoType[];
 }

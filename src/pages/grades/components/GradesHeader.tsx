@@ -1,13 +1,25 @@
-import { Plus, UserPlus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Plus, Users, Search } from "lucide-react";
+import { useState } from "react";
 
+interface GradesHeaderProps {
+  onCreateClick?: () => void;
+  onJoinClick?: () => void;
+}
+export default function GradesHeader({ onCreateClick, onJoinClick }: GradesHeaderProps) {
+  const [activeTab, setActiveTab] = useState<"create" | "join" | null>(null);
 
-export default function GradesHeader() {
-  const navigate = useNavigate();
+  const handleTabClick = (tab: "create" | "join") => {
+    if (activeTab === tab) {
+      setActiveTab(null);
+    } else {
+      setActiveTab(tab);
+      if (tab === "create") onCreateClick?.();
+      if (tab === "join") onJoinClick?.();
+    }
+  };
 
   return (
     <div className='h-48 relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]'>
-      {/* Subtle sparkles */}
       <div className='absolute inset-0 opacity-30'>
         <div className='absolute top-6 left-[20%] h-1 w-1 rounded-full bg-white' />
         <div className='absolute top-10 right-[30%] h-0.5 w-0.5 rounded-full bg-white' />
@@ -17,24 +29,42 @@ export default function GradesHeader() {
         <div className='absolute top-14 left-[10%] h-1 w-1 rounded-full bg-purple-300' />
         <div className='absolute top-4 right-[40%] h-0.5 w-0.5 rounded-full bg-purple-200' />
       </div>
-      {/* Header content */}
-      <div className="relative z-10 flex flex-col px-4 pt-16">
-        {/* Title */}
-        <h1 className="text-2xl font-bold text-white mb-1">Mis Grados</h1>
-        <p className="text-purple-200/70 text-sm mb-5">
-          Gestiona tus grados y estudiantes
-        </p>
 
-        {/* Action buttons - always visible */}
-        <div className="flex gap-3">
-          <button className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.98] border border-white/20 rounded-xl text-white font-semibold transition-all duration-200">
-            <UserPlus className="h-5 w-5" />
-            <span>Unirme</span>
+      <div className="relative z-10 flex flex-col px-4 pt-12 pb-5">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Mis Grados</h1>
+            <p className="text-purple-200/60 text-sm mt-0.5">
+              Gestiona tus clases
+            </p>
+          </div>
+          <button className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/15 transition-colors">
+            <Search className="h-5 w-5 text-white/80" />
           </button>
-          <button className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 active:scale-[0.98] rounded-xl text-white font-semibold transition-all duration-200 shadow-lg shadow-purple-500/25"
-          onClick={() => { navigate("/grades/create") }}>
-            <Plus className="h-5 w-5" />
-            <span>Crear</span>
+        </div>
+
+        <div className="flex bg-white/5 rounded-lg p-1 gap-1">
+          <button 
+            onClick={() => handleTabClick("create")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md font-medium text-sm transition-all duration-200 ${
+              activeTab === "create" 
+                ? "bg-emerald-500 text-white shadow-lg" 
+                : "text-purple-200/70 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Nuevo grado</span>
+          </button>
+          <button 
+            onClick={() => handleTabClick("join")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md font-medium text-sm transition-all duration-200 ${
+              activeTab === "join" 
+                ? "bg-emerald-500 text-white shadow-lg" 
+                : "text-purple-200/70 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            <span>Unirme</span>
           </button>
         </div>
       </div>

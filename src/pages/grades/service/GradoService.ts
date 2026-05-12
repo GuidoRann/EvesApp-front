@@ -8,7 +8,7 @@ export default class GradoService {
     try {
       const response = await axios.post( 
         `${ this.BASE_URL }/crearGrado`,
-        { grado },
+        grado ,
         {
           headers: {
             Authorization: `Bearer ${ token }`
