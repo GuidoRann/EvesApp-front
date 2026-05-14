@@ -1,6 +1,6 @@
 import type { AlumnoType } from './AlumnoTypes';
 
-export interface GradoType {
+export interface GradoDTO {
   gradoId: string;
   escuelaId: string;
   numero: string;
