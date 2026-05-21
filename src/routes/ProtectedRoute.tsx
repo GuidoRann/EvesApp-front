@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import { supabase } from '@/lib/supabaseClient';
 import { type Session } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ const ProtectedRoute = () => {
     });
   }, []);
 
-  if ( loading ) return <div>Cargando...</div>;
+  if ( loading ) return <Loading />;
 
   if ( !session ) {
     return <Navigate to="/login" replace />;

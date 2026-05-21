@@ -8,11 +8,13 @@ import { AuthLogin } from './pages/auth/AuthLogin';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AuthCallback from './pages/auth/authCallback';
 import CreateGradoForm from './pages/grades/components/CreateGradoForm';
+import { Toaster } from 'sonner'
 
 function App() {  
 
   return (
     <>
+      <Toaster richColors/>
       <BrowserRouter>
         <Routes>
 

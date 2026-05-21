@@ -1,18 +1,18 @@
-import type { MaestraType } from '@/types/MaestraTypes';
+import type { MaestraDTO } from '@/types/MaestraTypes';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 
 interface MaestraStore {
-  maestra: MaestraType | null;
-  listaDeMaestras: MaestraType[];
+  maestra: MaestraDTO| null;
+  listaDeMaestras: MaestraDTO[];
   loading: boolean;
 
   // setters
-  setMaestra: ( maestra: MaestraType | null ) => void;
+  setMaestra: ( maestra: MaestraDTO| null ) => void;
 
   // adds
-  addNewMaestra: ( maestra: MaestraType ) => void;
+  addNewMaestra: ( maestra: MaestraDTO) => void;
   
   // deletes
   removeMaestra: ( maestraId: string ) => void;
@@ -23,13 +23,13 @@ interface MaestraStore {
 
 export const useMaestraStore = create<MaestraStore>()(
   persist(
-    (set) => ({
+    ( set ) => ({
       maestra: null,
       listaDeMaestras: [],
       loading: false,
 
       // Setters
-      setMaestra: ( maestra: MaestraType | null ) => set( { maestra } ),
+      setMaestra: ( maestra: MaestraDTO| null ) => set( { maestra } ),
       
       // Clear
       clearAll: () => set({
@@ -39,7 +39,7 @@ export const useMaestraStore = create<MaestraStore>()(
       }),
       
       // Add
-      addNewMaestra: ( maestra: MaestraType ) => 
+      addNewMaestra: ( maestra: MaestraDTO) => 
         set(( state ) => ({ 
           listaDeMaestras: [ ...state.listaDeMaestras, maestra ]
          })),
@@ -49,7 +49,7 @@ export const useMaestraStore = create<MaestraStore>()(
         set(( state ) => ({ 
           listaDeMaestras: state.listaDeMaestras.filter( maestra => maestra.maestraId !== maestraId )
          })),
-    }),
+     }),
     { name: "maestraStore" }
   )
 );

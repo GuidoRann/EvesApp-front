@@ -29,15 +29,6 @@ interface EscuelaDetailViewProps {
   onBack: () => void;
 }
 
-// Mock data for available teachers
-// const availableMaestras: MaestraDTO[] = [
-//   { maestraId: "1", nombre: "Maria Garcia", email: "maria@escuela.com" },
-//   { id: "2", nombre: "Ana Martinez", email: "ana@escuela.com" },
-//   { id: "3", nombre: "Laura Rodriguez", email: "laura@escuela.com" },
-//   { id: "4", nombre: "Carmen Lopez", email: "carmen@escuela.com" },
-//   { id: "5", nombre: "Sofia Hernandez", email: "sofia@escuela.com" },
-// ];
-
 export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailViewProps) {
   const [ maestrasOpen, setMaestrasOpen ] = useState( false );
   const [ maestrasSearch, setMaestrasSearch ] = useState( "" );
@@ -45,41 +36,39 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
   const [ tempSelectedMaestras, setTempSelectedMaestras ] = useState< MaestraDTO[] >( [] );
   const [ availableMaestras, setAvailableMaestras ] = useState< MaestraDTO[] >( escuela.maestras );
 
-  // Filter teachers based on search
+  // Filtro para buscar maestras
   const filteredMaestras = availableMaestras.filter(
     ( m ) =>
-      m.nombre.toLowerCase().includes(maestrasSearch.toLowerCase()) ||
-      m.email.toLowerCase().includes(maestrasSearch.toLowerCase())
+      m.nombre.toLowerCase().includes( maestrasSearch.toLowerCase() ) ||
+      m.email.toLowerCase().includes( maestrasSearch.toLowerCase() )
   );
 
   const handleOpenMaestras = () => {
-    setTempSelectedMaestras([...selectedMaestras]);
-    setMaestrasOpen(true);
+    setTempSelectedMaestras( [ ...selectedMaestras ] );
+    setMaestrasOpen( true );
   };
 
-  const toggleMaestraSelection = (maestra: MaestraDTO) => {
-    const isSelected = tempSelectedMaestras.some((m) => m.maestraId === maestra.maestraId);
-    if (isSelected) {
-      setTempSelectedMaestras(tempSelectedMaestras.filter((m) => m.maestraId !== maestra.maestraId));
+  const toggleMaestraSelection = ( maestra: MaestraDTO ) => {
+    const isSelected = tempSelectedMaestras.some( ( m ) => m.maestraId === maestra.maestraId );
+    if ( isSelected ) {
+      setTempSelectedMaestras( tempSelectedMaestras.filter(( m ) => m.maestraId !== maestra.maestraId ) );
     } else {
-      setTempSelectedMaestras([...tempSelectedMaestras, maestra]);
+      setTempSelectedMaestras([ ...tempSelectedMaestras, maestra ]);
     }
   };
 
   const handleSaveMaestras = () => {
-    setSelectedMaestras(tempSelectedMaestras);
-    setMaestrasOpen(false);
+    setSelectedMaestras( tempSelectedMaestras );
+    setMaestrasOpen( false );
   };
 
-  const removeMaestra = (maestraId: string) => {
-    setSelectedMaestras(selectedMaestras.filter((m) => m.maestraId !== maestraId));
+  const removeMaestra = ( maestraId: string ) => {
+    setSelectedMaestras( selectedMaestras.filter(( m ) => m.maestraId !== maestraId ));
   };
 
   return (
     <div className="mx-auto flex h-dvh bg-background max-w-md flex-col">
-      {/* Header */}
       <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]">
-        {/* Subtle sparkles */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-6 left-[20%] h-1 w-1 rounded-full bg-white animate-pulse" />
           <div className="absolute top-10 right-[30%] h-0.5 w-0.5 rounded-full bg-white animate-pulse [animation-delay:0.5s]" />
@@ -107,9 +96,9 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
         </div>
       </div>
 
-      {/* Content */}
+      {/* Contenido general */}
       <main className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
-        {/* School Info Cards */}
+        {/* Informacion de la escuela */}
         <div className="flex flex-col gap-3">
           {/* Nombre */}
           <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl">
@@ -145,12 +134,11 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
           </div>
         </div>
 
-        {/* Divider */}
         <div className="h-px bg-purple-500/10 my-6" />
 
-        {/* Actions */}
+        {/* Botones de accion */}
         <div className="flex flex-col gap-3">
-          {/* Grados - Read only for now */}
+          {/* Grados */}
           <button className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl hover:bg-[#201328] transition-colors">
             <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
               <BookOpen className="h-5 w-5 text-amber-400" />
@@ -186,7 +174,7 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
           </button>
         </div>
 
-        {/* Selected Maestras Preview */}
+        {/* Maestras asignadas */}
         { selectedMaestras.length > 0 && (
           <div className="mt-4">
             <p className="text-purple-200/50 text-xs mb-2 px-1">Maestras asignadas</p>
@@ -218,7 +206,8 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
         )}
       </main>
 
-      {/* Maestras Drawer */}
+      {/* TODO: Al seleccionar la maestra tiene que agregarse al grado en base de datos  */}
+      {/* Seleccionador de maestras */}
       <Drawer open={ maestrasOpen } onOpenChange={ setMaestrasOpen }>
         <DrawerContent className="bg-[#1a1025] border-purple-500/20">
           <DrawerHeader>

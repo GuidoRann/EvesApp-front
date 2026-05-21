@@ -1,16 +1,20 @@
 import { useState } from "react";
 import CreateEscuelaForm from './components/CreateEscuelaForm';
 import EscuelaDetailView from './components/EscuelaDetailView';
-import SchoolCard from './components/SchoolCard';
-import SchoolsHeader from './components/SchoolsHeader';
+import SchoolCard from './components/EscuelaCard';
+import SchoolsHeader from './components/EscuelaHeader';
 import type { CreateEscuelaDTO, EscuelaDTO } from '@/types/EscuelaTypes';
+import { useManagementEscuelas } from './hooks/useManagementEscuela';
+import Loading from '@/components/Loading';
+import { BottomNav } from '@/components/BottomNav';
 
 type ViewState = "list" | "create" | "detail";
 
-export default function SchoolsPage() {
-  const [ schools, setSchools ] = useState<EscuelaDTO[]>();
+export default function EscuelaPage() {
+  const [ escuelas, setEscuelas ] = useState<EscuelaDTO[]>();
   const [ view, setView ] = useState<ViewState>( "list" );
-  const [ selectedSchool, setSelectedSchool ] = useState<EscuelaDTO | null>( null );
+  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
+  const { createEscuela } = useManagementEscuelas();
 
   const handleCreateClick = () => {
     setView("create");
@@ -20,38 +24,36 @@ export default function SchoolsPage() {
     console.log("Unirse a escuela");
   };
 
-  const handleSchoolClick = (school: EscuelaDTO) => {
-    setSelectedSchool(school);
-    setView("detail");
+  const handleSchoolClick = ( escuela: EscuelaDTO ) => {
+    setSelectedEscuela( escuela );
+    setView( "detail" );
   };
 
   const handleBack = () => {
-    setView("list");
-    setSelectedSchool(null);
+    setView( "list" );
+    setSelectedEscuela( null );
   };
 
-  // const handleCreateSubmit = ( escuela: CreateEscuelaDTO ) => {
-  //   const newSchool: CreateEscuelaDTO = {
-  //     nombre: escuela.nombre,
-  //     numero: escuela.numero,
-  //     direccion: escuela.direccion,
-  //     grados: [],
-  //     maestras: []
-  //   };
-  //   setSchools([...schools, newSchool]);
-  //   setView("list");
-  // };
+
+  // TODO: Conectar el create con el backend
+  const handleCreateSubmit = ( escuela: CreateEscuelaDTO ) => {
+    const newSchool: CreateEscuelaDTO = {
+      nombre: escuela.nombre,
+      numero: escuela.numero,
+      direccion: escuela.direccion
+    };
+
+    createEscuela( newSchool );
+    
+    setView( "list" );
+  };
 
   if ( view === "create" ) {
-    return <CreateEscuelaForm onBack={ handleBack } onSubmit={ () => {} } />;
+    return <CreateEscuelaForm onBack={ handleBack } onSubmit={ handleCreateSubmit } />;
   }
 
-  if ( view === "detail" && selectedSchool ) {
-    return <EscuelaDetailView escuela={ selectedSchool } onBack={ handleBack } />;
-  }
-
-  if ( !schools ) {
-    return <div>Loading...</div>;
+  if ( view === "detail" && selectedEscuela ) {
+    return <EscuelaDetailView escuela={ selectedEscuela } onBack={ handleBack } />;
   }
 
   return (
@@ -61,30 +63,25 @@ export default function SchoolsPage() {
         {/* Stats summary */}
         <div className="flex gap-3 py-5">
           <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-amber-400">{ schools.length }</span>
+            <span className="text-2xl font-bold text-amber-400">{ escuelas?.length || 0 }</span>
             <p className="text-purple-200/50 text-xs mt-0.5">Escuelas</p>
-          </div>
-          <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-white">
-              { schools.reduce( ( acc, s ) => acc + s.grados.length, 0 ) }
-            </span>
-            <p className="text-purple-200/50 text-xs mt-0.5">Grados</p>
           </div>
         </div>
 
         {/* Schools list */}
         <div className="flex flex-col gap-3 pb-24">
-          { schools.map(( school ) => (
+          { escuelas?.map(( escuela ) => (
             <SchoolCard
-              key={ school.escuelaId }
-              name={ school.nombre }
-              location={ school.direccion }
-              gradesCount={ school.grados.length }
-              onClick={ () => handleSchoolClick( school ) }
+              key={ escuela.escuelaId }
+              name={ escuela.nombre }
+              location={ escuela.direccion }
+              gradesCount={ escuela.grados.length }
+              onClick={ () => handleSchoolClick( escuela ) }
             />
           ))}
         </div>
       </main>
+      <BottomNav />
     </div>
   );
 }

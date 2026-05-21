@@ -6,16 +6,16 @@ interface SchoolsHeaderProps {
   onJoinClick?: () => void;
 }
 
-export default function SchoolsHeader({ onCreateClick, onJoinClick }: SchoolsHeaderProps) {
-  const [activeTab, setActiveTab] = useState<"create" | "join" | null>(null);
+export default function EscuelaHeader({ onCreateClick, onJoinClick }: SchoolsHeaderProps) {
+  const [ activeTab, setActiveTab ] = useState<"create" | "join" | null>(null);
 
-  const handleTabClick = (tab: "create" | "join") => {
-    if (activeTab === tab) {
-      setActiveTab(null);
+  const handleTabClick = ( tab: "create" | "join" ) => {
+    if ( activeTab === tab ) {
+      setActiveTab( null );
     } else {
-      setActiveTab(tab);
-      if (tab === "create") onCreateClick?.();
-      if (tab === "join") onJoinClick?.();
+      setActiveTab( tab );
+      if ( tab === "create" ) onCreateClick?.();
+      if ( tab === "join" ) onJoinClick?.();
     }
   };
 
@@ -49,7 +49,7 @@ export default function SchoolsHeader({ onCreateClick, onJoinClick }: SchoolsHea
         {/* Action tabs - horizontal segmented control style with amber/orange */}
         <div className="flex bg-white/5 rounded-lg p-1 gap-1">
           <button 
-            onClick={() => handleTabClick("create")}
+            onClick={() => handleTabClick( "create" )}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md font-medium text-sm transition-all duration-200 ${
               activeTab === "create" 
                 ? "bg-amber-500 text-white shadow-lg" 
@@ -60,7 +60,7 @@ export default function SchoolsHeader({ onCreateClick, onJoinClick }: SchoolsHea
             <span>Nueva escuela</span>
           </button>
           <button 
-            onClick={() => handleTabClick("join")}
+            onClick={() => handleTabClick( "join" )}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md font-medium text-sm transition-all duration-200 ${
               activeTab === "join" 
                 ? "bg-amber-500 text-white shadow-lg" 

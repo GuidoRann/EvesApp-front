@@ -2,10 +2,11 @@ import { useState } from "react";
 import { ArrowLeft, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
 
 interface CreateEscuelaFormProps {
   onBack: () => void;
-  onSubmit: ( escuela: { nombre: string; numero: string; direccion: string } ) => void;
+  onSubmit: ( escuela: CreateEscuelaDTO ) => void;
 }
 
 export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFormProps) {
@@ -16,9 +17,9 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
   const isFormValid = nombre.trim() !== "" && numero.trim() !== "" && direccion.trim() !== "";
 
   const handleSubmit = () => {
-    if (isFormValid) {
-      onSubmit({ nombre, numero, direccion });
-    }
+    if ( isFormValid ) {
+      onSubmit( { nombre, numero, direccion } );
+    } else alert("Todos los campos son obligatorios");
   };
 
   return (
