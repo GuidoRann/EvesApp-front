@@ -1,12 +1,13 @@
-import {useState} from "react";
-import {ChevronLeft, Search, School, User, Check } from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle} from "@/components/ui/drawer";
-import {Field, FieldGroup, FieldLabel} from "@/components/ui/field";
+import { useState } from "react";
+import { ChevronLeft, Search, School, User, Check, ArrowLeft, LayoutGrid } from "lucide-react";
+import { Button} from "@/components/ui/button";
+import { Input} from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 // Data de muestra, cambiar por data real del backend
+
 const mockEscuelas = [
   {id: "1", nombre: "Escuela Primaria Benito Juarez"},
   {id: "2", nombre: "Escuela Primaria Miguel Hidalgo"},
@@ -74,7 +75,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
   };
 
   return (
-    <div className='flex min-h-dvh flex-col bg-background'>
+    <div className='mx-auto flex min-h-dvh flex-col max-w-md bg-background'>
       {/* Header */}
       <div className='relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4'>
         {/* Sparkles */}
@@ -86,15 +87,22 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
           <div className='absolute left-[10%] top-14 h-1 w-1 animate-pulse rounded-full bg-purple-300' />
         </div>
 
-        <div className='relative px-4'>
-          <button
-            onClick={onBack}
-            className='mb-4 flex items-center gap-1 text-purple-200 transition-colors hover:text-white'>
-            <ChevronLeft className='h-5 w-5' />
-            <span className='text-sm'>Volver</span>
-          </button>
-          <h1 className='text-2xl font-bold text-white'>Crear Grado</h1>
-          <p className='mt-1 text-sm text-purple-200/70'>Configura los datos de tu nuevo grado</p>
+      <div className="relative px-4 pt-4 pb-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={ onBack }
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5 text-white" />
+            </button>
+            <div className="flex-1">
+              <h1 className="text-xl font-bold text-white">Nuevo Grado</h1>
+              <p className="text-purple-200/60 text-sm">Configura los datos de tu nuevo grado</p>
+            </div>
+            <div className="h-12 w-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+              <LayoutGrid className="h-6 w-6 text-emerald-400" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -123,7 +131,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
             <Field>
               <FieldLabel className='text-purple-100'>Grado *</FieldLabel>
               <Select value={formData.numero} onValueChange={(value) => setFormData({...formData, numero: value})}>
-                <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white'>
+                <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Numero' />
                 </SelectTrigger>
                 <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
@@ -142,7 +150,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
             <Field>
               <FieldLabel className='text-purple-100'>Grupo *</FieldLabel>
               <Select value={formData.letra} onValueChange={(value) => setFormData({...formData, letra: value})}>
-                <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white'>
+                <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Letra' />
                 </SelectTrigger>
                 <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
@@ -163,7 +171,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
           <Field>
             <FieldLabel className='text-purple-100'>Turno *</FieldLabel>
             <Select value={formData.turno} onValueChange={(value) => setFormData({...formData, turno: value})}>
-              <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white'>
+              <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar turno' />
               </SelectTrigger>
               <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
@@ -183,7 +191,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
             <Select
               value={formData.divisionAnual}
               onValueChange={(value) => setFormData({...formData, divisionAnual: value})}>
-              <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white'>
+              <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar division' />
               </SelectTrigger>
               <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
@@ -217,18 +225,19 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
       </div>
 
       {/* Submit Button */}
-      <div className='fixed bottom-0 left-0 right-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm'>
+      <div className="p-4 border-t border-purple-500/10">
         <Button
-          onClick={handleSubmit}
-          disabled={!isFormValid}
-          className='w-full bg-linear-to-r from-purple-600 to-purple-500 py-6 text-base font-semibold text-white hover:from-purple-500 hover:to-purple-400 disabled:opacity-50'>
+          onClick={ handleSubmit }
+          disabled={ !isFormValid }
+          className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Crear Grado
         </Button>
       </div>
 
       {/* Escuela Drawer */}
       <Drawer open={showEscuelaDrawer} onOpenChange={setShowEscuelaDrawer}>
-        <DrawerContent className='border-purple-500/30 bg-[#110a24]'>
+        <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
           <DrawerHeader>
             <DrawerTitle className='text-white'>Seleccionar Escuela</DrawerTitle>
           </DrawerHeader>
@@ -270,7 +279,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
 
       {/* Maestra Titular Drawer */}
       <Drawer open={showMaestraDrawer} onOpenChange={setShowMaestraDrawer}>
-        <DrawerContent className='border-purple-500/30 bg-[#110a24]'>
+        <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
           <DrawerHeader>
             <DrawerTitle className='text-white'>Seleccionar Maestra Titular</DrawerTitle>
           </DrawerHeader>

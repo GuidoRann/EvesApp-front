@@ -127,7 +127,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
   // Alumnos list view
   if (showAlumnosView) {
     return (
-      <div className="flex min-h-dvh flex-col bg-background">
+      <div className="mx-auto flex h-dvh w-md flex-col bg-background">
         {/* Header */}
         <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4">
           <div className="absolute inset-0 opacity-30">
@@ -193,11 +193,11 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
         </div>
 
         {/* Add button */}
-        <div className="fixed bottom-0 left-0 right-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm">
+        <div className="fixed mx-auto w-md bottom-0 left-0 right-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm">
           <Button
             onClick={() => setShowAddAlumnoDrawer(true)}
             className="w-full bg-emerald-600 py-6 text-base font-semibold text-white hover:bg-emerald-500"
-          >
+            >
             <Plus className="mr-2 h-5 w-5" />
             Agregar Alumno
           </Button>
@@ -205,7 +205,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
 
         {/* Add Alumno Drawer */}
         <Drawer open={showAddAlumnoDrawer} onOpenChange={setShowAddAlumnoDrawer}>
-          <DrawerContent className="border-purple-500/30 bg-[#110a24]">
+          <DrawerContent className="w-md mx-auto border-purple-500/30 bg-[#110a24]">
             <DrawerHeader>
               <DrawerTitle className="text-white">Nuevo Alumno</DrawerTitle>
             </DrawerHeader>
@@ -252,7 +252,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
       {/* Header */}
       <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4">
         <div className="absolute inset-0 opacity-30">
@@ -400,7 +400,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
 
       {/* Maestras Drawer */}
       <Drawer open={showMaestrasDrawer} onOpenChange={setShowMaestrasDrawer}>
-        <DrawerContent className="border-purple-500/30 bg-[#110a24]">
+        <DrawerContent className="w-md mx-auto border-purple-500/30 bg-[#110a24]">
           <DrawerHeader>
             <DrawerTitle className="text-white">Seleccionar Maestras</DrawerTitle>
           </DrawerHeader>

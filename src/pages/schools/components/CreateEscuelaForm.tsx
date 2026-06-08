@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ArrowLeft, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 
 interface CreateEscuelaFormProps {
   onBack: () => void;
@@ -17,9 +18,7 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
   const isFormValid = nombre.trim() !== "" && numero.trim() !== "" && direccion.trim() !== "";
 
   const handleSubmit = () => {
-    if ( isFormValid ) {
-      onSubmit( { nombre, numero, direccion } );
-    } else alert("Todos los campos son obligatorios");
+    onSubmit( { nombre, numero, direccion } );
   };
 
   return (
@@ -55,48 +54,46 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
       </div>
 
       {/* Form */}
-      <main className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
-        <div className="flex flex-col gap-5">
-          {/* Nombre */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-purple-200/80">
-              Nombre de la escuela <span className="text-red-400">*</span>
-            </label>
+      <main className="flex flex-col flex-1 gap-2 overflow-y-auto px-4 py-6 scrollbar-hide">
+        <FieldGroup>
+        <Field className="flex flex-col gap-1">
+            <FieldLabel className='text-sm font-medium text-purple-200/70'>
+              Nombre de la escuela
+            </FieldLabel>
             <Input
-              placeholder="Ej: Escuela Primaria Benito Juarez"
-              value={ nombre }
-              onChange={( e ) => setNombre( e.target.value )}
-              className="bg-[#1a1025] border-purple-500/20 text-white placeholder:text-purple-200/30 focus:border-amber-500/50 focus:ring-amber-500/20"
+              placeholder="Ingrese el nombre de la escuela"
+              className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
+              onChange={ (e) => setNombre(e.target.value) }
             />
-          </div>
+        </Field>
+      </FieldGroup>
 
-          {/* Numero */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-purple-200/80">
-              Numero <span className="text-red-400">*</span>
-            </label>
+      <FieldGroup>
+        <Field className="flex flex-col gap-1">
+            <FieldLabel className='text-sm font-medium text-purple-200/70'>
+              Número de la escuela
+            </FieldLabel>
             <Input
-              placeholder="Ej: 123"
-              value={ numero }
-              onChange={( e ) => setNumero( e.target.value )}
-              className="bg-[#1a1025] border-purple-500/20 text-white placeholder:text-purple-200/30 focus:border-amber-500/50 focus:ring-amber-500/20"
+              placeholder="Ingrese el nombre de la escuela"
+              className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
+              onChange={ (e) => setNumero(e.target.value) }
             />
-          </div>
+        </Field>
+      </FieldGroup>
 
-          {/* Direccion */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-purple-200/80">
-              Direccion <span className="text-red-400">*</span>
-            </label>
+      <FieldGroup>
+        <Field className="flex flex-col gap-1">
+            <FieldLabel className='text-sm font-medium text-purple-200/70'>
+              Direccion de la escuela
+            </FieldLabel>
             <Input
-              placeholder="Ej: Calle Principal #456, Col. Centro"
-              value={ direccion }
-              onChange={( e ) => setDireccion( e.target.value )}
-              className="bg-[#1a1025] border-purple-500/20 text-white placeholder:text-purple-200/30 focus:border-amber-500/50 focus:ring-amber-500/20"
+              placeholder="Ingrese el nombre de la escuela"
+              className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
+              onChange={ (e) => setDireccion(e.target.value) }
             />
-          </div>
-        </div>
-      </main>
+        </Field>
+      </FieldGroup>
+      </main> 
 
       {/* Footer button */}
       <div className="p-4 border-t border-purple-500/10">

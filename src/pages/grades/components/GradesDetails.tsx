@@ -1,5 +1,4 @@
 import { BottomNav } from '@/components/BottomNav';
-import TopNav from '@/components/TopNav';
 
 export default function GradesDetails( gradeName: string ) {
   return (
@@ -14,7 +13,6 @@ export default function GradesDetails( gradeName: string ) {
           <div className='absolute top-14 left-[10%] h-1 w-1 rounded-full bg-purple-300' />
           <div className='absolute top-4 right-[40%] h-0.5 w-0.5 rounded-full bg-purple-200' />
         </div>
-        <TopNav />
         <h1 className='text-4xl font-bold text-center pt-8 pb-4'> { gradeName } </h1>
       </div>
 

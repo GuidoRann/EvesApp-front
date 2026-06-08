@@ -1,27 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateEscuelaForm from './components/CreateEscuelaForm';
 import EscuelaDetailView from './components/EscuelaDetailView';
 import SchoolCard from './components/EscuelaCard';
 import SchoolsHeader from './components/EscuelaHeader';
 import type { CreateEscuelaDTO, EscuelaDTO } from '@/types/EscuelaTypes';
 import { useManagementEscuelas } from './hooks/useManagementEscuela';
-import Loading from '@/components/Loading';
 import { BottomNav } from '@/components/BottomNav';
+import JoinEscuela from './components/JoinEscuela';
 
-type ViewState = "list" | "create" | "detail";
+type ViewState = "list" | "create" | "detail" | "join";
 
 export default function EscuelaPage() {
-  const [ escuelas, setEscuelas ] = useState<EscuelaDTO[]>();
+  const [ escuelas, setEscuelas ] = useState< EscuelaDTO[] >();
   const [ view, setView ] = useState<ViewState>( "list" );
   const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
-  const { createEscuela } = useManagementEscuelas();
+  const { createEscuela, listarEscuelas } = useManagementEscuelas();
+
+  useEffect(() => {
+    const fetchEscuelas = async () => {
+      const escuelas = await listarEscuelas();
+
+      setEscuelas( escuelas );
+    };
+
+    if ( view === "list" ) {
+      fetchEscuelas();
+    }
+  }, [ view ]);
 
   const handleCreateClick = () => {
-    setView("create");
+    setView( "create" );
   };
 
   const handleJoinClick = () => {
-    console.log("Unirse a escuela");
+    setView( "join" );
   };
 
   const handleSchoolClick = ( escuela: EscuelaDTO ) => {
@@ -35,21 +47,23 @@ export default function EscuelaPage() {
   };
 
 
-  // TODO: Conectar el create con el backend
-  const handleCreateSubmit = ( escuela: CreateEscuelaDTO ) => {
+  const handleCreateSubmit = async ( escuela: CreateEscuelaDTO ) => {
     const newSchool: CreateEscuelaDTO = {
       nombre: escuela.nombre,
       numero: escuela.numero,
       direccion: escuela.direccion
     };
 
-    createEscuela( newSchool );
-    
+    await createEscuela( newSchool );
     setView( "list" );
   };
 
   if ( view === "create" ) {
     return <CreateEscuelaForm onBack={ handleBack } onSubmit={ handleCreateSubmit } />;
+  }
+
+  if ( view === "join" ) {
+    return <JoinEscuela onBack={ handleBack } />;
   }
 
   if ( view === "detail" && selectedEscuela ) {
@@ -75,7 +89,7 @@ export default function EscuelaPage() {
               key={ escuela.escuelaId }
               name={ escuela.nombre }
               location={ escuela.direccion }
-              gradesCount={ escuela.grados.length }
+              gradesCount={ escuela.grados?.length || 0 }
               onClick={ () => handleSchoolClick( escuela ) }
             />
           ))}

@@ -47,8 +47,9 @@ export const useManagementEscuelas = () => {
       const token = data.session?.access_token;
 
       if ( !token ) return;
+      const response = await EscuelaService.listarEscuelas( token );
 
-      return await EscuelaService.listarEscuelas( token );
+      return response.body
     } catch ( error ) {
       console.log( error );
     }

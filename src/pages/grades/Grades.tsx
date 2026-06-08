@@ -5,7 +5,7 @@ import GradeDetailView, { type GradeDetailData } from './components/GradeDetailV
 import GradeCard from './components/GradesCard';
 import GradesHeader from './components/GradesHeader';
 
-const gradesData: GradeDetailData[] = [
+const gradosComoTitular: GradeDetailData[] = [
   {
     id: "1",
     numero: 4,
@@ -19,7 +19,10 @@ const gradesData: GradeDetailData[] = [
       { id: "1", nombre: "Juan", apellidoPaterno: "Perez", apellidoMaterno: "Lopez" },
       { id: "2", nombre: "Ana", apellidoPaterno: "Martinez", apellidoMaterno: "Garcia" },
     ],
-  },
+  }
+];
+
+const gradosComoMaestra: GradeDetailData[] = [
   {
     id: "2",
     numero: 3,
@@ -60,44 +63,43 @@ const gradesData: GradeDetailData[] = [
 type ViewState = "list" | "detail" | "create";
 
 export default function Grades() {
-  const [grades, setGrades] = useState<GradeDetailData[]>(gradesData);
-  const [currentView, setCurrentView] = useState<ViewState>("list");
-  const [selectedGrade, setSelectedGrade] = useState<GradeDetailData | null>(null);
+  const [gradosTitular, setGradosTitular] = useState<GradeDetailData[]>( gradosComoTitular );
+  const [gradosMaestra, setGradosMaestra] = useState<GradeDetailData[]>( gradosComoMaestra );
+  const [currentView, setCurrentView] = useState<ViewState>( "list" );
+  const [selectedGrade, setSelectedGrade] = useState<GradeDetailData | null>( null );
 
   const handleCreateClick = () => {
-    setCurrentView("create");
+    setCurrentView( "create" );
   };
 
   const handleJoinClick = () => {
-    console.log("Unirse a grado");
+    console.log( "Unirse a grado" );
   };
 
-  const handleGradeClick = (grade: GradeDetailData) => {
-    setSelectedGrade(grade);
-    setCurrentView("detail");
+  const handleGradeClick = ( grade: GradeDetailData ) => {
+    setSelectedGrade( grade );
+    setCurrentView( "detail" );
   };
 
   const handleBackToList = () => {
-    setCurrentView("list");
-    setSelectedGrade(null);
+    setCurrentView( "list" );
+    setSelectedGrade( null );
   };
 
-  const handleUpdateGrade = (updatedGrade: GradeDetailData) => {
-    setGrades((prev) =>
-      prev.map((g) => (g.id === updatedGrade.id ? updatedGrade : g))
-    );
-    setSelectedGrade(updatedGrade);
-  };
-
-  const totalStudents = grades.reduce((acc, g) => acc + g.alumnos.length, 0);
+  // const handleUpdateGrade = ( updatedGrade: GradeDetailData ) => {
+  //   setGradosTitular(( prev ) =>
+  //     prev.map(( g ) => ( g.id === updatedGrade.id ? updatedGrade : g ))
+  //   );
+  //   setSelectedGrade( updatedGrade );
+  // };
 
   // Create view
-  if (currentView === "create") {
+  if ( currentView === "create" ) {
     return (
       <CreateGradoForm
-        onBack={handleBackToList}
-        onSubmit={(data: any) => {
-          console.log("Grado creado:", data);
+        onBack={ handleBackToList }
+        onSubmit={( data: any ) => {
+          console.log( "Grado creado:", data );
           handleBackToList();
         }}
       />
@@ -105,44 +107,59 @@ export default function Grades() {
   }
 
   // Detail view
-  if (currentView === "detail" && selectedGrade) {
+  if ( currentView === "detail" && selectedGrade ) {
     return (
       <GradeDetailView
-        grade={selectedGrade}
-        onBack={handleBackToList}
-        onUpdate={handleUpdateGrade}
+        grade={ selectedGrade }
+        onBack={ handleBackToList }
+        // onUpdate={ handleUpdateGrade }
       />
     );
   }
 
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>
-      <GradesHeader onCreateClick={handleCreateClick} onJoinClick={handleJoinClick} />
+      <GradesHeader onCreateClick={ handleCreateClick } onJoinClick={ handleJoinClick } />
       <main className="flex-1 overflow-y-auto px-4 scrollbar-hide">
 
         {/* Cantidad de grados y cantidad de alumnos */}
         <div className="flex gap-3 py-5">
           <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-emerald-400">{grades.length}</span>
-            <p className="text-purple-200/50 text-xs mt-0.5">Grados</p>
+            <span className="text-2xl font-bold text-emerald-400">{ gradosTitular.length }</span>
+            <p className="text-purple-200/50 text-xs mt-0.5">Grados Titular</p>
           </div>
           <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-white">{totalStudents}</span>
-            <p className="text-purple-200/50 text-xs mt-0.5">Alumnos</p>
+            <span className="text-2xl font-bold text-white">{ gradosMaestra.length }</span>
+            <p className="text-purple-200/50 text-xs mt-0.5">Grados General</p>
           </div>
         </div>
 
         {/* Grades list */}
         <div className="flex flex-col gap-3 pb-24">
-          { grades.map((grade) => (
+          <h1 className="mt-3 font-bold text-center">Grados Como Maestra Titular</h1>
+          <div className="mb-3 border-t border-purple-500/20" />
+          { gradosTitular.map(( grado ) => (
             <GradeCard
-              key={grade.id}
-              numero={grade.numero}
-              letra={grade.letra}
-              turno={grade.turno}
-              nombreEscuela={grade.escuela.nombre}
-              cantidadEstudiantes={grade.alumnos.length}
-              onClick={() => handleGradeClick(grade)}
+              key={ grado.id }
+              numero={ grado.numero }
+              letra={ grado.letra }
+              turno={ grado.turno }
+              nombreEscuela={ grado.escuela.nombre }
+              cantidadEstudiantes={ grado.alumnos.length }
+              onClick={() => handleGradeClick( grado )}
+            />
+          ))}
+          <h1 className="mt-3 font-bold text-center">Grados Como Maestra General</h1>
+          <div className="mb-3 border-t border-purple-500/20" />
+          { gradosMaestra.map(( grado ) => (
+            <GradeCard
+              key={ grado.id }
+              numero={ grado.numero }
+              letra={ grado.letra }
+              turno={ grado.turno }
+              nombreEscuela={ grado.escuela.nombre }
+              cantidadEstudiantes={ grado.alumnos.length }
+              onClick={() => handleGradeClick( grado )}
             />
           ))}
         </div>
