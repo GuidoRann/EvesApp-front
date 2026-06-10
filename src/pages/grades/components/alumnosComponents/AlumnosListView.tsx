@@ -9,13 +9,16 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import type { AlumnoType } from '@/types/AlumnoTypes';
+import type { AlumnoType, CreateAlumnoDTO } from '@/types/AlumnoTypes';
+import CreateAlumnoView from './CreateAlumnoView';
 
 interface AlumnosListViewProps {
   alumnos: AlumnoType[];
   onBack: () => void;
   onSave: ( alumnos: AlumnoType[] ) => void;
 }
+
+type CurrentView = "list" | "create";
 
 export default function AlumnosListView({
   alumnos: initialAlumnos,
@@ -24,26 +27,29 @@ export default function AlumnosListView({
 }: AlumnosListViewProps) {
   const [ alumnos, setAlumnos ] = useState<AlumnoType[]>( initialAlumnos );
   const [ showAddDrawer, setShowAddDrawer ] = useState( false );
-  const [ newAlumno, setNewAlumno ] = useState<AlumnoType>({
-    alumnoId: "",
+  const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
+  const [ newAlumno, setNewAlumno ] = useState<CreateAlumnoDTO>({
     nombre: "",
-    apellido: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
     numeroDocumento: "",
     direccion: "",
     fechaNacimiento: new Date(),
   });
 
-  // const handleAddAlumno = () => {
-  //   if (newAlumno.nombre && newAlumno.apellidoPaterno) {
-  //     const alumno: Alumno = {
-  //       id: Date.now().toString(),
-  //       ...newAlumno,
-  //     };
-  //     setAlumnos([...alumnos, alumno]);
-  //     setNewAlumno({ nombre: "", apellidoPaterno: "", apellidoMaterno: "" });
-  //     setShowAddDrawer(false);
-  //   }
-  // };
+  const handleCreateAlumno = () => {
+      setCurrentView( "create" );
+  };
+
+  if ( currentView === "create" ) {
+    return (
+      <CreateAlumnoView
+        onBack={ () => setCurrentView( "list" ) }
+        // onSave={ () => {} }
+      />
+    );
+  }
+  
 
   const handleRemoveAlumno = ( alumnoId: string ) => {
     setAlumnos( alumnos.filter(( a ) => a.alumnoId !== alumnoId ));
@@ -55,7 +61,7 @@ export default function AlumnosListView({
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
       <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute left-[20%] top-6 h-1 w-1 animate-pulse rounded-full bg-white" />
@@ -81,7 +87,7 @@ export default function AlumnosListView({
               </p>
             </div>
             <button
-              onClick={() => setShowAddDrawer( true )}
+              onClick={() => handleCreateAlumno() }
               className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-white transition-colors hover:bg-purple-500"
             >
               <Plus className="h-5 w-5" />
@@ -117,7 +123,7 @@ export default function AlumnosListView({
                   </div>
                   <div>
                     <p className="font-medium text-white">
-                      { alumno.nombre } { alumno.apellido } { alumno.numeroDocumento }
+                      { alumno.nombre } { alumno.apellidoPaterno } { alumno.numeroDocumento }
                     </p>
                   </div>
                 </div>
@@ -164,13 +170,26 @@ export default function AlumnosListView({
               </Field>
               <Field>
                 <FieldLabel className="text-purple-100">
-                  Apellido
+                  Apellido Paterno
                 </FieldLabel>
                 <Input
                   placeholder="Apellido"
-                  value={ newAlumno.apellido }
+                  value={ newAlumno.apellidoPaterno }
                   onChange={( e ) =>
-                    setNewAlumno({ ...newAlumno, apellido: e.target.value })
+                    setNewAlumno({ ...newAlumno, apellidoPaterno: e.target.value })
+                  }
+                  className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
+                />
+              </Field>
+              <Field>
+                <FieldLabel className="text-purple-100">
+                  Apellido Materno
+                </FieldLabel>
+                <Input
+                  placeholder="Apellido"
+                  value={ newAlumno.apellidoMaterno }
+                  onChange={( e ) =>
+                    setNewAlumno({ ...newAlumno, apellidoMaterno: e.target.value })
                   }
                   className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
                 />
@@ -199,7 +218,7 @@ export default function AlumnosListView({
               </Button>
               <Button
                 onClick={ () => alert( "Modificar agregar alumno" ) }
-                disabled={ !newAlumno.nombre || !newAlumno.apellido }
+                disabled={ !newAlumno.nombre || !newAlumno.apellidoPaterno || !newAlumno.apellidoMaterno || !newAlumno.numeroDocumento }
                 className="flex-1 bg-purple-600 text-white hover:bg-purple-500 disabled:opacity-50"
               >
                 Agregar

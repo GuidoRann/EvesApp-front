@@ -60,7 +60,7 @@ const gradosComoMaestra: GradeDetailData[] = [
   },
 ];
 
-type ViewState = "list" | "detail" | "create";
+type ViewState = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
   const [gradosTitular, setGradosTitular] = useState<GradeDetailData[]>( gradosComoTitular );
@@ -73,7 +73,7 @@ export default function Grades() {
   };
 
   const handleJoinClick = () => {
-    console.log( "Unirse a grado" );
+    setCurrentView( "join" );
   };
 
   const handleGradeClick = ( grade: GradeDetailData ) => {
@@ -85,13 +85,6 @@ export default function Grades() {
     setCurrentView( "list" );
     setSelectedGrade( null );
   };
-
-  // const handleUpdateGrade = ( updatedGrade: GradeDetailData ) => {
-  //   setGradosTitular(( prev ) =>
-  //     prev.map(( g ) => ( g.id === updatedGrade.id ? updatedGrade : g ))
-  //   );
-  //   setSelectedGrade( updatedGrade );
-  // };
 
   // Create view
   if ( currentView === "create" ) {

@@ -1,7 +1,8 @@
 export interface AlumnoType {
   alumnoId: string
   nombre: string
-  apellido: string
+  apellidoPaterno: string
+  apellidoMaterno: string
   numeroDocumento: string
   direccion: string
   fechaNacimiento: Date
@@ -9,7 +10,8 @@ export interface AlumnoType {
 
 export interface CreateAlumnoDTO {
   nombre: string
-  apellido: string
+  apellidoPaterno: string
+  apellidoMaterno: string
   numeroDocumento: string
   direccion: string
   fechaNacimiento: Date
