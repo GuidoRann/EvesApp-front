@@ -9,6 +9,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import AuthCallback from './pages/auth/authCallback';
 import CreateGradoForm from './pages/grades/components/CreateGradoForm';
 import { Toaster } from 'sonner'
+import AlumnosListView from './pages/grades/components/alumnosComponents/AlumnosListView';
 
 function App() {  
 
@@ -34,6 +35,8 @@ function App() {
               <Route index element={<Grados />} />
               <Route path="create" element={<CreateGradoForm />} />
             </Route>
+
+            <Route path="/studentList" element={<AlumnosListView />} />
 
             <Route path="/schools" element={<Schools />} />
 

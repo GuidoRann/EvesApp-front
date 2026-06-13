@@ -4,6 +4,7 @@ import {supabase} from "@/lib/supabaseClient";
 import axios from "axios";
 import {useMaestraStore} from "@/stores/Maestra.store";
 import Loading from '@/components/Loading';
+import MaestraService from '@/services/MaestraService';
 
 const AuthCallback = () => {
   const { setMaestra } = useMaestraStore();
@@ -38,9 +39,10 @@ const AuthCallback = () => {
           throw new Error("Error al sincronizar usuario");
         }
 
-        const maestra = response.data.body;
+        const perfil = await MaestraService.obtenerPerfil(token);
 
-        setMaestra( maestra );
+        setMaestra(perfil.body);
+
         navigate( "/home" );
       } catch ( error ) {
         console.error( error );

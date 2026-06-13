@@ -39,6 +39,24 @@ export default class EscuelaService {
     }
   }
 
+  static async unirmeEscuela( token: string | null, escuelaId: string ) {
+    try {
+      const response = await axios.put( 
+        `${ this.BASE_URL }/unirmeEscuela/${ escuelaId }`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
   static async listarEscuelas( token: string | null ) {
     try {
       const response = await axios.get( 

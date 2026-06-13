@@ -9,10 +9,7 @@ import {
   UserPlus,
   Search,
   Check,
-  Trash2,
-  Plus,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Drawer,
@@ -20,7 +17,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import CreateAlumnoView from './alumnosComponents/CreateAlumnoView';
 import AlumnosListView from './alumnosComponents/AlumnosListView';
 
 export interface Alumno {
@@ -53,7 +49,7 @@ export interface GradeDetailData {
   alumnos: Alumno[];
 }
 
-type ViewState = "details" | "listaAlumnos" | "createMaestra";
+type ViewState = "details" | "listaAlumnos" | "agregarMaestras";
 
 interface GradeDetailViewProps {
   grade: GradeDetailData;
@@ -89,7 +85,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
   };
 
   const handleCreateMaestra = () => {
-    setCurrentView("createMaestra");
+    setCurrentView("agregarMaestras");
   };
 
   const handleBackToDetails = () => {
@@ -99,7 +95,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
   const selectedMaestrasIds = gradeData.maestrasAdicionales.map((m) => m.id);
 
   const filteredMaestras = mockMaestras.filter(
-    (m) =>
+    ( m ) =>
       m.nombre.toLowerCase().includes(maestrasSearch.toLowerCase()) &&
       m.id !== gradeData.maestraTitular.id
   );
@@ -136,138 +132,6 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
     return <AlumnosListView alumnos={ [] } onBack={ handleBackToDetails } onSave={ handleAddAlumno } />
   }
 
-  // if ( currentView === "createMaestra" ){
-  //   return <CreateMaestraView onBack={ handleBackToDetails } onSubmit={ handleAddMaestra } />
-  // }
-
-
-  // Alumnos list view
-  // if (showAlumnosView) {
-  //   return (
-  //     <div className="mx-auto flex h-dvh w-md flex-col bg-background">
-  //       {/* Header */}
-  //       <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4">
-  //         <div className="absolute inset-0 opacity-30">
-  //           <div className="absolute left-[20%] top-6 h-1 w-1 animate-pulse rounded-full bg-white" />
-  //           <div className="absolute right-[30%] top-10 h-0.5 w-0.5 animate-pulse rounded-full bg-white" />
-  //           <div className="absolute left-[60%] top-16 h-1 w-1 animate-pulse rounded-full bg-white" />
-  //         </div>
-
-  //         <div className="relative px-4">
-  //           <button
-  //             onClick={() => setShowAlumnosView(false)}
-  //             className="mb-4 flex items-center gap-1 text-purple-200 transition-colors hover:text-white"
-  //           >
-  //             <ChevronLeft className="h-5 w-5" />
-  //             <span className="text-sm">Volver</span>
-  //           </button>
-  //           <h1 className="text-2xl font-bold text-white">Lista de Alumnos</h1>
-  //           <p className="mt-1 text-sm text-purple-200/70">
-  //             {gradeData.numero}° Grado - Grupo {gradeData.letra}
-  //           </p>
-  //         </div>
-  //       </div>
-
-  //       {/* Alumnos list */}
-  //       <div className="flex-1 overflow-y-auto px-4 py-6 pb-24">
-  //         {gradeData.alumnos.length === 0 ? (
-  //           <div className="flex flex-col items-center justify-center py-12 text-center">
-  //             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10">
-  //               <Users className="h-8 w-8 text-emerald-400" />
-  //             </div>
-  //             <p className="text-white font-medium">Sin alumnos</p>
-  //             <p className="mt-1 text-sm text-purple-200/50">
-  //               Agrega alumnos a este grado
-  //             </p>
-  //           </div>
-  //         ) : (
-  //           <div className="space-y-2">
-  //             {gradeData.alumnos.map((alumno, index) => (
-  //               <div
-  //                 key={alumno.id}
-  //                 className="flex items-center justify-between rounded-xl border border-purple-500/20 bg-[#1a1025] p-4"
-  //               >
-  //                 <div className="flex items-center gap-3">
-  //                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-sm font-semibold text-emerald-400">
-  //                     {index + 1}
-  //                   </div>
-  //                   <div>
-  //                     <p className="font-medium text-white">
-  //                       {alumno.nombre} {alumno.apellidoPaterno} {alumno.apellidoMaterno}
-  //                     </p>
-  //                   </div>
-  //                 </div>
-  //                 <button
-  //                   onClick={() => handleRemoveAlumno(alumno.id)}
-  //                   className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-500/20"
-  //                 >
-  //                   <Trash2 className="h-4 w-4" />
-  //                 </button>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         )}
-  //       </div>
-
-  //       {/* Add button */}
-  //       <div className="fixed mx-auto w-md bottom-0 left-0 right-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm">
-  //         <Button
-  //           onClick={() => setShowAddAlumnoDrawer(true)}
-  //           className="w-full bg-emerald-600 py-6 text-base font-semibold text-white hover:bg-emerald-500"
-  //           >
-  //           <Plus className="mr-2 h-5 w-5" />
-  //           Agregar Alumno
-  //         </Button>
-  //       </div>
-
-  //       {/* Add Alumno Drawer */}
-  //       <Drawer open={showAddAlumnoDrawer} onOpenChange={setShowAddAlumnoDrawer}>
-  //         <DrawerContent className="w-md mx-auto border-purple-500/30 bg-[#110a24]">
-  //           <DrawerHeader>
-  //             <DrawerTitle className="text-white">Nuevo Alumno</DrawerTitle>
-  //           </DrawerHeader>
-  //           <div className="space-y-4 px-4 pb-6">
-  //             <div>
-  //               <label className="mb-2 block text-sm text-purple-200">Nombre *</label>
-  //               <Input
-  //                 placeholder="Nombre del alumno"
-  //                 value={newAlumno.nombre}
-  //                 onChange={(e) => setNewAlumno({ ...newAlumno, nombre: e.target.value })}
-  //                 className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-  //               />
-  //             </div>
-  //             <div>
-  //               <label className="mb-2 block text-sm text-purple-200">Apellido Paterno *</label>
-  //               <Input
-  //                 placeholder="Apellido paterno"
-  //                 value={newAlumno.apellidoPaterno}
-  //                 onChange={(e) => setNewAlumno({ ...newAlumno, apellidoPaterno: e.target.value })}
-  //                 className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-  //               />
-  //             </div>
-  //             <div>
-  //               <label className="mb-2 block text-sm text-purple-200">Apellido Materno</label>
-  //               <Input
-  //                 placeholder="Apellido materno"
-  //                 value={newAlumno.apellidoMaterno}
-  //                 onChange={(e) => setNewAlumno({ ...newAlumno, apellidoMaterno: e.target.value })}
-  //                 className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-  //               />
-  //             </div>
-  //             <Button
-  //               onClick={handleAddAlumno}
-  //               disabled={!newAlumno.nombre || !newAlumno.apellidoPaterno}
-  //               className="w-full bg-emerald-600 py-6 text-white hover:bg-emerald-500 disabled:opacity-50"
-  //             >
-  //               Agregar
-  //             </Button>
-  //           </div>
-  //         </DrawerContent>
-  //       </Drawer>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
       {/* Header */}
@@ -282,7 +146,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
 
         <div className="relative px-4">
           <button
-            onClick={onBack}
+            onClick={ onBack }
             className="mb-4 flex items-center gap-1 text-purple-200 transition-colors hover:text-white"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -293,14 +157,14 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 border border-emerald-500/30">
               <span className="text-2xl font-bold text-emerald-400">
-                {gradeData.numero}º {gradeData.letra}
+                { gradeData.numero }º { gradeData.letra }
               </span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">
-                {gradeData.numero}° Grado - Grupo {gradeData.letra}
+                { gradeData.numero }° Grado - Grupo { gradeData.letra }
               </h1>
-              <p className="mt-1 text-sm text-purple-200/70">{gradeData.escuela.nombre}</p>
+              <p className="mt-1 text-sm text-purple-200/70">{ gradeData.escuela.nombre }</p>
             </div>
           </div>
         </div>
@@ -318,7 +182,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Escuela</p>
-                <p className="font-medium text-white">{gradeData.escuela.nombre}</p>
+                <p className="font-medium text-white">{ gradeData.escuela.nombre }</p>
               </div>
             </div>
           </div>
@@ -332,7 +196,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
                 </div>
                 <div>
                   <p className="text-xs text-purple-200/50">Turno</p>
-                  <p className="font-medium capitalize text-white">{gradeData.turno}</p>
+                  <p className="font-medium capitalize text-white">{ gradeData.turno }</p>
                 </div>
               </div>
             </div>
@@ -343,7 +207,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
                 </div>
                 <div>
                   <p className="text-xs text-purple-200/50">Division Anual</p>
-                  <p className="font-medium capitalize text-white">{gradeData.divisionAnual}</p>
+                  <p className="font-medium capitalize text-white">{ gradeData.divisionAnual }</p>
                 </div>
               </div>
             </div>
@@ -357,8 +221,8 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Maestra Titular</p>
-                <p className="font-medium text-white">{gradeData.maestraTitular.nombre}</p>
-                <p className="text-xs text-purple-200/50">{gradeData.maestraTitular.email}</p>
+                <p className="font-medium text-white">{ gradeData.maestraTitular.nombre }</p>
+                <p className="text-xs text-purple-200/50">{ gradeData.maestraTitular.email }</p>
               </div>
             </div>
           </div>
@@ -382,9 +246,9 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
               <div>
                 <p className="font-medium text-white">Maestras Adicionales</p>
                 <p className="text-sm text-purple-300/60">
-                  {gradeData.maestrasAdicionales.length > 0
-                    ? `${gradeData.maestrasAdicionales.length} maestra${gradeData.maestrasAdicionales.length > 1 ? "s" : ""} asignada${gradeData.maestrasAdicionales.length > 1 ? "s" : ""}`
-                    : "Agregar otras maestras al grado"}
+                  { gradeData.maestrasAdicionales.length > 0
+                    ? `${ gradeData.maestrasAdicionales.length } maestra${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" } asignada${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" }`
+                    : "Agregar otras maestras al grado" }
                 </p>
               </div>
             </div>
@@ -404,9 +268,9 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
               <div>
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
-                  {gradeData.alumnos.length > 0
-                    ? `${gradeData.alumnos.length} alumno${gradeData.alumnos.length > 1 ? "s" : ""} registrado${gradeData.alumnos.length > 1 ? "s" : ""}`
-                    : "Gestionar lista de alumnos del grado"}
+                  { gradeData.alumnos.length > 0
+                    ? `${ gradeData.alumnos.length } alumno${ gradeData.alumnos.length === 1 ? "s" : "" } registrado${ gradeData.alumnos.length === 1 ? "s" : "" }`
+                    : "Gestionar lista de alumnos del grado" }
                 </p>
               </div>
             </div>
@@ -416,7 +280,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
       </div>
 
       {/* Maestras Drawer */}
-      <Drawer open={showMaestrasDrawer} onOpenChange={setShowMaestrasDrawer}>
+      <Drawer open={ showMaestrasDrawer } onOpenChange={ setShowMaestrasDrawer }>
         <DrawerContent className="w-md mx-auto border-purple-500/30 bg-[#110a24]">
           <DrawerHeader>
             <DrawerTitle className="text-white">Seleccionar Maestras</DrawerTitle>
@@ -429,19 +293,19 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
               <Input
                 placeholder="Buscar por nombre..."
-                value={maestrasSearch}
-                onChange={(e) => setMaestrasSearch(e.target.value)}
+                value={ maestrasSearch }
+                onChange={ ( e ) => setMaestrasSearch( e.target.value ) }
                 className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
               />
             </div>
           </div>
           <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
-            {filteredMaestras.map((maestra) => {
-              const isSelected = selectedMaestrasIds.includes(maestra.id);
+            { filteredMaestras.map(( maestra ) => {
+              const isSelected = selectedMaestrasIds.includes( maestra.id );
               return (
                 <button
-                  key={maestra.id}
-                  onClick={() => toggleMaestraSelection(maestra)}
+                  key={ maestra.id }
+                  onClick={ () => toggleMaestraSelection( maestra ) }
                   className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
                     isSelected
                       ? "border-emerald-500 bg-emerald-600/20"
@@ -454,14 +318,14 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
                         isSelected ? "bg-emerald-500/30" : "bg-purple-600/50"
                       }`}
                     >
-                      <User className={`h-5 w-5 ${isSelected ? "text-emerald-300" : "text-purple-200"}`} />
+                      <User className={`h-5 w-5 ${ isSelected ? "text-emerald-300" : "text-purple-200" }`} />
                     </div>
                     <div>
-                      <p className="font-medium text-white">{maestra.nombre}</p>
-                      <p className="text-sm text-purple-300/60">{maestra.email}</p>
+                      <p className="font-medium text-white">{ maestra.nombre }</p>
+                      <p className="text-sm text-purple-300/60">{ maestra.email }</p>
                     </div>
                   </div>
-                  {isSelected && <Check className="h-5 w-5 text-emerald-400" />}
+                  { isSelected && <Check className="h-5 w-5 text-emerald-400" /> }
                 </button>
               );
             })}

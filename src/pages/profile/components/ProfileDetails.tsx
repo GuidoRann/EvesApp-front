@@ -10,10 +10,10 @@ interface DetailRowProps {
 function DetailRow({ icon, label, value }: DetailRowProps) {
   return (
     <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1f1540]">
-      <div className="text-[#8b5cf6]">{icon}</div>
+      <div className="text-[#8b5cf6]">{ icon }</div>
       <div className="flex items-baseline gap-2">
-        <span className="font-semibold text-white">{label}</span>
-        <span className="text-[#8a7faa]">{value}</span>
+        <span className="font-semibold text-white">{ label }</span>
+        <span className="text-[#8a7faa]">{ value }</span>
       </div>
     </div>
   )
@@ -25,17 +25,17 @@ export function ProfileDetails() {
       <DetailRow
         icon={<School className="h-5 w-5" />}
         label="Escuela:"
-        value="Escuela Benito Ju\u00e1rez"
+        value="Escuela Republica del paraguay"
       />
       <DetailRow
         icon={<BookOpen className="h-5 w-5" />}
         label="Grado:"
-        value="3\u00b0 de Primaria"
+        value="3º de Primaria"
       />
       <DetailRow
         icon={<GraduationCap className="h-5 w-5" />}
         label="Experiencia:"
-        value="8 a\u00f1os de experiencia"
+        value="8 años de experiencia"
       />
       <div className="flex items-center gap-3 px-5 py-4">
         <div className="text-[#8b5cf6]">
@@ -43,7 +43,7 @@ export function ProfileDetails() {
         </div>
         <div className="flex items-baseline gap-2">
           <span className="font-semibold text-white">{'Ubicaci\u00f3n:'}</span>
-          <span className="text-[#8a7faa]">Monterrey, NL</span>
+          <span className="text-[#8a7faa]">Rosario, Argentina</span>
         </div>
       </div>
     </div>

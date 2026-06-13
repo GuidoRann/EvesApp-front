@@ -26,7 +26,6 @@ export default function AlumnosListView({
   onSave,
 }: AlumnosListViewProps) {
   const [ alumnos, setAlumnos ] = useState<AlumnoType[]>( initialAlumnos );
-  const [ showAddDrawer, setShowAddDrawer ] = useState( false );
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const [ newAlumno, setNewAlumno ] = useState<CreateAlumnoDTO>({
     nombre: "",
@@ -148,85 +147,6 @@ export default function AlumnosListView({
           Guardar Lista
         </Button>
       </div>
-
-      {/* Modal Agregar Alumno */}
-      <Drawer open={ showAddDrawer } onOpenChange={ setShowAddDrawer }>
-        <DrawerContent className="border-purple-500/30 bg-[#110a24]">
-          <DrawerHeader>
-            <DrawerTitle className="text-white">Agregar Alumno</DrawerTitle>
-          </DrawerHeader>
-          <div className="px-4 pb-6">
-            <FieldGroup className="space-y-4">
-              <Field>
-                <FieldLabel className="text-purple-100">Nombre *</FieldLabel>
-                <Input
-                  placeholder="Nombre del alumno"
-                  value={ newAlumno.nombre }
-                  onChange={( e ) =>
-                    setNewAlumno({ ...newAlumno, nombre: e.target.value })
-                  }
-                  className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-                />
-              </Field>
-              <Field>
-                <FieldLabel className="text-purple-100">
-                  Apellido Paterno
-                </FieldLabel>
-                <Input
-                  placeholder="Apellido"
-                  value={ newAlumno.apellidoPaterno }
-                  onChange={( e ) =>
-                    setNewAlumno({ ...newAlumno, apellidoPaterno: e.target.value })
-                  }
-                  className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-                />
-              </Field>
-              <Field>
-                <FieldLabel className="text-purple-100">
-                  Apellido Materno
-                </FieldLabel>
-                <Input
-                  placeholder="Apellido"
-                  value={ newAlumno.apellidoMaterno }
-                  onChange={( e ) =>
-                    setNewAlumno({ ...newAlumno, apellidoMaterno: e.target.value })
-                  }
-                  className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-                />
-              </Field>
-              <Field>
-                <FieldLabel className="text-purple-100">
-                  Número de documento
-                </FieldLabel>
-                <Input
-                  placeholder="Número de documento"
-                  value={newAlumno.numeroDocumento}
-                  onChange={(e) =>
-                    setNewAlumno({ ...newAlumno, numeroDocumento: e.target.value })
-                  }
-                  className="border-purple-500/30 bg-purple-900/20 text-white placeholder:text-purple-300/50"
-                />
-              </Field>
-            </FieldGroup>
-            <div className="mt-6 flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowAddDrawer(false)}
-                className="flex-1 border-purple-500/30 text-purple-200 hover:bg-purple-900/30 hover:text-white"
-              >
-                Cancelar
-              </Button>
-              <Button
-                onClick={ () => alert( "Modificar agregar alumno" ) }
-                disabled={ !newAlumno.nombre || !newAlumno.apellidoPaterno || !newAlumno.apellidoMaterno || !newAlumno.numeroDocumento }
-                className="flex-1 bg-purple-600 text-white hover:bg-purple-500 disabled:opacity-50"
-              >
-                Agregar
-              </Button>
-            </div>
-          </div>
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 }

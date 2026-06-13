@@ -7,6 +7,7 @@ import type { CreateEscuelaDTO, EscuelaDTO } from '@/types/EscuelaTypes';
 import { useManagementEscuelas } from './hooks/useManagementEscuela';
 import { BottomNav } from '@/components/BottomNav';
 import JoinEscuela from './components/JoinEscuela';
+import { useMaestraStore } from '@/stores/Maestra.store';
 
 type ViewState = "list" | "create" | "detail" | "join";
 
@@ -14,11 +15,12 @@ export default function EscuelaPage() {
   const [ escuelas, setEscuelas ] = useState< EscuelaDTO[] >();
   const [ view, setView ] = useState<ViewState>( "list" );
   const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
-  const { createEscuela, listarEscuelas } = useManagementEscuelas();
+  const { createEscuela } = useManagementEscuelas();
+  const maestra = useMaestraStore( state => state.maestra );
 
   useEffect(() => {
     const fetchEscuelas = async () => {
-      const escuelas = await listarEscuelas();
+      const escuelas = maestra?.escuelas || [];
 
       setEscuelas( escuelas );
     };

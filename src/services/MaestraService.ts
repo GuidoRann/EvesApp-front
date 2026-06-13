@@ -40,7 +40,7 @@ export default class MaestraService {
   static async obtenerPerfil( token: string | null ){
     try {
       const response = await axios.get( 
-        `${ this.BASE_URL }/maestra/me`,
+        `${ this.BASE_URL }/me`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
