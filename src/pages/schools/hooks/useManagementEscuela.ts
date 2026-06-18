@@ -79,10 +79,6 @@ export const useManagementEscuelas = () => {
 
       const response = await EscuelaService.listarEscuelas( token );
 
-      if ( response ) {
-        toast.success( 'Escuelas obtenidas exitosamente' );
-      };
-
       return response.body
     } catch ( error ) {
       console.log( error );

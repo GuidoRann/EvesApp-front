@@ -6,6 +6,7 @@ import { useManagementEscuelas } from '../hooks/useManagementEscuela';
 import EscuelaCard from './EscuelaCard';
 import { Input } from '@/components/ui/input';
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { useMaestraStore } from '@/stores/Maestra.store';
 
 
 interface JoinEscuelaProps {
@@ -17,7 +18,7 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
   const { listarEscuelas, unirmeAEscuela } = useManagementEscuelas();
   const [ escuelaSearch, setEscuelaSearch ] = useState("");
   const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
-
+  const maestra = useMaestraStore((state) => state.maestra);
 
   useEffect(() => {
     const fetchEscuelas = async () => {
@@ -26,7 +27,7 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
       setEscuelas( escuelas );
     };
   
-      fetchEscuelas();
+    fetchEscuelas();
   }, []);
 
   const handleSchoolClick = ( escuela: EscuelaDTO ) => {
@@ -85,15 +86,22 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
           className="py-5 border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
         />
         <div className='flex flex-col gap-3 pt-5 pb-24'>
-          { filteredEscuelas?.map(( escuela ) => (
-            <EscuelaCard
-              key={ escuela.escuelaId }
-              name={ escuela.nombre }
-              location={ escuela.direccion }
-              gradesCount={ escuela.grados?.length || 0 }
-              onClick={() => handleSchoolClick( escuela )}
-            />
-          ))}
+          { filteredEscuelas?.map(( escuela ) => {
+            const yaUnida = maestra?.escuelas?.some(
+              ( escuelaMaestra ) => escuelaMaestra.escuelaId === escuela.escuelaId
+            );
+
+            return(
+              <EscuelaCard
+                key={ escuela.escuelaId }
+                name={ escuela.nombre }
+                location={ escuela.direccion }
+                gradesCount={ escuela.grados?.length || 0 }
+                alreadyJoined={ yaUnida }
+                onClick={() => handleSchoolClick( escuela )}
+              />
+            )
+          })}
         </div>
       </main>
       <Drawer
