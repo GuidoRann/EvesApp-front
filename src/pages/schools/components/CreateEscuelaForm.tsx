@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, School } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';

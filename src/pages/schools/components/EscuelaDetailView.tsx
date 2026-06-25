@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   School,
   MapPin,
-  Hash,
   BookOpen,
   Users,
   ChevronRight,
