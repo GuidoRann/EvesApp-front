@@ -1,4 +1,4 @@
-import { MapPin, School } from "lucide-react";
+import { GraduationCap, MapPin, School } from "lucide-react";
 
 export interface SchoolCardProps {
   name: string;
@@ -11,46 +11,40 @@ export interface SchoolCardProps {
 export default function EscuelaCard({ name, location, gradesCount, onClick, alreadyJoined }: SchoolCardProps) {
   return (
     <button
-      onClick={ onClick }
-      disabled={ alreadyJoined }
-      className={`w-full flex flex-col bg-[#1a1025] hover:bg-[#201328] active:scale-[0.98] border border-purple-500/10 rounded-2xl transition-all duration-200 overflow-hidden ${
-        alreadyJoined
-          ? "cursor-not-allowed border-gray-600 bg-gray-800/50 opacity-70"
-          : "border-purple-500/30 bg-purple-900/20 hover:bg-purple-900/30"
-      }`}
-    >
-      <div className="h-1.5 w-full bg-amber-500" />
-      
-      <div className="p-4 flex gap-4">
-        <div className="shrink-0 h-16 w-16 rounded-xl flex items-center justify-center bg-amber-500/15">
-          <School className="h-8 w-8 text-amber-400" />
+      onClick={onClick}
+      disabled={alreadyJoined}
+      className={`w-full flex flex-col bg-[#1a1025] hover:bg-[#201328]  active:scale-[0.98] border border-purple-500/10 rounded-2xl transition-all duration-200 overflow-hidden ${
+        alreadyJoined ? "cursor-not-allowed border-gray-600 bg-gray-800/50 opacity-70" : ""
+      }`}>
+      <div className='h-1.5 w-full bg-amber-500' />
+
+      <div className='p-4 flex gap-4'>
+        <div className='shrink-0 h-16 w-16 rounded-xl flex items-center justify-center bg-amber-500/15'>
+          <School className='h-8 w-8 text-amber-400' />
         </div>
 
-        {/* Informacion de la escuela */}
-        <div className="flex-1 flex flex-col items-start text-left min-w-0 py-1">
-      
-          <span className="text-white font-semibold truncate w-full text-left">{ name }</span>
-      
-          <div className="flex items-center gap-3 mt-2">
-            <div className="flex items-center gap-1 text-purple-200/50 text-xs">
-              <MapPin className="h-3 w-3" />
-              <span className="truncate">{ location }</span>
+        {/* Info de la escuela */}
+        <div className='flex-1 flex flex-col items-start text-left min-w-0 py-1'>
+          <span className='text-white font-semibold truncate w-full text-left'>{name}</span>
+          <div className='flex items-center gap-3 mt-0.5'>
+            <div className='flex items-center gap-1 text-purple-200/50 text-xs'>
+              <MapPin className='h-3 w-3' />
+              <span className='truncate'>{location}</span>
             </div>
-
+          </div>
+          <div className="flex items-center gap-3 mt-2">
             { gradesCount !== undefined && (
-              <span className="text-amber-400/70 text-xs font-medium">
-                { gradesCount } { gradesCount === 1 ? "grado" : "grados" }
-              </span>
+              <div className='flex items-center gap-1 text-amber-400/70 text-xs font-medium'>
+                <GraduationCap className='h-3 w-3' />
+                <span>
+                  { gradesCount } { gradesCount === 1 ? "grado" : "grados" }
+                </span>
+              </div>
             )}
           </div>
-
         </div>
       </div>
-          { alreadyJoined && (
-            <span className="text-gray-400/70 text-s font-medium">
-              Ya perteneces a esta escuela
-            </span>
-          )}
+      {alreadyJoined && <span className='text-gray-400/70 text-s font-medium'>Ya perteneces a esta escuela</span>}
     </button>
   );
 }

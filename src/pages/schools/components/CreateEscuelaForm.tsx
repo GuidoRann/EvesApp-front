@@ -14,11 +14,12 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
   const [ nombre, setNombre ] = useState("");
   const [ numero, setNumero ] = useState("");
   const [ direccion, setDireccion ] = useState("");
+  const [ telefono, setTelefono ] = useState("");
 
-  const isFormValid = nombre.trim() !== "" && numero.trim() !== "" && direccion.trim() !== "";
+  const isFormValid = nombre.trim() !== "" && numero.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "";
 
   const handleSubmit = () => {
-    onSubmit( { nombre, numero, direccion } );
+    onSubmit( { nombre, numero, direccion, telefono } );
   };
 
   return (
@@ -46,9 +47,6 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
               <h1 className="text-xl font-bold text-white">Nueva Escuela</h1>
               <p className="text-purple-200/60 text-sm">Completa los datos de la escuela</p>
             </div>
-            <div className="h-12 w-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <School className="h-6 w-6 text-amber-400" />
-            </div>
           </div>
         </div>
       </div>
@@ -63,7 +61,7 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
             <Input
               placeholder="Ingrese el nombre de la escuela"
               className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
-              onChange={ (e) => setNombre(e.target.value) }
+              onChange={ ( e ) => setNombre( e.target.value ) }
             />
         </Field>
       </FieldGroup>
@@ -76,7 +74,7 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
             <Input
               placeholder="Ingrese el nombre de la escuela"
               className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
-              onChange={ (e) => setNumero(e.target.value) }
+              onChange={ ( e ) => setNumero( e.target.value ) }
             />
         </Field>
       </FieldGroup>
@@ -84,12 +82,25 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
       <FieldGroup>
         <Field className="flex flex-col gap-1">
             <FieldLabel className='text-sm font-medium text-purple-200/70'>
-              Direccion de la escuela
+              Direccion 
             </FieldLabel>
             <Input
               placeholder="Ingrese el nombre de la escuela"
               className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
-              onChange={ (e) => setDireccion(e.target.value) }
+              onChange={ ( e ) => setDireccion( e.target.value ) }
+            />
+        </Field>
+      </FieldGroup>
+
+      <FieldGroup>
+        <Field className="flex flex-col gap-1">
+            <FieldLabel className='text-sm font-medium text-purple-200/70'>
+              Telefono 
+            </FieldLabel>
+            <Input
+              placeholder="Ingrese el telefono de la escuela"
+              className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
+              onChange={ ( e ) => setTelefono( e.target.value ) }
             />
         </Field>
       </FieldGroup>

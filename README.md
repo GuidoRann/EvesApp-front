@@ -8,7 +8,24 @@
 
 - [✅] Arreglar que no se pueda unir a la misma escuela y que no aparezca en la lista de escuelas o que aparezca en gris con el texto de "Unida a esta escuela"
 
+- [ ] Mostrar vista de la escuela a hacer click en el boton ( copiar formato de gradosDetails )
+
+- [ ] Mostrar lista de maestras en el desplegable de maestras, pero no se puede hacer ninguna accion con eso, solo son datos planos a mostrar, tanto grados como materias
+
+
+
+----- Implementaciones Grados -----
+- [ ]  
+
+
 ----- Implementaciones Alumnos -----
+
+
+
+
+
+## Features para implementar
+
 
 
 

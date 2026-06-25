@@ -35,7 +35,7 @@ export default function GradeCard({ numero, letra, turno, nombreEscuela, cantida
           <div className="flex items-center gap-3 mt-2">
             <div className="flex items-center gap-1 text-purple-200/50 text-xs">
               <BookOpen className="h-3 w-3" />
-              <span className="capitalize">{turno}</span>
+              <span className="capitalize">{ turno }</span>
             </div>
             { cantidadEstudiantes !== undefined && (
               <div className="flex items-center gap-1 text-emerald-400/70 text-xs font-medium">

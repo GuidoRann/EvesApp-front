@@ -6,7 +6,7 @@ import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
 import { toast } from 'sonner';
 
 export const useManagementEscuelas = () => {
-  const { setEscuela } = useEscuelaStore();
+  const { setEscuela, setListaDeEscuelas } = useEscuelaStore();
   const { fetchProfileInfo } = useManagementProfile();
 
   const createEscuela = async ( escuela: CreateEscuelaDTO ) => {
@@ -27,25 +27,6 @@ export const useManagementEscuelas = () => {
     } catch ( error ) {
       console.log( error );
       toast.error( 'Error al crear la escuela' );
-    }
-  };
-
-  const obtenerEscuela = async ( escuelaId: string ) => {
-    try {
-      const { data } = await supabase.auth.getSession();
-      const token = data.session?.access_token;
-
-      if ( !token ) return;
-
-      const response = await EscuelaService.obtenerEscuela( token, escuelaId );
-
-      if ( response ) {
-        toast.success( 'Escuela obtenida exitosamente' );
-      };
-
-    } catch ( error ) {
-      console.log( error );
-      toast.error( 'Error al obtener la escuela' );
     }
   };
 
@@ -70,6 +51,26 @@ export const useManagementEscuelas = () => {
     }
   };
 
+  const obtenerEscuela = async ( escuelaId: string ) => {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+
+      if ( !token ) return;
+
+      const response = await EscuelaService.obtenerEscuela( token, escuelaId );
+
+      if ( response ) {
+        toast.success( 'Escuela obtenida exitosamente' );
+        setEscuela( response.body );
+      };
+
+    } catch ( error ) {
+      console.log( error );
+      toast.error( 'Error al obtener la escuela' );
+    }
+  };
+
   const listarEscuelas = async () => {
     try {
       const { data } = await supabase.auth.getSession();
@@ -79,6 +80,7 @@ export const useManagementEscuelas = () => {
 
       const response = await EscuelaService.listarEscuelas( token );
 
+      setListaDeEscuelas( response.body );
       return response.body
     } catch ( error ) {
       console.log( error );

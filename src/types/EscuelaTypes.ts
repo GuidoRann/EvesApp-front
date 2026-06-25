@@ -6,7 +6,8 @@ export interface EscuelaDTO {
   nombre: string
   numero: string
   direccion: string
-  grados: GradoDTO[]
+  telefono: string
+  listaGrados: GradoDTO[]
   maestras: MaestraDTO[]
 }
 
@@ -14,4 +15,5 @@ export interface CreateEscuelaDTO {
   nombre: string
   numero: string
   direccion: string
+  telefono: string
 }

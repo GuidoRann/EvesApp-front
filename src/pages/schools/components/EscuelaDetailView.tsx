@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   School,
@@ -8,9 +8,8 @@ import {
   Users,
   ChevronRight,
   Search,
-  Check,
-  UserPlus,
-  Trash2,
+  PhoneIcon,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +22,7 @@ import {
 } from "@/components/ui/drawer";
 import type { EscuelaDTO } from '@/types/EscuelaTypes';
 import type { MaestraDTO } from '@/types/MaestraTypes';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface EscuelaDetailViewProps {
   escuela: EscuelaDTO;
@@ -32,9 +32,14 @@ interface EscuelaDetailViewProps {
 export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailViewProps) {
   const [ maestrasOpen, setMaestrasOpen ] = useState( false );
   const [ maestrasSearch, setMaestrasSearch ] = useState( "" );
-  const [ selectedMaestras, setSelectedMaestras ] = useState< MaestraDTO[] >( escuela.maestras );
-  const [ tempSelectedMaestras, setTempSelectedMaestras ] = useState< MaestraDTO[] >( [] );
-  const [ availableMaestras, setAvailableMaestras ] = useState< MaestraDTO[] >( escuela.maestras );
+  const [ gradosOpen, setGradosOpen ] = useState( false );
+  const [ gradosSearch, setGradosSearch ] = useState( "" );
+  const [ availableMaestras, setAvailableMaestras ] = useState< MaestraDTO[] >( [] );
+
+
+  useEffect(() => {
+    setAvailableMaestras( escuela.maestras ?? [] );
+  }, [ escuela ]);
 
   // Filtro para buscar maestras
   const filteredMaestras = availableMaestras.filter(
@@ -43,27 +48,18 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
       m.email.toLowerCase().includes( maestrasSearch.toLowerCase() )
   );
 
+  // Filtro para separar grados por turnos
+  const filteredGrados = escuela.listaGrados?.filter(
+    (g) => !gradosSearch || g.turno === gradosSearch
+  );
+
+  const handleOpenGrados = () => {
+    setGradosSearch( "" );
+    setGradosOpen( true );
+  };
+
   const handleOpenMaestras = () => {
-    setTempSelectedMaestras( [ ...selectedMaestras ] );
     setMaestrasOpen( true );
-  };
-
-  const toggleMaestraSelection = ( maestra: MaestraDTO ) => {
-    const isSelected = tempSelectedMaestras.some( ( m ) => m.maestraId === maestra.maestraId );
-    if ( isSelected ) {
-      setTempSelectedMaestras( tempSelectedMaestras.filter(( m ) => m.maestraId !== maestra.maestraId ) );
-    } else {
-      setTempSelectedMaestras([ ...tempSelectedMaestras, maestra ]);
-    }
-  };
-
-  const handleSaveMaestras = () => {
-    setSelectedMaestras( tempSelectedMaestras );
-    setMaestrasOpen( false );
-  };
-
-  const removeMaestra = ( maestraId: string ) => {
-    setSelectedMaestras( selectedMaestras.filter(( m ) => m.maestraId !== maestraId ));
   };
 
   return (
@@ -89,9 +85,6 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
               <h1 className="text-xl font-bold text-white truncate">{ escuela.nombre }</h1>
               <p className="text-purple-200/60 text-sm">Detalle de la escuela</p>
             </div>
-            <div className="h-12 w-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <School className="h-6 w-6 text-amber-400" />
-            </div>
           </div>
         </div>
       </div>
@@ -100,30 +93,29 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
       <main className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
         {/* Informacion de la escuela */}
         <div className="flex flex-col gap-3">
-          {/* Nombre */}
-          <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl">
-            <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
-              <School className="h-5 w-5 text-amber-400" />
+          <div className="flex gap-2 ">
+            {/* Nombre */}
+            <div className="flex w-3/4 gap-4 p-4  bg-[#1a1025] border border-purple-500/20 rounded-xl">
+              <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                <School className="h-5 w-5 text-purple-300" />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-purple-200/50 text-xs">Nombre</p>
+                <p className="text-white font-medium">{ escuela.nombre }</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-purple-200/50 text-xs">Nombre</p>
-              <p className="text-white font-medium">{ escuela.nombre }</p>
-            </div>
-          </div>
 
-          {/* Numero */}
-          <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl">
-            <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
-              <Hash className="h-5 w-5 text-amber-400" />
-            </div>
-            <div className="flex-1">
-              <p className="text-purple-200/50 text-xs">Numero</p>
-              <p className="text-white font-medium">{ escuela.numero }</p>
+            {/* Numero */}
+            <div className="flex items-center justify-center gap-4 w-1/4 p-4 bg-[#1a1025] border border-purple-500/20 rounded-xl">
+              <div className="flex flex-col justify-center items-center">
+                <p className="text-purple-200/50 text-xs">Numero</p>
+                <p className="text-white font-medium">{ escuela.numero }</p>
+              </div>
             </div>
           </div>
 
           {/* Direccion */}
-          <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl">
+          <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/20 rounded-xl">
             <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
               <MapPin className="h-5 w-5 text-amber-400" />
             </div>
@@ -132,22 +124,37 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
               <p className="text-white font-medium">{ escuela.direccion }</p>
             </div>
           </div>
+
+          {/* telefono */}
+          <div className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/20 rounded-xl">
+            <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
+              <PhoneIcon className="h-5 w-5 text-amber-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-purple-200/50 text-xs">Telefono</p>
+              <p className="text-white font-medium">{ escuela.telefono ?? "Sin telefono" }</p>
+            </div>
+          </div>
         </div>
 
-        <div className="h-px bg-purple-500/10 my-6" />
+        <div className="my-6 border-t border-purple-500/20" />
+
+        <p className="text-sm font-medium text-purple-200/70 mb-4">Gestionar</p>
 
         {/* Botones de accion */}
         <div className="flex flex-col gap-3">
           {/* Grados */}
-          <button className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl hover:bg-[#201328] transition-colors">
-            <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-amber-400" />
+          <button 
+            onClick={ handleOpenGrados } 
+            className="flex w-full items-center justify-between gap-4 rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30">
+            <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-purple-300" />
             </div>
             <div className="flex-1 text-left">
               <p className="text-white font-medium">Lista de Grados</p>
-              <p className="text-purple-200/50 text-xs">
-                { escuela.grados.length > 0
-                  ? `${escuela.grados.length} ${escuela.grados.length === 1 ? "grado" : "grados"}`
+              <p className="text-purple-300/60 text-xs">
+                { escuela.listaGrados?.length > 0
+                  ? `${escuela.listaGrados.length} ${escuela.listaGrados.length === 1 ? "grado" : "grados"}`
                   : "Sin grados asignados" }
               </p>
             </div>
@@ -157,112 +164,140 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
           {/* Maestras */}
           <button
             onClick={ handleOpenMaestras }
-            className="flex items-center gap-4 p-4 bg-[#1a1025] border border-purple-500/10 rounded-xl hover:bg-[#201328] transition-colors"
+            className="flex w-full items-center justify-between gap-4 rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
           >
-            <div className="h-10 w-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
-              <Users className="h-5 w-5 text-amber-400" />
+            <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <Users className="h-5 w-5 text-purple-300" />
             </div>
             <div className="flex-1 text-left">
               <p className="text-white font-medium">Maestras de la Escuela</p>
-              <p className="text-purple-200/50 text-xs">
-                { selectedMaestras.length > 0
-                  ? `${selectedMaestras.length} ${selectedMaestras.length === 1 ? "maestra" : "maestras"}`
+              <p className="text-purple-300/60 text-xs">
+                { availableMaestras?.length > 0
+                  ? `${ availableMaestras.length } ${ availableMaestras.length === 1 ? "maestra" : "maestras" }`
                   : "Sin maestras asignadas" }
               </p>
             </div>
             <ChevronRight className="h-5 w-5 text-purple-200/30" />
           </button>
         </div>
-
-        {/* Maestras asignadas */}
-        { selectedMaestras.length > 0 && (
-          <div className="mt-4">
-            <p className="text-purple-200/50 text-xs mb-2 px-1">Maestras asignadas</p>
-            <div className="flex flex-col gap-2">
-              { selectedMaestras.map(( maestra ) => (
-                <div
-                  key={ maestra.maestraId }
-                  className="flex items-center gap-3 p-3 bg-[#1a1025] border border-purple-500/10 rounded-xl"
-                >
-                  <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center">
-                    <span className="text-amber-400 text-xs font-medium">
-                      { maestra.nombre.charAt( 0 ) }
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-white text-sm font-medium">{ maestra.nombre }</p>
-                    <p className="text-purple-200/40 text-xs">{ maestra.email }</p>
-                  </div>
-                  <button
-                    onClick={() => removeMaestra( maestra.maestraId )}
-                    className="h-8 w-8 rounded-full bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4 text-red-400" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
 
-      {/* TODO: Al seleccionar la maestra tiene que agregarse al grado en base de datos  */}
-      {/* Seleccionador de maestras */}
-      <Drawer open={ maestrasOpen } onOpenChange={ setMaestrasOpen }>
-        <DrawerContent className="bg-[#1a1025] border-purple-500/20">
+      {/* Lista de grados pertenecientes al grado */}
+      <Drawer open={ gradosOpen } onOpenChange={ setGradosOpen }>
+        <DrawerContent className="max-w-md mx-auto h-[85vh] flex flex-col bg-[#1a1025] border-purple-500/20">
           <DrawerHeader>
-            <DrawerTitle className="text-white">Maestras de la Escuela</DrawerTitle>
+            <DrawerTitle className="text-white">
+              Grados de la Escuela
+            </DrawerTitle>
             <DrawerDescription className="text-purple-200/60">
-              Selecciona las maestras que pertenecen a esta escuela
+              Estos son los grados pertenecientes a la escuela
             </DrawerDescription>
           </DrawerHeader>
-          <div className="px-4 pb-4">
+
+          <div className="flex flex-col flex-1 px-4 pb-4 overflow-hidden">
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-200/40" />
+              <Select
+                value={ gradosSearch }
+                onValueChange={ setGradosSearch }
+              >
+                <SelectTrigger className="pl-10 w-full bg-[#110a24] border-purple-500/20 text-white placeholder:text-purple-200/30">
+                  <SelectValue placeholder="Seleccionar turno" />
+                </SelectTrigger>
+
+                <SelectContent className="bg-[#110a24] border-purple-500/20 text-white">
+                  <SelectItem value="Mañana">Mañana</SelectItem>
+                  <SelectItem value="Tarde">Tarde</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex-1 overflow-y-auto flex flex-col gap-2">
+              {filteredGrados?.map(( grado ) => {
+                return (
+                  <div
+                    key={ grado.gradoId }
+                    className="flex items-center gap-3 p-3 rounded-xl transition-all bg-[#110a24] border border-purple-500/10 hover:border-purple-500/30"
+                  >
+                    <div className="h-8 w-8 rounded-full flex items-center justify-center bg-purple-500/20">
+                      <User className="h-4 w-4 text-purple-300" />
+                    </div>
+
+                    <div className="flex-1 text-left">
+                      <p className="text-white text-sm font-medium">
+                        {grado.letra} {grado.numero}
+                      </p>
+                      <p className="text-white text-sm font-medium">
+                        {grado.turno}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <Button
+              onClick={() => setGradosOpen( false )}
+              className="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-white"
+            >
+              Cerrar
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Lista de maestras pertenecientes al grado */}
+      <Drawer open={maestrasOpen} onOpenChange={setMaestrasOpen}>
+        <DrawerContent className="max-w-md mx-auto h-[85vh] flex flex-col bg-[#1a1025] border-purple-500/20">
+          <DrawerHeader>
+            <DrawerTitle className="text-white">
+              Maestras de la Escuela
+            </DrawerTitle>
+            <DrawerDescription className="text-purple-200/60">
+              Estas son todas las maestras registradas en esta escuela
+            </DrawerDescription>
+          </DrawerHeader>
+
+          <div className="flex flex-col flex-1 px-4 pb-4 overflow-hidden">
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-200/40" />
               <Input
                 placeholder="Buscar maestra..."
-                value={ maestrasSearch }
-                onChange={( e ) => setMaestrasSearch( e.target.value )}
+                value={maestrasSearch}
+                onChange={(e) => setMaestrasSearch(e.target.value)}
                 className="pl-10 bg-[#110a24] border-purple-500/20 text-white placeholder:text-purple-200/30"
               />
             </div>
-            <div className="max-h-64 overflow-y-auto flex flex-col gap-2">
-              { filteredMaestras.map(( maestra ) => {
-                const isSelected = tempSelectedMaestras.some(( m ) => m.maestraId === maestra.maestraId);
+
+            <div className="flex-1 overflow-y-auto flex flex-col gap-2">
+              {filteredMaestras.map((maestra) => {
                 return (
-                  <button
-                    key={ maestra.maestraId }
-                    onClick={() => toggleMaestraSelection( maestra )}
-                    className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
-                      isSelected
-                        ? "bg-amber-500/20 border border-amber-500/30"
-                        : "bg-[#110a24] border border-purple-500/10 hover:border-purple-500/30"
-                    }`}
+                  <div
+                    key={maestra.maestraId}
+                    className="flex items-center gap-3 p-3 rounded-xl transition-all bg-[#110a24] border border-purple-500/10 hover:border-purple-500/30"
                   >
-                    <div
-                      className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                        isSelected ? "bg-amber-500" : "bg-purple-500/20"
-                      }`}
-                    >
-                      { isSelected ? (
-                        <Check className="h-4 w-4 text-white" />
-                      ) : (
-                        <UserPlus className="h-4 w-4 text-purple-300" />
-                      ) }
+                    <div className="h-8 w-8 rounded-full flex items-center justify-center bg-purple-500/20">
+                      <User className="h-4 w-4 text-purple-300" />
                     </div>
+
                     <div className="flex-1 text-left">
-                      <p className="text-white text-sm font-medium">{ maestra.nombre }</p>
-                      <p className="text-purple-200/40 text-xs">{ maestra.email }</p>
+                      <p className="text-white text-sm font-medium">
+                        {maestra.nombre}
+                      </p>
+                      <p className="text-purple-200/40 text-xs">
+                        {maestra.email}
+                      </p>
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
+
             <Button
-              onClick={ handleSaveMaestras }
+              onClick={() => setMaestrasOpen(false)}
               className="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-white"
             >
-              Guardar ( { tempSelectedMaestras.length } seleccionadas )
+              Cerrar
             </Button>
           </div>
         </DrawerContent>

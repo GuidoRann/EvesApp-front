@@ -70,9 +70,6 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
               <h1 className='text-xl font-bold text-white'>Unirme a una Escuela</h1>
               <p className='text-purple-200/60 text-sm'>Selecciona la escuela a la que quieres unirte</p>
             </div>
-            <div className='h-12 w-12 rounded-xl bg-amber-500/20 flex items-center justify-center'>
-              <LayoutGrid className='h-6 w-6 text-amber-400' />
-            </div>
           </div>
         </div>
       </div>
@@ -96,7 +93,7 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
                 key={ escuela.escuelaId }
                 name={ escuela.nombre }
                 location={ escuela.direccion }
-                gradesCount={ escuela.grados?.length || 0 }
+                gradesCount={ escuela.listaGrados?.length || 0 }
                 alreadyJoined={ yaUnida }
                 onClick={() => handleSchoolClick( escuela )}
               />

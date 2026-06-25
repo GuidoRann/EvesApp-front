@@ -71,8 +71,6 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
   const [gradeData, setGradeData] = useState<GradeDetailData>(grade);
   const [showMaestrasDrawer, setShowMaestrasDrawer] = useState(false);
   const [currentView, setCurrentView] = useState<ViewState>( "details" );
-  // const [showAlumnosView, setShowAlumnosView] = useState(false);
-  // const [showAddAlumnoDrawer, setShowAddAlumnoDrawer] = useState(false);
   const [maestrasSearch, setMaestrasSearch] = useState("");
   const [newAlumno, setNewAlumno] = useState({
     nombre: "",
