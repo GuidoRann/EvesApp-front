@@ -1,12 +1,29 @@
-import { Plus, Users, Search } from "lucide-react";
-import { useState } from "react";
+import { Plus, Users, Search, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface GradesHeaderProps {
   onCreateClick?: () => void;
   onJoinClick?: () => void;
+  searchQuery?: string;
+  onSearchChange?: ( value: string ) => void;
 }
-export default function GradesHeader({ onCreateClick, onJoinClick }: GradesHeaderProps) {
+export default function GradesHeader({ onCreateClick, onJoinClick, searchQuery, onSearchChange }: GradesHeaderProps) {
   const [activeTab, setActiveTab] = useState<"create" | "join" | null>(null);
+  const [ searchOpen, setSearchOpen ] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+      if ( searchOpen ) {
+        inputRef.current?.focus();
+      }
+    }, [ searchOpen ]);
+
+    const toggleSearch = () => {
+    if ( searchOpen ) {
+      onSearchChange?.( "" );
+    }
+    setSearchOpen(( prev ) => !prev);
+  };
 
   const handleTabClick = (tab: "create" | "join") => {
     if (activeTab === tab) {
@@ -38,9 +55,46 @@ export default function GradesHeader({ onCreateClick, onJoinClick }: GradesHeade
               Gestiona tus clases
             </p>
           </div>
-          <button className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/15 transition-colors">
-            <Search className="h-5 w-5 text-white/80" />
+          {/* Search icon button */}
+          <button
+            onClick={ toggleSearch }
+            aria-label={ searchOpen ? "Cerrar busqueda" : "Buscar escuelas" }
+            className={`h-10 w-10 flex items-center justify-center rounded-full transition-colors ${
+              searchOpen ? "bg-amber-500 text-white" : "bg-white/10 hover:bg-white/15 text-white/80"
+            }`}
+          >
+            { searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
+        </div>
+
+        {/* Expanding search bar */}
+        <div
+          className={`grid transition-all duration-300 ease-out ${
+            searchOpen ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-200/50" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => onSearchChange?.(e.target.value)}
+                placeholder="Buscar por nombre o direccion..."
+                className="w-full h-11 pl-10 pr-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm placeholder:text-purple-200/40 outline-none focus:border-amber-400/50 focus:bg-white/15 transition-colors"
+              />
+              { searchQuery && (
+                <button
+                  onClick={() => onSearchChange?.("")}
+                  aria-label="Limpiar"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-200/50 hover:text-white"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex bg-white/5 rounded-lg p-1 gap-1">

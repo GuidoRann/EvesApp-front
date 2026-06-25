@@ -63,10 +63,11 @@ const gradosComoMaestra: GradeDetailData[] = [
 type ViewState = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
-  const [gradosTitular, setGradosTitular] = useState<GradeDetailData[]>( gradosComoTitular );
-  const [gradosMaestra, setGradosMaestra] = useState<GradeDetailData[]>( gradosComoMaestra );
-  const [currentView, setCurrentView] = useState<ViewState>( "list" );
-  const [selectedGrade, setSelectedGrade] = useState<GradeDetailData | null>( null );
+  const [ gradosTitular, setGradosTitular ] = useState<GradeDetailData[]>( gradosComoTitular );
+  const [ gradosMaestra, setGradosMaestra ] = useState<GradeDetailData[]>( gradosComoMaestra );
+  const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
+  const [ selectedGrade, setSelectedGrade ] = useState<GradeDetailData | null>( null );
+  const [ searchQuery, setSearchQuery ] = useState("");
 
   const handleCreateClick = () => {
     setCurrentView( "create" );
@@ -112,7 +113,12 @@ export default function Grades() {
 
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>
-      <GradesHeader onCreateClick={ handleCreateClick } onJoinClick={ handleJoinClick } />
+      <GradesHeader 
+        onCreateClick={ handleCreateClick } 
+        onJoinClick={ handleJoinClick }
+        searchQuery={ searchQuery }
+        onSearchChange={ setSearchQuery }
+      />
       <main className="flex-1 overflow-y-auto px-4 scrollbar-hide">
 
         {/* Cantidad de grados y cantidad de alumnos */}

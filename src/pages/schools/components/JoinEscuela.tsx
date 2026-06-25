@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import type { EscuelaDTO } from '@/types/EscuelaTypes';
-import { ArrowLeft, Hash, MapPin, School } from 'lucide-react';
+import { ArrowLeft, Hash, MapPin, Phone, School } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useManagementEscuelas } from '../hooks/useManagementEscuela';
 import EscuelaCard from './EscuelaCard';
@@ -126,16 +126,23 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
             <div className='mt-8 flex flex-col'>
               <div className='flex items-center gap-4 py-4 border-b border-purple-500/10'>
                 <Hash className='h-5 w-5 text-amber-400/80 shrink-0' />
-                <span className='text-sm text-purple-200/50 w-20'>Numero</span>
+                <span className='text-sm text-purple-200/50 w-20'>Número</span>
                 <span className='flex-1 text-right text-white font-medium truncate'>
                   { selectedEscuela?.numero }
                 </span>
               </div>
               <div className='flex items-center gap-4 py-4'>
                 <MapPin className='h-5 w-5 text-amber-400/80 shrink-0' />
-                <span className='text-sm text-purple-200/50 w-20'>Direccion</span>
+                <span className='text-sm text-purple-200/50 w-20'>Dirección</span>
                 <span className='flex-1 text-right text-white font-medium truncate'>
                   { selectedEscuela?.direccion }
+                </span>
+              </div>
+              <div className='flex items-center gap-4 py-4'>
+                <Phone className='h-5 w-5 text-amber-400/80 shrink-0' />
+                <span className='text-sm text-purple-200/50 w-20'>Teléfono</span>
+                <span className='flex-1 text-right text-white font-medium truncate'>
+                  { selectedEscuela?.telefono }
                 </span>
               </div>
             </div>
