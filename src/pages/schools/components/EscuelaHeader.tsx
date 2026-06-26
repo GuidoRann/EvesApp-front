@@ -37,7 +37,7 @@ export default function EscuelaHeader({ onCreateClick, onJoinClick, searchQuery,
   };
 
   return (
-    <div className="relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]">
+    <div className="h-46 relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]">
       {/* Subtle sparkles */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-6 left-[20%] h-1 w-1 rounded-full bg-white" />
@@ -47,9 +47,7 @@ export default function EscuelaHeader({ onCreateClick, onJoinClick, searchQuery,
         <div className="absolute top-14 left-[10%] h-1 w-1 rounded-full bg-purple-300" />
       </div>
 
-      {/* Header content */}
       <div className="relative z-10 flex flex-col px-4 pt-12 pb-5">
-        {/* Title row */}
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-white">Escuelas</h1>
@@ -79,10 +77,10 @@ export default function EscuelaHeader({ onCreateClick, onJoinClick, searchQuery,
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-200/50" />
               <input
-                ref={inputRef}
+                ref={ inputRef }
                 type="text"
-                value={searchQuery}
-                onChange={(e) => onSearchChange?.(e.target.value)}
+                value={ searchQuery }
+                onChange={(e) => onSearchChange?.( e.target.value )}
                 placeholder="Buscar por nombre o direccion..."
                 className="w-full h-11 pl-10 pr-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm placeholder:text-purple-200/40 outline-none focus:border-amber-400/50 focus:bg-white/15 transition-colors"
               />
@@ -99,7 +97,7 @@ export default function EscuelaHeader({ onCreateClick, onJoinClick, searchQuery,
           </div>
         </div>
 
-        {/* Action tabs - horizontal segmented control style with amber/orange */}
+        {/* Action tabs buttons */}
         <div className="flex bg-white/5 rounded-lg p-1 gap-1">
           <button 
             onClick={() => handleTabClick( "create" )}

@@ -36,7 +36,7 @@ export default function GradesHeader({ onCreateClick, onJoinClick, searchQuery, 
   };
 
   return (
-    <div className='h-48 relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]'>
+    <div className='h-46 relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]'>
       <div className='absolute inset-0 opacity-30'>
         <div className='absolute top-6 left-[20%] h-1 w-1 rounded-full bg-white' />
         <div className='absolute top-10 right-[30%] h-0.5 w-0.5 rounded-full bg-white' />
@@ -77,10 +77,10 @@ export default function GradesHeader({ onCreateClick, onJoinClick, searchQuery, 
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-200/50" />
               <input
-                ref={inputRef}
+                ref={ inputRef }
                 type="text"
-                value={searchQuery}
-                onChange={(e) => onSearchChange?.(e.target.value)}
+                value={ searchQuery }
+                onChange={(e) => onSearchChange?.( e.target.value )}
                 placeholder="Buscar por nombre o direccion..."
                 className="w-full h-11 pl-10 pr-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm placeholder:text-purple-200/40 outline-none focus:border-amber-400/50 focus:bg-white/15 transition-colors"
               />
@@ -97,6 +97,7 @@ export default function GradesHeader({ onCreateClick, onJoinClick, searchQuery, 
           </div>
         </div>
 
+        {/* Action tabs buttons */}
         <div className="flex bg-white/5 rounded-lg p-1 gap-1">
           <button 
             onClick={() => handleTabClick("create")}
