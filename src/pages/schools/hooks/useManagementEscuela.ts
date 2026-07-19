@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabaseClient';
 import { useManagementProfile } from '@/pages/profile/hooks/useManagementProfile';
 import EscuelaService from '@/services/EscuelaService';
-import { useEscuelaStore } from '@/stores/Escuela.store';
+import { useEscuelaStore } from '@/pages/schools/service/Escuela.store';
 import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
 import { toast } from 'sonner';
 

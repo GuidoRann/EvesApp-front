@@ -1,32 +1,17 @@
 import { useState } from "react";
-import { ChevronLeft, Search, School, User, Check, ArrowLeft, LayoutGrid } from "lucide-react";
+import { ChevronLeft, Search, School, Check, ArrowLeft, LayoutGrid } from "lucide-react";
 import { Button} from "@/components/ui/button";
 import { Input} from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { useEscuelaStore } from '@/pages/schools/service/Escuela.store';
 
 // Data de muestra, cambiar por data real del backend
 
-const mockEscuelas = [
-  {id: "1", nombre: "Escuela Primaria Benito Juarez"},
-  {id: "2", nombre: "Escuela Primaria Miguel Hidalgo"},
-  {id: "3", nombre: "Escuela Primaria Jose Maria Morelos"},
-  {id: "4", nombre: "Escuela Primaria Emiliano Zapata"},
-];
-
-const mockMaestras = [
-  {id: "1", nombre: "Maria Gonzalez", email: "maria@escuela.com"},
-  {id: "2", nombre: "Ana Lopez", email: "ana@escuela.com"},
-  {id: "3", nombre: "Carmen Hernandez", email: "carmen@escuela.com"},
-  {id: "4", nombre: "Laura Martinez", email: "laura@escuela.com"},
-  {id: "5", nombre: "Sofia Rodriguez", email: "sofia@escuela.com"},
-  {id: "6", nombre: "Patricia Sanchez", email: "patricia@escuela.com"},
-];
-
 interface CreateGradoFormProps {
   onBack?: () => void;
-  onSubmit?: (data: GradoFormData) => void;
+  onSubmit?: ( data: GradoFormData ) => void;
 }
 
 interface GradoFormData {
@@ -35,42 +20,38 @@ interface GradoFormData {
   letra: string;
   turno: string;
   divisionAnual: string;
-  maestraTitularId: string;
 }
 
-export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps) {
-  const [formData, setFormData] = useState<GradoFormData>({
+export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormProps) {
+  const escuelas = useEscuelaStore( state => state.listaDeEscuelas ); 
+  const [ formData, setFormData ] = useState<GradoFormData>({
     escuelaId: "",
     numero: "",
     letra: "",
     turno: "",
     divisionAnual: "",
-    maestraTitularId: "",
   });
 
-  const [escuelaSearch, setEscuelaSearch] = useState("");
-  const [maestraSearch, setMaestraSearch] = useState("");
-  const [showEscuelaDrawer, setShowEscuelaDrawer] = useState(false);
-  const [showMaestraDrawer, setShowMaestraDrawer] = useState(false);
+  const [ escuelaSearch, setEscuelaSearch ] = useState("");
+  const [ maestraSearch, setMaestraSearch ] = useState("");
+  const [ showEscuelaDrawer, setShowEscuelaDrawer ] = useState(false);
+  const [ showMaestraDrawer, setShowMaestraDrawer ] = useState(false);
 
-  const selectedEscuela = mockEscuelas.find((e) => e.id === formData.escuelaId);
-  const selectedMaestra = mockMaestras.find((m) => m.id === formData.maestraTitularId);
+  const selectedEscuela = escuelas.find(( e ) => e.escuelaId === formData.escuelaId );
 
-  const filteredEscuelas = mockEscuelas.filter((e) => e.nombre.toLowerCase().includes(escuelaSearch.toLowerCase()));
+  const filteredEscuelas = escuelas.filter(( e ) => e.nombre.toLowerCase().includes( escuelaSearch.toLowerCase() ));
 
-  const filteredMaestras = mockMaestras.filter((m) => m.nombre.toLowerCase().includes(maestraSearch.toLowerCase()));
 
   const isFormValid =
     formData.escuelaId &&
     formData.numero &&
     formData.letra &&
     formData.turno &&
-    formData.divisionAnual &&
-    formData.maestraTitularId;
+    formData.divisionAnual;
 
   const handleSubmit = () => {
-    if (isFormValid && onSubmit) {
-      onSubmit(formData);
+    if ( isFormValid && onSubmit ) {
+      onSubmit( formData );
     }
   };
 
@@ -118,8 +99,8 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
               className='flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-3 text-left transition-colors hover:bg-purple-900/30'>
               <div className='flex items-center gap-3'>
                 <School className='h-5 w-5 text-purple-400' />
-                <span className={selectedEscuela ? "text-white" : "text-purple-300/50"}>
-                  {selectedEscuela?.nombre || "Seleccionar escuela"}
+                <span className={ selectedEscuela ? "text-white" : "text-purple-300/50" }>
+                  { selectedEscuela?.nombre || "Seleccionar escuela" }
                 </span>
               </div>
               <ChevronLeft className='h-5 w-5 rotate-180 text-purple-400' />
@@ -130,17 +111,17 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
           <div className='grid grid-cols-2 gap-4'>
             <Field>
               <FieldLabel className='text-purple-100'>Grado *</FieldLabel>
-              <Select value={formData.numero} onValueChange={(value) => setFormData({...formData, numero: value})}>
+              <Select value={ formData.numero } onValueChange={( value ) => setFormData({...formData, numero: value})}>
                 <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Numero' />
                 </SelectTrigger>
                 <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
                   {[1, 2, 3, 4, 5, 6, 7].map((num) => (
                     <SelectItem
-                      key={num}
-                      value={num.toString()}
+                      key={ num }
+                      value={ num.toString() }
                       className='text-white focus:bg-purple-800/50 focus:text-white'>
-                      {num}°
+                      { num }°
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -149,17 +130,17 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
 
             <Field>
               <FieldLabel className='text-purple-100'>Grupo *</FieldLabel>
-              <Select value={formData.letra} onValueChange={(value) => setFormData({...formData, letra: value})}>
+              <Select value={ formData.letra } onValueChange={( value ) => setFormData({...formData, letra: value})}>
                 <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Letra' />
                 </SelectTrigger>
                 <SelectContent className='border-purple-500/30 bg-[#1a0a2e]'>
-                  {["A", "B", "C", "D", "E"].map((letra) => (
+                  {["A", "B", "C", "D", "E"].map(( letra ) => (
                     <SelectItem
-                      key={letra}
-                      value={letra}
+                      key={ letra }
+                      value={ letra }
                       className='text-white focus:bg-purple-800/50 focus:text-white'>
-                      {letra}
+                      { letra }
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -170,7 +151,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
           {/* Turno */}
           <Field>
             <FieldLabel className='text-purple-100'>Turno *</FieldLabel>
-            <Select value={formData.turno} onValueChange={(value) => setFormData({...formData, turno: value})}>
+            <Select value={ formData.turno } onValueChange={( value ) => setFormData({...formData, turno: value})}>
               <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar turno' />
               </SelectTrigger>
@@ -189,8 +170,8 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
           <Field>
             <FieldLabel className='text-purple-100'>Division Anual *</FieldLabel>
             <Select
-              value={formData.divisionAnual}
-              onValueChange={(value) => setFormData({...formData, divisionAnual: value})}>
+              value={ formData.divisionAnual }
+              onValueChange={( value ) => setFormData({...formData, divisionAnual: value})}>
               <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar division' />
               </SelectTrigger>
@@ -203,23 +184,6 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
                 </SelectItem>
               </SelectContent>
             </Select>
-          </Field>
-
-          {/* Maestra Titular */}
-          <Field>
-            <FieldLabel className='text-purple-100'>Maestra Titular *</FieldLabel>
-            <button
-              type='button'
-              onClick={() => setShowMaestraDrawer(true)}
-              className='flex w-full items-center justify-between rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-3 text-left transition-colors hover:bg-purple-900/30'>
-              <div className='flex items-center gap-3'>
-                <User className='h-5 w-5 text-purple-400' />
-                <span className={selectedMaestra ? "text-white" : "text-purple-300/50"}>
-                  {selectedMaestra?.nombre || "Seleccionar maestra"}
-                </span>
-              </div>
-              <ChevronLeft className='h-5 w-5 rotate-180 text-purple-400' />
-            </button>
           </Field>
         </FieldGroup>
       </div>
@@ -236,7 +200,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
       </div>
 
       {/* Escuela Drawer */}
-      <Drawer open={showEscuelaDrawer} onOpenChange={setShowEscuelaDrawer}>
+      <Drawer open={ showEscuelaDrawer } onOpenChange={ setShowEscuelaDrawer }>
         <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
           <DrawerHeader>
             <DrawerTitle className='text-white'>Seleccionar Escuela</DrawerTitle>
@@ -246,31 +210,31 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
               <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400' />
               <Input
                 placeholder='Buscar escuela...'
-                value={escuelaSearch}
-                onChange={(e) => setEscuelaSearch(e.target.value)}
+                value={ escuelaSearch }
+                onChange={(e) => setEscuelaSearch( e.target.value )}
                 className='border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50'
               />
             </div>
           </div>
           <div className='max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6'>
-            {filteredEscuelas.map((escuela) => (
+            { filteredEscuelas.map(( escuela ) => (
               <button
-                key={escuela.id}
+                key={ escuela.escuelaId }
                 onClick={() => {
-                  setFormData({...formData, escuelaId: escuela.id});
-                  setShowEscuelaDrawer(false);
+                  setFormData({...formData, escuelaId: escuela.escuelaId});
+                  setShowEscuelaDrawer( false );
                   setEscuelaSearch("");
                 }}
                 className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
-                  formData.escuelaId === escuela.id
+                  formData.escuelaId === escuela.escuelaId
                     ? "border-purple-500 bg-purple-600/30"
                     : "border-purple-500/20 bg-purple-900/20 hover:bg-purple-900/40"
                 }`}>
                 <div className='flex items-center gap-3'>
                   <School className='h-5 w-5 text-purple-400' />
-                  <span className='text-white'>{escuela.nombre}</span>
+                  <span className='text-white'>{ escuela.nombre }</span>
                 </div>
-                {formData.escuelaId === escuela.id && <Check className='h-5 w-5 text-purple-400' />}
+                { formData.escuelaId === escuela.escuelaId && <Check className='h-5 w-5 text-purple-400' />}
               </button>
             ))}
           </div>
@@ -278,7 +242,7 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
       </Drawer>
 
       {/* Maestra Titular Drawer */}
-      <Drawer open={showMaestraDrawer} onOpenChange={setShowMaestraDrawer}>
+      <Drawer open={ showMaestraDrawer } onOpenChange={ setShowMaestraDrawer }>
         <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
           <DrawerHeader>
             <DrawerTitle className='text-white'>Seleccionar Maestra Titular</DrawerTitle>
@@ -288,38 +252,11 @@ export default function CreateGradoForm({onBack, onSubmit}: CreateGradoFormProps
               <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400' />
               <Input
                 placeholder='Buscar por nombre...'
-                value={maestraSearch}
-                onChange={(e) => setMaestraSearch(e.target.value)}
+                value={ maestraSearch }
+                onChange={(e) => setMaestraSearch( e.target.value )}
                 className='border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50'
               />
             </div>
-          </div>
-          <div className='max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6'>
-            {filteredMaestras.map((maestra) => (
-              <button
-                key={maestra.id}
-                onClick={() => {
-                  setFormData({...formData, maestraTitularId: maestra.id});
-                  setShowMaestraDrawer(false);
-                  setMaestraSearch("");
-                }}
-                className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
-                  formData.maestraTitularId === maestra.id
-                    ? "border-purple-500 bg-purple-600/30"
-                    : "border-purple-500/20 bg-purple-900/20 hover:bg-purple-900/40"
-                }`}>
-                <div className='flex items-center gap-3'>
-                  <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/50'>
-                    <User className='h-5 w-5 text-purple-200' />
-                  </div>
-                  <div>
-                    <p className='font-medium text-white'>{maestra.nombre}</p>
-                    <p className='text-sm text-purple-300/60'>{maestra.email}</p>
-                  </div>
-                </div>
-                {formData.maestraTitularId === maestra.id && <Check className='h-5 w-5 text-purple-400' />}
-              </button>
-            ))}
           </div>
         </DrawerContent>
       </Drawer>

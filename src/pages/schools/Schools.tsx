@@ -13,7 +13,7 @@ type ViewState = "list" | "create" | "detail" | "join";
 
 export default function EscuelaPage() {
   const [ escuelas, setEscuelas ] = useState< EscuelaDTO[] >( [] );
-  const [ view, setView ] = useState<ViewState>( "list" );
+  const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
   const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
   const [ searchQuery, setSearchQuery ] = useState("");
 
@@ -38,26 +38,26 @@ export default function EscuelaPage() {
       setEscuelas( escuelas );
     };
 
-    if ( view === "list" ) {
+    if ( currentView === "list" ) {
       fetchEscuelas();
     }
-  }, [ view ]);
+  }, [ currentView ]);
 
   const handleCreateClick = () => {
-    setView( "create" );
+    setCurrentView( "create" );
   };
 
   const handleJoinClick = () => {
-    setView( "join" );
+    setCurrentView( "join" );
   };
 
   const handleSchoolClick = ( escuela: EscuelaDTO ) => {
     setSelectedEscuela( escuela );
-    setView( "detail" );
+    setCurrentView( "detail" );
   };
 
   const handleBack = () => {
-    setView( "list" );
+    setCurrentView( "list" );
     setSelectedEscuela( null );
   };
 
@@ -71,18 +71,18 @@ export default function EscuelaPage() {
     };
 
     await createEscuela( newSchool );
-    setView( "list" );
+    setCurrentView( "list" );
   };
 
-  if ( view === "create" ) {
+  if ( currentView === "create" ) {
     return <CreateEscuelaForm onBack={ handleBack } onSubmit={ handleCreateSubmit } />;
   }
 
-  if ( view === "join" ) {
+  if ( currentView === "join" ) {
     return <JoinEscuela onBack={ handleBack } />;
   }
 
-  if ( view === "detail" && selectedEscuela ) {
+  if ( currentView === "detail" && selectedEscuela ) {
     return <EscuelaDetailView escuela={ selectedEscuela } onBack={ handleBack } />;
   }
 

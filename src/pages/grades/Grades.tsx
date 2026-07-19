@@ -1,73 +1,24 @@
 import { BottomNav } from '@/components/BottomNav';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateGradoForm from './components/CreateGradoForm';
-import GradeDetailView, { type GradeDetailData } from './components/GradeDetailView';
 import GradeCard from './components/GradesCard';
 import GradesHeader from './components/GradesHeader';
+import { useManagementGrados } from './hooks/useManagementGrados';
+import { useMaestraStore } from '@/stores/Maestra.store';
+import type { GradoDTO } from '@/types/GradoTypes';
+import GradeDetailView from './components/GradeDetailView';
 
-const gradosComoTitular: GradeDetailData[] = [
-  {
-    id: "1",
-    numero: 4,
-    letra: "A",
-    turno: "mañana",
-    divisionAnual: "bimestre",
-    escuela: { id: "1", nombre: "Escuela Primaria Benito Juárez" },
-    maestraTitular: { id: "1", nombre: "Maria Gonzalez", email: "maria@escuela.com" },
-    maestrasAdicionales: [],
-    alumnos: [
-      { id: "1", nombre: "Juan", apellidoPaterno: "Perez", apellidoMaterno: "Lopez" },
-      { id: "2", nombre: "Ana", apellidoPaterno: "Martinez", apellidoMaterno: "Garcia" },
-    ],
-  }
-];
-
-const gradosComoMaestra: GradeDetailData[] = [
-  {
-    id: "2",
-    numero: 3,
-    letra: "B",
-    turno: "tarde",
-    divisionAnual: "trimestre",
-    escuela: { id: "1", nombre: "Escuela Primaria Benito Juárez" },
-    maestraTitular: { id: "2", nombre: "Ana Lopez", email: "ana@escuela.com" },
-    maestrasAdicionales: [
-      { id: "3", nombre: "Carmen Hernandez", email: "carmen@escuela.com" },
-    ],
-    alumnos: [],
-  },
-  {
-    id: "3",
-    numero: 5,
-    letra: "C",
-    turno: "mañana",
-    divisionAnual: "bimestre",
-    escuela: { id: "2", nombre: "Colegio Montessori" },
-    maestraTitular: { id: "4", nombre: "Laura Martinez", email: "laura@escuela.com" },
-    maestrasAdicionales: [],
-    alumnos: [],
-  },
-  {
-    id: "4",
-    numero: 6,
-    letra: "A",
-    turno: "tarde",
-    divisionAnual: "trimestre",
-    escuela: { id: "3", nombre: "Instituto Educativo del Valle" },
-    maestraTitular: { id: "5", nombre: "Sofia Rodriguez", email: "sofia@escuela.com" },
-    maestrasAdicionales: [],
-    alumnos: [],
-  },
-];
 
 type ViewState = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
-  const [ gradosTitular, setGradosTitular ] = useState<GradeDetailData[]>( gradosComoTitular );
-  const [ gradosMaestra, setGradosMaestra ] = useState<GradeDetailData[]>( gradosComoMaestra );
   const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
-  const [ selectedGrade, setSelectedGrade ] = useState<GradeDetailData | null>( null );
+  const [ selectedGrade, setSelectedGrade ] = useState<GradoDTO | null>( null );
   const [ searchQuery, setSearchQuery ] = useState("");
+  const { crearGrado } = useManagementGrados();
+  const maestra = useMaestraStore(( state ) => state.maestra);
+  const gradosTitular = maestra?.gradosComoTitular || [];
+  const gradosMaestra = maestra?.gradosGeneral || [];
 
   const handleCreateClick = () => {
     setCurrentView( "create" );
@@ -77,7 +28,7 @@ export default function Grades() {
     setCurrentView( "join" );
   };
 
-  const handleGradeClick = ( grade: GradeDetailData ) => {
+  const handleGradeClick = ( grade: GradoDTO ) => {
     setSelectedGrade( grade );
     setCurrentView( "detail" );
   };
@@ -93,7 +44,7 @@ export default function Grades() {
       <CreateGradoForm
         onBack={ handleBackToList }
         onSubmit={( data: any ) => {
-          console.log( "Grado creado:", data );
+          crearGrado( data );
           handleBackToList();
         }}
       />
@@ -111,6 +62,11 @@ export default function Grades() {
     );
   }
 
+  console.log("gradosMaestra:", gradosMaestra);
+  console.log("length de grados como maestra: ", gradosMaestra.length);
+  console.log("Array?", Array.isArray(gradosMaestra));
+  console.log("maestra:", maestra);
+
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>
       <GradesHeader 
@@ -124,11 +80,20 @@ export default function Grades() {
         {/* Cantidad de grados y cantidad de alumnos */}
         <div className="flex gap-3 py-5">
           <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-emerald-400">{ gradosTitular.length }</span>
+            { gradosTitular.length != 0 ? 
+              <span className="text-2xl font-bold text-emerald-400">{ gradosTitular.length }</span>
+              :
+              <span className="text-2xl font-bold text-white">{ 0 }</span>
+            }
             <p className="text-purple-200/50 text-xs mt-0.5">Grados Titular</p>
           </div>
           <div className="flex-1 bg-[#1a1025] border border-purple-500/10 rounded-xl p-3 text-center">
-            <span className="text-2xl font-bold text-white">{ gradosMaestra.length }</span>
+            { gradosMaestra.length != 0 ? 
+              <span className="text-2xl font-bold text-emerald-400">{ gradosMaestra.length }</span>
+              :
+              <span className="text-2xl font-bold text-white">{ 0 }</span>
+            }
+            {/* <span className="text-2xl font-bold text-white">{ gradosMaestra.length }</span> */}
             <p className="text-purple-200/50 text-xs mt-0.5">Grados General</p>
           </div>
         </div>
@@ -139,12 +104,12 @@ export default function Grades() {
           <div className="mb-3 border-t border-purple-500/20" />
           { gradosTitular.map(( grado ) => (
             <GradeCard
-              key={ grado.id }
+              key={ grado.gradoId }
               numero={ grado.numero }
               letra={ grado.letra }
               turno={ grado.turno }
-              nombreEscuela={ grado.escuela.nombre }
-              cantidadEstudiantes={ grado.alumnos.length }
+              nombreEscuela={ grado.escuela?.nombre }
+              cantidadEstudiantes={ grado.alumnos?.length }
               onClick={() => handleGradeClick( grado )}
             />
           ))}
@@ -152,12 +117,12 @@ export default function Grades() {
           <div className="mb-3 border-t border-purple-500/20" />
           { gradosMaestra.map(( grado ) => (
             <GradeCard
-              key={ grado.id }
+              key={ grado.gradoId }
               numero={ grado.numero }
               letra={ grado.letra }
               turno={ grado.turno }
-              nombreEscuela={ grado.escuela.nombre }
-              cantidadEstudiantes={ grado.alumnos.length }
+              nombreEscuela={ grado.escuela?.nombre }
+              cantidadEstudiantes={ grado.alumnos?.length }
               onClick={() => handleGradeClick( grado )}
             />
           ))}
@@ -167,3 +132,4 @@ export default function Grades() {
     </div>
   );
 }
+

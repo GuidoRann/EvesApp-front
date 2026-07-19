@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabaseClient';
 import GradoService from '../service/GradoService';
 import type { CreateGradoDTO } from '@/types/GradoTypes';
 
-export const useManagementGrade = () => {
+export const useManagementGrados = () => {
   
   const crearGrado = async ( grado: CreateGradoDTO ) => {
     try {

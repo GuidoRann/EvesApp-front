@@ -8,7 +8,6 @@ import {
   Users,
   UserPlus,
   Search,
-  Check,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,46 +17,19 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import AlumnosListView from './alumnosComponents/AlumnosListView';
+import type { GradoDTO } from '@/types/GradoTypes';
+import type { MaestraDTO } from '@/types/MaestraTypes';
 
-export interface Alumno {
-  id: string;
-  nombre: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
-}
-
-export interface GradeDetailData {
-  id: string;
-  numero: number;
-  letra: string;
-  turno: "mañana" | "tarde";
-  divisionAnual: "bimestre" | "trimestre";
-  escuela: {
-    id: string;
-    nombre: string;
-  };
-  maestraTitular: {
-    id: string;
-    nombre: string;
-    email: string;
-  };
-  maestrasAdicionales: {
-    id: string;
-    nombre: string;
-    email: string;
-  }[];
-  alumnos: Alumno[];
-}
 
 type ViewState = "details" | "listaAlumnos" | "agregarMaestras";
 
-interface GradeDetailViewProps {
-  grade: GradeDetailData;
+interface GradoDetailViewProps {
+  grade: GradoDTO;
   onBack: () => void;
-  onUpdate?: (data: GradeDetailData) => void;
+  onUpdate?: (data: GradoDTO) => void;
 }
 
-// Mock data for available teachers
+// TODO: cambiar el mock por las maestras reales de la DATA
 const mockMaestras = [
   { id: "1", nombre: "Maria Gonzalez", email: "maria@escuela.com" },
   { id: "2", nombre: "Ana Lopez", email: "ana@escuela.com" },
@@ -67,22 +39,17 @@ const mockMaestras = [
   { id: "6", nombre: "Patricia Sanchez", email: "patricia@escuela.com" },
 ];
 
-export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetailViewProps) {
-  const [gradeData, setGradeData] = useState<GradeDetailData>(grade);
+export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetailViewProps) {
+  const [gradeData, setGradeData] = useState<GradoDTO>(grade);
   const [showMaestrasDrawer, setShowMaestrasDrawer] = useState(false);
   const [currentView, setCurrentView] = useState<ViewState>( "details" );
   const [maestrasSearch, setMaestrasSearch] = useState("");
-  const [newAlumno, setNewAlumno] = useState({
-    nombre: "",
-    apellidoPaterno: "",
-    apellidoMaterno: "",
-  });
 
   const handleListaAlumnos = () => {
     setCurrentView("listaAlumnos");
   };
 
-  const handleCreateMaestra = () => {
+  const handleAddMaestra = () => {
     setCurrentView("agregarMaestras");
   };
 
@@ -90,19 +57,19 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
     setCurrentView("details");
   };
 
-  const selectedMaestrasIds = gradeData.maestrasAdicionales.map((m) => m.id);
+  const selectedMaestrasIds = gradeData.maestrasAdicionales.map((m) => m.maestraId);
 
   const filteredMaestras = mockMaestras.filter(
     ( m ) =>
-      m.nombre.toLowerCase().includes(maestrasSearch.toLowerCase()) &&
-      m.id !== gradeData.maestraTitular.id
+      m.nombre.toLowerCase().includes( maestrasSearch.toLowerCase() ) &&
+      m.id !== gradeData.maestraTitular.maestraId
   );
 
-  const toggleMaestraSelection = (maestra: { id: string; nombre: string; email: string }) => {
+  const toggleMaestraSelection = ( maestra: MaestraDTO ) => {
     setGradeData((prev) => {
-      const isSelected = prev.maestrasAdicionales.some((m) => m.id === maestra.id);
+      const isSelected = prev.maestrasAdicionales.some((m) => m.maestraId === maestra.maestraId);
       const newMaestras = isSelected
-        ? prev.maestrasAdicionales.filter((m) => m.id !== maestra.id)
+        ? prev.maestrasAdicionales.filter((m) => m.maestraId !== maestra.maestraId)
         : [...prev.maestrasAdicionales, maestra];
       
       const newData = { ...prev, maestrasAdicionales: newMaestras };
@@ -111,23 +78,23 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
     });
   };
 
-  const handleAddAlumno = () => {
-    if (newAlumno.nombre && newAlumno.apellidoPaterno) {
-      const alumno: Alumno = {
-        id: Date.now().toString(),
-        ...newAlumno,
-      };
-      setGradeData((prev) => {
-        const newData = { ...prev, alumnos: [...prev.alumnos, alumno] };
-        onUpdate?.(newData);
-        return newData;
-      });
-      setNewAlumno({ nombre: "", apellidoPaterno: "", apellidoMaterno: "" });
-    }
-  };
+  // const handleAddAlumno = () => {
+  //   if (newAlumno.nombre && newAlumno.apellidoPaterno) {
+  //     const alumno: AlumnoType = {
+  //       alumnoId: Date.now().toString(),
+  //       ...newAlumno,
+  //     };
+  //     setGradeData((prev) => {
+  //       const newData = { ...prev, alumnos: [...prev.alumnos, alumno] };
+  //       onUpdate?.(newData);
+  //       return newData;
+  //     });
+  //     setNewAlumno();
+  //   }
+  // };
 
   if ( currentView === "listaAlumnos" ){
-    return <AlumnosListView alumnos={ [] } onBack={ handleBackToDetails } onSave={ handleAddAlumno } />
+    return <AlumnosListView alumnos={ [] } onBack={ handleBackToDetails } onSave={ () => {} } />
   }
 
   return (
@@ -298,7 +265,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
             </div>
           </div>
           <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
-            { filteredMaestras.map(( maestra ) => {
+            {/* { filteredMaestras.map(( maestra ) => {
               const isSelected = selectedMaestrasIds.includes( maestra.id );
               return (
                 <button
@@ -326,7 +293,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradeDetail
                   { isSelected && <Check className="h-5 w-5 text-emerald-400" /> }
                 </button>
               );
-            })}
+            })} */}
           </div>
         </DrawerContent>
       </Drawer>

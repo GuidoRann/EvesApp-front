@@ -8,7 +8,7 @@ export interface MaestraDTO {
   apellido: string;
   email: string;
   escuelas: EscuelaDTO[];
-  gradosTitular: GradoDTO[];
+  gradosComoTitular: GradoDTO[];
   gradosGeneral: GradoDTO[];
   avatar_url: string;
   created_at: string;
