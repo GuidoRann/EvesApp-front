@@ -33,7 +33,7 @@ export default class GradoService {
         }
       );
   
-      return response.data;
+      return response.data.body;
     } catch ( error ) {
       throw error;
     }

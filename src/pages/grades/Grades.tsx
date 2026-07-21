@@ -1,21 +1,21 @@
 import { BottomNav } from '@/components/BottomNav';
-import { useEffect, useState } from "react";
-import CreateGradoForm from './components/CreateGradoForm';
-import GradeCard from './components/GradesCard';
-import GradesHeader from './components/GradesHeader';
+import { useState } from "react";
+import CreateGradoForm from './components/gradosComponents/CreateGradoForm';
+import GradeCard from './components/gradosComponents/GradesCard';
+import GradesHeader from './components/gradosComponents/GradesHeader';
 import { useManagementGrados } from './hooks/useManagementGrados';
 import { useMaestraStore } from '@/stores/Maestra.store';
 import type { GradoDTO } from '@/types/GradoTypes';
-import GradeDetailView from './components/GradeDetailView';
-
+import { useNavigate } from "react-router-dom";
 
 type ViewState = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
   const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
-  const [ selectedGrade, setSelectedGrade ] = useState<GradoDTO | null>( null );
   const [ searchQuery, setSearchQuery ] = useState("");
   const { crearGrado } = useManagementGrados();
+  const navigate = useNavigate();
+
   const maestra = useMaestraStore(( state ) => state.maestra);
   const gradosTitular = maestra?.gradosComoTitular || [];
   const gradosMaestra = maestra?.gradosGeneral || [];
@@ -29,13 +29,11 @@ export default function Grades() {
   };
 
   const handleGradeClick = ( grade: GradoDTO ) => {
-    setSelectedGrade( grade );
-    setCurrentView( "detail" );
+    navigate( `/grades/details/${ grade.gradoId }` );
   };
 
   const handleBackToList = () => {
     setCurrentView( "list" );
-    setSelectedGrade( null );
   };
 
   // Create view
@@ -50,22 +48,6 @@ export default function Grades() {
       />
     );
   }
-
-  // Detail view
-  if ( currentView === "detail" && selectedGrade ) {
-    return (
-      <GradeDetailView
-        grade={ selectedGrade }
-        onBack={ handleBackToList }
-        // onUpdate={ handleUpdateGrade }
-      />
-    );
-  }
-
-  console.log("gradosMaestra:", gradosMaestra);
-  console.log("length de grados como maestra: ", gradosMaestra.length);
-  console.log("Array?", Array.isArray(gradosMaestra));
-  console.log("maestra:", maestra);
 
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>

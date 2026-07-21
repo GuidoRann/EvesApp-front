@@ -3,24 +3,27 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import type { CreateAlumnoDTO } from '@/types/AlumnoTypes';
+import DateOfBirthPicker from '../gradosComponents/DateOfBirthPicker';
 
 interface CreateAlumnoFormProps {
   onBack: () => void;
-  // onSubmit: ( alumno: CreateAlumnoDTO ) => void;
+  onSubmit: ( alumno: CreateAlumnoDTO ) => void;
 }
 
-export default function CreateAlumnoForm({ onBack }: CreateAlumnoFormProps) {
+export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormProps) {
   const [ nombre, setNombre ] = useState("");
   const [ apellidoPaterno, setApellidoPaterno ] = useState("");
   const [ apellidoMaterno, setApellidoMaterno ] = useState("");
   const [ numeroDocumento, setNumeroDocumento ] = useState("");
   const [ direccion, setDireccion ] = useState("");
+  const [ fechaNacimiento, setFechaNacimiento ] = useState<Date | null>(null);
 
   const isFormValid = nombre.trim() !== "" && apellidoPaterno.trim() !== "" && apellidoMaterno.trim() !== "" && numeroDocumento.trim() !== "" && direccion.trim() !== "";
 
-  // const handleSubmit = () => {
-  //   onSubmit( { nombre, apellidoPaterno, apellidoMaterno, numeroDocumento, direccion, fechaNacimiento: new Date() } ); // TODO: Agregar la validacion correcta de la fecha de nacimiento
-  // };
+  const handleSubmit = () => {
+    onSubmit( { nombre, apellidoPaterno, apellidoMaterno, numeroDocumento, direccion, fechaNacimiento: new Date() } ); // TODO: Agregar la validacion correcta de la fecha de nacimiento
+  };
 
   return (
     <div className="mx-auto flex h-dvh bg-background max-w-md flex-col">
@@ -126,9 +129,19 @@ export default function CreateAlumnoForm({ onBack }: CreateAlumnoFormProps) {
             <FieldLabel className='text-sm font-medium text-purple-200/70'>
               Selecciona la Fecha de Nacimiento
             </FieldLabel>
-            <h1>AQUI VA EL PICKER</h1>
+            <DateOfBirthPicker
+              value={fechaNacimiento}
+              onChange={setFechaNacimiento}
+              placeholder="Toca para elegir una fecha"
+            />
         </Field>
       </FieldGroup>
+
+      {/* {fechaNacimiento && (
+          <p className="mt-6 text-sm text-emerald-400">
+            Fecha seleccionada: {fechaNacimiento.toLocaleDateString("es-MX")}
+          </p>
+      )} */}
 
       </main> 
 

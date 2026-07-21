@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronLeft,
   School,
@@ -8,6 +8,7 @@ import {
   Users,
   UserPlus,
   Search,
+  ArrowLeft,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,86 +17,51 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import AlumnosListView from './alumnosComponents/AlumnosListView';
 import type { GradoDTO } from '@/types/GradoTypes';
-import type { MaestraDTO } from '@/types/MaestraTypes';
-
+import { useManagementGrados } from '../../hooks/useManagementGrados';
+import { useParams, useNavigate } from 'react-router-dom';
 
 type ViewState = "details" | "listaAlumnos" | "agregarMaestras";
 
-interface GradoDetailViewProps {
-  grade: GradoDTO;
-  onBack: () => void;
-  onUpdate?: (data: GradoDTO) => void;
-}
+export default function GradeDetailView() {
+  const [ gradeData, setGradeData ] = useState<GradoDTO>( {} as GradoDTO );
+  const [ showMaestrasDrawer, setShowMaestrasDrawer ] = useState( false );
+  const [ currentView, setCurrentView ] = useState<ViewState>( "details" );
+  const [ maestrasSearch, setMaestrasSearch ] = useState("");
+  const { gradoId } = useParams()
+  const navigate = useNavigate();
 
-// TODO: cambiar el mock por las maestras reales de la DATA
-const mockMaestras = [
-  { id: "1", nombre: "Maria Gonzalez", email: "maria@escuela.com" },
-  { id: "2", nombre: "Ana Lopez", email: "ana@escuela.com" },
-  { id: "3", nombre: "Carmen Hernandez", email: "carmen@escuela.com" },
-  { id: "4", nombre: "Laura Martinez", email: "laura@escuela.com" },
-  { id: "5", nombre: "Sofia Rodriguez", email: "sofia@escuela.com" },
-  { id: "6", nombre: "Patricia Sanchez", email: "patricia@escuela.com" },
-];
+  const { obtenerGrado } = useManagementGrados();
 
-export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetailViewProps) {
-  const [gradeData, setGradeData] = useState<GradoDTO>(grade);
-  const [showMaestrasDrawer, setShowMaestrasDrawer] = useState(false);
-  const [currentView, setCurrentView] = useState<ViewState>( "details" );
-  const [maestrasSearch, setMaestrasSearch] = useState("");
+  useEffect(() => {
+    if( !gradoId ) return;
+
+    const traerGrado = async () => {
+      const gradoData: GradoDTO = await obtenerGrado( gradoId );
+
+      setGradeData( gradoData );
+    }
+
+    traerGrado();
+  }, [ gradoId ]);
+
+
+  //TODO: modificar todos los handlers para que usen rutas en lugar de vistas
+  const handleBack = () => {
+    navigate('/grades')
+  }
 
   const handleListaAlumnos = () => {
-    setCurrentView("listaAlumnos");
+    navigate(`/grades/${ gradoId }/studentList`);    
   };
 
-  const handleAddMaestra = () => {
+  const handleAddMaestras = () => {
     setCurrentView("agregarMaestras");
   };
 
   const handleBackToDetails = () => {
     setCurrentView("details");
   };
-
-  const selectedMaestrasIds = gradeData.maestrasAdicionales.map((m) => m.maestraId);
-
-  const filteredMaestras = mockMaestras.filter(
-    ( m ) =>
-      m.nombre.toLowerCase().includes( maestrasSearch.toLowerCase() ) &&
-      m.id !== gradeData.maestraTitular.maestraId
-  );
-
-  const toggleMaestraSelection = ( maestra: MaestraDTO ) => {
-    setGradeData((prev) => {
-      const isSelected = prev.maestrasAdicionales.some((m) => m.maestraId === maestra.maestraId);
-      const newMaestras = isSelected
-        ? prev.maestrasAdicionales.filter((m) => m.maestraId !== maestra.maestraId)
-        : [...prev.maestrasAdicionales, maestra];
-      
-      const newData = { ...prev, maestrasAdicionales: newMaestras };
-      onUpdate?.(newData);
-      return newData;
-    });
-  };
-
-  // const handleAddAlumno = () => {
-  //   if (newAlumno.nombre && newAlumno.apellidoPaterno) {
-  //     const alumno: AlumnoType = {
-  //       alumnoId: Date.now().toString(),
-  //       ...newAlumno,
-  //     };
-  //     setGradeData((prev) => {
-  //       const newData = { ...prev, alumnos: [...prev.alumnos, alumno] };
-  //       onUpdate?.(newData);
-  //       return newData;
-  //     });
-  //     setNewAlumno();
-  //   }
-  // };
-
-  if ( currentView === "listaAlumnos" ){
-    return <AlumnosListView alumnos={ [] } onBack={ handleBackToDetails } onSave={ () => {} } />
-  }
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
@@ -110,26 +76,20 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetail
         </div>
 
         <div className="relative px-4">
-          <button
-            onClick={ onBack }
-            className="mb-4 flex items-center gap-1 text-purple-200 transition-colors hover:text-white"
-          >
-            <ChevronLeft className="h-5 w-5" />
-            <span className="text-sm">Volver</span>
-          </button>
           
           {/* Grade badge */}
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 border border-emerald-500/30">
-              <span className="text-2xl font-bold text-emerald-400">
-                { gradeData.numero }º { gradeData.letra }
-              </span>
-            </div>
+            <button
+              onClick={ handleBack }
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5 text-white" />
+            </button>
             <div>
               <h1 className="text-2xl font-bold text-white">
                 { gradeData.numero }° Grado - Grupo { gradeData.letra }
               </h1>
-              <p className="mt-1 text-sm text-purple-200/70">{ gradeData.escuela.nombre }</p>
+              <p className="mt-1 text-sm text-purple-200/70">{ gradeData.escuela?.nombre }</p>
             </div>
           </div>
         </div>
@@ -147,7 +107,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetail
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Escuela</p>
-                <p className="font-medium text-white">{ gradeData.escuela.nombre }</p>
+                <p className="font-medium text-white">{ gradeData.escuela?.nombre }</p>
               </div>
             </div>
           </div>
@@ -186,8 +146,8 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetail
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Maestra Titular</p>
-                <p className="font-medium text-white">{ gradeData.maestraTitular.nombre }</p>
-                <p className="text-xs text-purple-200/50">{ gradeData.maestraTitular.email }</p>
+                <p className="font-medium text-white">{ gradeData.maestraTitular?.nombre } {gradeData.maestraTitular?.apellido}</p>
+                <p className="text-xs text-purple-200/50">{ gradeData.maestraTitular?.email }</p>
               </div>
             </div>
           </div>
@@ -211,7 +171,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetail
               <div>
                 <p className="font-medium text-white">Maestras Adicionales</p>
                 <p className="text-sm text-purple-300/60">
-                  { gradeData.maestrasAdicionales.length > 0
+                  { gradeData.maestrasAdicionales?.length > 0
                     ? `${ gradeData.maestrasAdicionales.length } maestra${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" } asignada${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" }`
                     : "Agregar otras maestras al grado" }
                 </p>
@@ -233,7 +193,7 @@ export default function GradeDetailView({ grade, onBack, onUpdate }: GradoDetail
               <div>
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
-                  { gradeData.alumnos.length > 0
+                  { gradeData.alumnos?.length > 0
                     ? `${ gradeData.alumnos.length } alumno${ gradeData.alumnos.length === 1 ? "s" : "" } registrado${ gradeData.alumnos.length === 1 ? "s" : "" }`
                     : "Gestionar lista de alumnos del grado" }
                 </p>

@@ -7,9 +7,10 @@ import Schools from './pages/schools/Schools';
 import { AuthLogin } from './pages/auth/AuthLogin';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AuthCallback from './pages/auth/authCallback';
-import CreateGradoForm from './pages/grades/components/CreateGradoForm';
+import CreateGradoForm from './pages/grades/components/gradosComponents/CreateGradoForm';
 import { Toaster } from 'sonner'
 import AlumnosListView from './pages/grades/components/alumnosComponents/AlumnosListView';
+import GradeDetailView from './pages/grades/components/gradosComponents/GradeDetailView';
 
 function App() {  
 
@@ -34,9 +35,9 @@ function App() {
             <Route path="/grades">
               <Route index element={<Grados />} />
               <Route path="create" element={<CreateGradoForm />} />
+              <Route path="details/:gradoId" element={<GradeDetailView />} />
+              <Route path=":gradoId/studentList" element={<AlumnosListView />} />
             </Route>
-
-            <Route path="/studentList" element={<AlumnosListView />} />
 
             <Route path="/schools" element={<Schools />} />
 
