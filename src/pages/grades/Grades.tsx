@@ -91,7 +91,7 @@ export default function Grades() {
               letra={ grado.letra }
               turno={ grado.turno }
               nombreEscuela={ grado.escuela?.nombre }
-              cantidadEstudiantes={ grado.alumnos?.length }
+              cantidadEstudiantes={ grado.listaAlumnos?.length }
               onClick={() => handleGradeClick( grado )}
             />
           ))}
@@ -104,7 +104,7 @@ export default function Grades() {
               letra={ grado.letra }
               turno={ grado.turno }
               nombreEscuela={ grado.escuela?.nombre }
-              cantidadEstudiantes={ grado.alumnos?.length }
+              cantidadEstudiantes={ grado.listaAlumnos?.length }
               onClick={() => handleGradeClick( grado )}
             />
           ))}

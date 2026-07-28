@@ -3,26 +3,57 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { CreateAlumnoDTO } from '@/types/AlumnoTypes';
+import type { AlumnoType, CreateAlumnoDTO } from '@/types/AlumnoTypes';
 import DateOfBirthPicker from '../gradosComponents/DateOfBirthPicker';
+import { useManagementAlumnos } from '../../hooks/useManagementAlumnos';
+import { useGradoStore } from '@/stores/Grado.store';
 
 interface CreateAlumnoFormProps {
   onBack: () => void;
-  onSubmit: ( alumno: CreateAlumnoDTO ) => void;
+  onSubmit: ( alumno: AlumnoType ) => void;
+  gradoId: string;
 }
 
-export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormProps) {
+export default function CreateAlumnoForm({ onBack, onSubmit, gradoId }: CreateAlumnoFormProps) {
   const [ nombre, setNombre ] = useState("");
   const [ apellidoPaterno, setApellidoPaterno ] = useState("");
   const [ apellidoMaterno, setApellidoMaterno ] = useState("");
   const [ numeroDocumento, setNumeroDocumento ] = useState("");
   const [ direccion, setDireccion ] = useState("");
-  const [ fechaNacimiento, setFechaNacimiento ] = useState<Date | null>(null);
+  const [ barrio, setBarrio ] = useState("");
+  const [ fechaNacimiento, setFechaNacimiento ] = useState<Date>();
+  const { crearAlumno } = useManagementAlumnos()
 
-  const isFormValid = nombre.trim() !== "" && apellidoPaterno.trim() !== "" && apellidoMaterno.trim() !== "" && numeroDocumento.trim() !== "" && direccion.trim() !== "";
+  const { grado } = useGradoStore()
 
-  const handleSubmit = () => {
-    onSubmit( { nombre, apellidoPaterno, apellidoMaterno, numeroDocumento, direccion, fechaNacimiento: new Date() } ); // TODO: Agregar la validacion correcta de la fecha de nacimiento
+  if (!grado) {
+    return null;
+  }
+
+  const isFormValid = nombre.trim() !== "" && apellidoPaterno.trim() !== "" && apellidoMaterno.trim() !== "" && numeroDocumento.trim() !== "" && direccion.trim() !== "" && barrio.trim() !== "" && fechaNacimiento !== undefined;
+
+  const handleSubmit = async () => {
+    if (!fechaNacimiento) return;
+    
+    const alumno: CreateAlumnoDTO = {
+      nombre,
+      apellidoPaterno,
+      apellidoMaterno,
+      numeroDocumento,
+      direccion,
+      barrio,
+      fechaNacimiento,
+      grado: grado
+    };
+
+
+    const newAlumno: AlumnoType = await crearAlumno( alumno );
+    
+    onSubmit( newAlumno );
+  };
+
+  const formatDocumento = ( value: string ) => {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   return (
@@ -103,9 +134,11 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
               Número de documento
             </FieldLabel>
             <Input
+              inputMode="numeric"
               placeholder="Ingrese el número de documento"
               className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
-              onChange={ ( e ) => setNumeroDocumento( e.target.value)  }
+              value={ formatDocumento( numeroDocumento ) }
+              onChange={ ( e ) => setNumeroDocumento( e.target.value.replace(/\D/g, "") ) }
             />
         </Field>
       </FieldGroup>
@@ -123,7 +156,19 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
         </Field>
       </FieldGroup>
 
-      {/* Aca necesito pedir la fecha de nacimiento pero poniendo un picker de fechas */}
+      <FieldGroup>
+        <Field className="flex flex-col gap-1">
+            <FieldLabel className='text-sm font-medium text-purple-200/70'>
+              Barrio
+            </FieldLabel>
+            <Input
+              placeholder="Ingrese el barrio"
+              className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
+              onChange={ ( e ) => setBarrio( e.target.value ) }
+            />
+        </Field>
+      </FieldGroup>
+
       <FieldGroup>
         <Field className="flex flex-col gap-1">
             <FieldLabel className='text-sm font-medium text-purple-200/70'>
@@ -137,6 +182,7 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
         </Field>
       </FieldGroup>
 
+      {/* Esto mostraria la fecha debajo en verde para valida */}
       {/* {fechaNacimiento && (
           <p className="mt-6 text-sm text-emerald-400">
             Fecha seleccionada: {fechaNacimiento.toLocaleDateString("es-MX")}
@@ -148,7 +194,7 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
       {/* Footer button */}
       <div className="p-4 border-t border-purple-500/10">
         <Button
-          // onClick={ handleSubmit }
+          onClick={ handleSubmit }
           disabled={ !isFormValid }
           className="w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -158,3 +204,4 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
     </div>
   );
 }
+

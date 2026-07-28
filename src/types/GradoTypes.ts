@@ -11,7 +11,7 @@ export interface GradoDTO {
   escuela: EscuelaDTO;
   maestraTitular: MaestraDTO;
   maestrasAdicionales: MaestraDTO[];
-  alumnos: AlumnoType[];
+  listaAlumnos: AlumnoType[];
 }
 
 export interface CreateGradoDTO {

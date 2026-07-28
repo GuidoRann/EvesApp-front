@@ -1,23 +1,21 @@
 import { useState } from "react";
-import { ChevronLeft, Plus, User, Trash2, ArrowLeft } from "lucide-react";
+import { Plus, User, Trash2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AlumnoType, CreateAlumnoDTO } from '@/types/AlumnoTypes';
 import CreateAlumnoView from './CreateAlumnoView';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useGradoStore } from '@/stores/Grado.store';
 
 type CurrentView = "list" | "create";
 
 export default function AlumnosListView() {
-  const [ alumnos, setAlumnos ] = useState<AlumnoType[]>( [] );
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
-  const [ newAlumno, setNewAlumno ] = useState<CreateAlumnoDTO>({
-    nombre: "",
-    apellidoPaterno: "",
-    apellidoMaterno: "",
-    numeroDocumento: "",
-    direccion: "",
-    fechaNacimiento: new Date(),
-  });
+  const { grado, addAlumno } = useGradoStore();
+  
+  if( !grado ) return null
+  const alumnos = grado.listaAlumnos ?? [];
+
+  console.log("Asi estan los alumnos en AlumnosListView: ", alumnos)
+
   const { gradoId } = useParams()
   const navigate = useNavigate();
 
@@ -25,24 +23,21 @@ export default function AlumnosListView() {
       setCurrentView( "create" );
   };
 
+  const handleSave = async () => {
+    //TODO: Este save quedó obsoleto ya que CreateAlumno guarda el alumno
+    navigate( `/grades/details/${ gradoId }` );
+  };
+
   if ( currentView === "create" ) {
     return (
       <CreateAlumnoView
+        gradoId={ gradoId || "" }
         onBack={ () => setCurrentView( "list" ) }
-        onSubmit={ () => {} }
+        onSubmit={ ( alumno ) => { addAlumno( alumno ) } }
       />
     );
   }
   
-  const handleRemoveAlumno = ( alumnoId: string ) => {
-    setAlumnos( alumnos.filter(( a ) => a.alumnoId !== alumnoId ));
-  };
-
-  const handleSave = async () => {
-    //TODO: aqui se deberia guardar la lista de alumnos en la base de datos, respetando tiempos asincronos
-    navigate( `/grades/details/${ gradoId }` );
-  };
-
   return (
     <div className='mx-auto flex min-h-dvh max-w-md flex-col bg-background'>
       <div className='relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24] pb-6 pt-4'>
@@ -102,12 +97,12 @@ export default function AlumnosListView() {
                   </div>
                   <div>
                     <p className='font-medium text-white'>
-                      {alumno.nombre} {alumno.apellidoPaterno} {alumno.numeroDocumento}
+                      {alumno.nombre} {alumno.apellidoPaterno}
                     </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => handleRemoveAlumno(alumno.alumnoId)}
+                  onClick={ () => {} }
                   className='flex h-8 w-8 items-center justify-center rounded-full text-red-400 transition-colors hover:bg-red-900/30'>
                   <Trash2 className='h-4 w-4' />
                 </button>
@@ -120,7 +115,7 @@ export default function AlumnosListView() {
       {/* Boton Guardar */}
       <div className='sticky bottom-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm'>
         <Button
-          onClick={handleSave}
+          onClick={ handleSave }
           className='w-full bg-linear-to-r from-purple-600 to-purple-500 py-6 text-base font-semibold text-white hover:from-purple-500 hover:to-purple-400'>
           Guardar Lista
         </Button>

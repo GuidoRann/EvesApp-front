@@ -13,9 +13,9 @@ interface DateOfBirthPickerProps {
   value?: Date | null;
   onChange: (date: Date) => void;
   placeholder?: string;
-  /** Año mínimo seleccionable. Por defecto: hace 100 años. */
+  // Año mínimo seleccionable. Por defecto: hace 50 años.
   minYear?: number;
-  /** Año máximo seleccionable. Por defecto: año actual. */
+  // Año máximo seleccionable. Por defecto: año actual.
   maxYear?: number;
 }
 
@@ -57,6 +57,7 @@ export default function DateOfBirthPicker({
 
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<"days" | "years">("days");
+  
   // Mes/año que se está visualizando en el calendario
   const [viewDate, setViewDate] = useState<Date>(value ?? new Date(resolvedMaxYear, today.getMonth(), 1));
 

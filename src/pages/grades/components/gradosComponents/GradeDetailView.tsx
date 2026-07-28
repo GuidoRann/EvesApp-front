@@ -20,18 +20,16 @@ import {
 import type { GradoDTO } from '@/types/GradoTypes';
 import { useManagementGrados } from '../../hooks/useManagementGrados';
 import { useParams, useNavigate } from 'react-router-dom';
-
-type ViewState = "details" | "listaAlumnos" | "agregarMaestras";
+import { useGradoStore } from '@/stores/Grado.store';
 
 export default function GradeDetailView() {
-  const [ gradeData, setGradeData ] = useState<GradoDTO>( {} as GradoDTO );
   const [ showMaestrasDrawer, setShowMaestrasDrawer ] = useState( false );
-  const [ currentView, setCurrentView ] = useState<ViewState>( "details" );
   const [ maestrasSearch, setMaestrasSearch ] = useState("");
   const { gradoId } = useParams()
   const navigate = useNavigate();
-
   const { obtenerGrado } = useManagementGrados();
+  const { setGrado } = useGradoStore();
+  const { grado } = useGradoStore();
 
   useEffect(() => {
     if( !gradoId ) return;
@@ -39,14 +37,14 @@ export default function GradeDetailView() {
     const traerGrado = async () => {
       const gradoData: GradoDTO = await obtenerGrado( gradoId );
 
-      setGradeData( gradoData );
+      setGrado( gradoData );
     }
 
     traerGrado();
   }, [ gradoId ]);
 
+  if( !grado ) return null;
 
-  //TODO: modificar todos los handlers para que usen rutas en lugar de vistas
   const handleBack = () => {
     navigate('/grades')
   }
@@ -55,13 +53,6 @@ export default function GradeDetailView() {
     navigate(`/grades/${ gradoId }/studentList`);    
   };
 
-  const handleAddMaestras = () => {
-    setCurrentView("agregarMaestras");
-  };
-
-  const handleBackToDetails = () => {
-    setCurrentView("details");
-  };
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
@@ -87,9 +78,9 @@ export default function GradeDetailView() {
             </button>
             <div>
               <h1 className="text-2xl font-bold text-white">
-                { gradeData.numero }° Grado - Grupo { gradeData.letra }
+                { grado.numero }° Grado - Grupo { grado.letra }
               </h1>
-              <p className="mt-1 text-sm text-purple-200/70">{ gradeData.escuela?.nombre }</p>
+              <p className="mt-1 text-sm text-purple-200/70">{ grado.escuela?.nombre }</p>
             </div>
           </div>
         </div>
@@ -107,7 +98,7 @@ export default function GradeDetailView() {
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Escuela</p>
-                <p className="font-medium text-white">{ gradeData.escuela?.nombre }</p>
+                <p className="font-medium text-white">{ grado.escuela?.nombre }</p>
               </div>
             </div>
           </div>
@@ -121,7 +112,7 @@ export default function GradeDetailView() {
                 </div>
                 <div>
                   <p className="text-xs text-purple-200/50">Turno</p>
-                  <p className="font-medium capitalize text-white">{ gradeData.turno }</p>
+                  <p className="font-medium capitalize text-white">{ grado.turno }</p>
                 </div>
               </div>
             </div>
@@ -132,7 +123,7 @@ export default function GradeDetailView() {
                 </div>
                 <div>
                   <p className="text-xs text-purple-200/50">Division Anual</p>
-                  <p className="font-medium capitalize text-white">{ gradeData.divisionAnual }</p>
+                  <p className="font-medium capitalize text-white">{ grado.divisionAnual }</p>
                 </div>
               </div>
             </div>
@@ -146,8 +137,8 @@ export default function GradeDetailView() {
               </div>
               <div>
                 <p className="text-xs text-purple-200/50">Maestra Titular</p>
-                <p className="font-medium text-white">{ gradeData.maestraTitular?.nombre } {gradeData.maestraTitular?.apellido}</p>
-                <p className="text-xs text-purple-200/50">{ gradeData.maestraTitular?.email }</p>
+                <p className="font-medium text-white">{ grado.maestraTitular?.nombre } { grado.maestraTitular?.apellido }</p>
+                <p className="text-xs text-purple-200/50">{ grado.maestraTitular?.email }</p>
               </div>
             </div>
           </div>
@@ -171,8 +162,8 @@ export default function GradeDetailView() {
               <div>
                 <p className="font-medium text-white">Maestras Adicionales</p>
                 <p className="text-sm text-purple-300/60">
-                  { gradeData.maestrasAdicionales?.length > 0
-                    ? `${ gradeData.maestrasAdicionales.length } maestra${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" } asignada${ gradeData.maestrasAdicionales.length === 1 ? "s" : "" }`
+                  { grado.maestrasAdicionales?.length > 0
+                    ? `${ grado.maestrasAdicionales.length } maestra${ grado.maestrasAdicionales.length === 1 ? "s" : "" } asignada${ grado.maestrasAdicionales.length === 1 ? "s" : "" }`
                     : "Agregar otras maestras al grado" }
                 </p>
               </div>
@@ -193,8 +184,8 @@ export default function GradeDetailView() {
               <div>
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
-                  { gradeData.alumnos?.length > 0
-                    ? `${ gradeData.alumnos.length } alumno${ gradeData.alumnos.length === 1 ? "s" : "" } registrado${ gradeData.alumnos.length === 1 ? "s" : "" }`
+                  { grado.alumnos?.length > 0
+                    ? `${ grado.alumnos.length } alumno${ grado.alumnos.length === 1 ? "s" : "" } registrado${ grado.alumnos.length === 1 ? "s" : "" }`
                     : "Gestionar lista de alumnos del grado" }
                 </p>
               </div>
