@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Plus, User, Trash2, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import CreateAlumnoView from './CreateAlumnoView';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGradoStore } from '@/stores/Grado.store';
+import type { AlumnoType } from '@/types/AlumnoTypes';
 
 type CurrentView = "list" | "create";
 
@@ -14,8 +14,6 @@ export default function AlumnosListView() {
   if( !grado ) return null
   const alumnos = grado.listaAlumnos ?? [];
 
-  console.log("Asi estan los alumnos en AlumnosListView: ", alumnos)
-
   const { gradoId } = useParams()
   const navigate = useNavigate();
 
@@ -23,9 +21,9 @@ export default function AlumnosListView() {
       setCurrentView( "create" );
   };
 
-  const handleSave = async () => {
-    //TODO: Este save quedó obsoleto ya que CreateAlumno guarda el alumno
-    navigate( `/grades/details/${ gradoId }` );
+  const handleSubmit = async ( alumno: AlumnoType ) => {
+    addAlumno( alumno )
+    setCurrentView( "list" );
   };
 
   if ( currentView === "create" ) {
@@ -33,7 +31,7 @@ export default function AlumnosListView() {
       <CreateAlumnoView
         gradoId={ gradoId || "" }
         onBack={ () => setCurrentView( "list" ) }
-        onSubmit={ ( alumno ) => { addAlumno( alumno ) } }
+        onSubmit={ handleSubmit }
       />
     );
   }
@@ -77,7 +75,7 @@ export default function AlumnosListView() {
 
       {/* Lista de alumnos */}
       <div className='flex-1 px-4 py-6'>
-        {alumnos.length === 0 ? (
+        { alumnos.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-12 text-center'>
             <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-900/30'>
               <User className='h-8 w-8 text-purple-400' />
@@ -87,25 +85,20 @@ export default function AlumnosListView() {
           </div>
         ) : (
           <div className='space-y-3'>
-            {alumnos.map((alumno, index) => (
+            { alumnos.map(( alumno, index ) => (
               <div
-                key={alumno.alumnoId}
+                key={ alumno.alumnoId }
                 className='flex items-center justify-between rounded-lg border border-purple-500/20 bg-purple-900/20 px-4 py-3'>
                 <div className='flex items-center gap-3'>
                   <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/50'>
-                    <span className='text-sm font-medium text-white'>{index + 1}</span>
+                    <span className='text-sm font-medium text-white'>{ index + 1 }</span>
                   </div>
                   <div>
                     <p className='font-medium text-white'>
-                      {alumno.nombre} {alumno.apellidoPaterno}
+                      { alumno.apellidoPaterno } { alumno.nombre }
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={ () => {} }
-                  className='flex h-8 w-8 items-center justify-center rounded-full text-red-400 transition-colors hover:bg-red-900/30'>
-                  <Trash2 className='h-4 w-4' />
-                </button>
               </div>
             ))}
           </div>
@@ -113,13 +106,13 @@ export default function AlumnosListView() {
       </div>
 
       {/* Boton Guardar */}
-      <div className='sticky bottom-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm'>
+      {/* <div className='sticky bottom-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm'>
         <Button
-          onClick={ handleSave }
+          onClick={ handleBack }
           className='w-full bg-linear-to-r from-purple-600 to-purple-500 py-6 text-base font-semibold text-white hover:from-purple-500 hover:to-purple-400'>
           Guardar Lista
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

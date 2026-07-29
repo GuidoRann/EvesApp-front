@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   ChevronLeft,
   School,
@@ -10,21 +10,12 @@ import {
   Search,
   ArrowLeft,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import type { GradoDTO } from '@/types/GradoTypes';
 import { useManagementGrados } from '../../hooks/useManagementGrados';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGradoStore } from '@/stores/Grado.store';
 
 export default function GradeDetailView() {
-  const [ showMaestrasDrawer, setShowMaestrasDrawer ] = useState( false );
-  const [ maestrasSearch, setMaestrasSearch ] = useState("");
   const { gradoId } = useParams()
   const navigate = useNavigate();
   const { obtenerGrado } = useManagementGrados();
@@ -149,29 +140,7 @@ export default function GradeDetailView() {
           {/* Action buttons */}
           <p className="text-sm font-medium text-purple-200/70 mb-4">Gestionar</p>
 
-          {/* Maestras Adicionales */}
-          <button
-            type="button"
-            onClick={() => setShowMaestrasDrawer(true)}
-            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
-                <UserPlus className="h-5 w-5 text-purple-300" />
-              </div>
-              <div>
-                <p className="font-medium text-white">Maestras Adicionales</p>
-                <p className="text-sm text-purple-300/60">
-                  { grado.maestrasAdicionales?.length > 0
-                    ? `${ grado.maestrasAdicionales.length } maestra${ grado.maestrasAdicionales.length === 1 ? "s" : "" } asignada${ grado.maestrasAdicionales.length === 1 ? "s" : "" }`
-                    : "Agregar otras maestras al grado" }
-                </p>
-              </div>
-            </div>
-            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
-          </button>
-
-          {/* Lista de Alumnos */}
+          {/* Vista de Alumnos */}
           <button
             type="button"
             onClick={ () => handleListaAlumnos() }
@@ -184,8 +153,8 @@ export default function GradeDetailView() {
               <div>
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
-                  { grado.alumnos?.length > 0
-                    ? `${ grado.alumnos.length } alumno${ grado.alumnos.length === 1 ? "s" : "" } registrado${ grado.alumnos.length === 1 ? "s" : "" }`
+                  { grado.listaAlumnos.length > 0
+                    ? `${ grado.listaAlumnos.length } alumno${ grado.listaAlumnos.length === 1 ? "s" : "" } registrado${ grado.listaAlumnos.length === 1 ? "s" : "" }`
                     : "Gestionar lista de alumnos del grado" }
                 </p>
               </div>
@@ -194,60 +163,6 @@ export default function GradeDetailView() {
           </button>
         </div>
       </div>
-
-      {/* Maestras Drawer */}
-      <Drawer open={ showMaestrasDrawer } onOpenChange={ setShowMaestrasDrawer }>
-        <DrawerContent className="w-md mx-auto border-purple-500/30 bg-[#110a24]">
-          <DrawerHeader>
-            <DrawerTitle className="text-white">Seleccionar Maestras</DrawerTitle>
-          </DrawerHeader>
-          <p className="px-4 pb-4 text-sm text-purple-300/60">
-            Selecciona las maestras adicionales para este grado
-          </p>
-          <div className="px-4 pb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
-              <Input
-                placeholder="Buscar por nombre..."
-                value={ maestrasSearch }
-                onChange={ ( e ) => setMaestrasSearch( e.target.value ) }
-                className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
-              />
-            </div>
-          </div>
-          <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
-            {/* { filteredMaestras.map(( maestra ) => {
-              const isSelected = selectedMaestrasIds.includes( maestra.id );
-              return (
-                <button
-                  key={ maestra.id }
-                  onClick={ () => toggleMaestraSelection( maestra ) }
-                  className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
-                    isSelected
-                      ? "border-emerald-500 bg-emerald-600/20"
-                      : "border-purple-500/20 bg-purple-900/20 hover:bg-purple-900/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                        isSelected ? "bg-emerald-500/30" : "bg-purple-600/50"
-                      }`}
-                    >
-                      <User className={`h-5 w-5 ${ isSelected ? "text-emerald-300" : "text-purple-200" }`} />
-                    </div>
-                    <div>
-                      <p className="font-medium text-white">{ maestra.nombre }</p>
-                      <p className="text-sm text-purple-300/60">{ maestra.email }</p>
-                    </div>
-                  </div>
-                  { isSelected && <Check className="h-5 w-5 text-emerald-400" /> }
-                </button>
-              );
-            })} */}
-          </div>
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 }

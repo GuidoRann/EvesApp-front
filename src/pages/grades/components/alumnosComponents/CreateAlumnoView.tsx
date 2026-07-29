@@ -7,6 +7,7 @@ import type { AlumnoType, CreateAlumnoDTO } from '@/types/AlumnoTypes';
 import DateOfBirthPicker from '../gradosComponents/DateOfBirthPicker';
 import { useManagementAlumnos } from '../../hooks/useManagementAlumnos';
 import { useGradoStore } from '@/stores/Grado.store';
+import { toast } from 'sonner';
 
 interface CreateAlumnoFormProps {
   onBack: () => void;
@@ -14,7 +15,7 @@ interface CreateAlumnoFormProps {
   gradoId: string;
 }
 
-export default function CreateAlumnoForm({ onBack, onSubmit, gradoId }: CreateAlumnoFormProps) {
+export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormProps) {
   const [ nombre, setNombre ] = useState("");
   const [ apellidoPaterno, setApellidoPaterno ] = useState("");
   const [ apellidoMaterno, setApellidoMaterno ] = useState("");
@@ -48,6 +49,8 @@ export default function CreateAlumnoForm({ onBack, onSubmit, gradoId }: CreateAl
 
 
     const newAlumno: AlumnoType = await crearAlumno( alumno );
+
+    toast.success('✅ Alumno creado exitosamente!');
     
     onSubmit( newAlumno );
   };
