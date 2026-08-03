@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabaseClient';
 import MaestraService from '@/services/MaestraService';
 import { useMaestraStore } from '@/stores/Maestra.store';
-import type { MaestraDTO } from '@/types/MaestraTypes';
+import type { MaestraType } from '@/types/MaestraTypes';
 
 export const useManagementProfile = () => {
   const {
@@ -49,7 +49,7 @@ export const useManagementProfile = () => {
     }
   };
 
-  const updateMaestra = async ( maestraId: string, maestra: MaestraDTO ) => {
+  const updateMaestra = async ( maestraId: string, maestra: MaestraType ) => {
     try {
       const { data } = await supabase.auth.getSession();
       const token = data.session?.access_token;

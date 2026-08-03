@@ -1,13 +1,13 @@
 import type {AlumnoType} from "@/types/AlumnoTypes";
-import type {GradoDTO} from "@/types/GradoTypes";
+import type {GradoType} from "@/types/GradoTypes";
 import {create} from "zustand";
 import {persist} from "zustand/middleware";
 
 interface GradoStore {
-  grado: GradoDTO | null;
+  grado: GradoType | null;
   loading: boolean;
 
-  setGrado: ( grado: GradoDTO | null ) => void;
+  setGrado: ( grado: GradoType | null ) => void;
 
   setAlumnos: ( alumnos: AlumnoType[] ) => void;
 
@@ -24,7 +24,7 @@ export const useGradoStore = create<GradoStore>()(
       grado: null,
       loading: false,
 
-      setGrado: ( grado: GradoDTO | null ) => set({ grado }),
+      setGrado: ( grado: GradoType | null ) => set({ grado }),
 
       setAlumnos: ( listaAlumnos: AlumnoType[] ) =>
         set(( state ) => {

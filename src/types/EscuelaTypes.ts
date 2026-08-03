@@ -1,5 +1,5 @@
-import type { GradoDTO } from './GradoTypes';
-import type { MaestraDTO } from './MaestraTypes';
+import type { GradoType } from './GradoTypes';
+import type { MaestraType } from './MaestraTypes';
 
 export interface EscuelaDTO {
   escuelaId: string
@@ -7,8 +7,8 @@ export interface EscuelaDTO {
   numero: string
   direccion: string
   telefono: string
-  listaGrados: GradoDTO[]
-  maestras: MaestraDTO[]
+  listaGrados: GradoType[]
+  maestras: MaestraType[]
 }
 
 export interface CreateEscuelaDTO {

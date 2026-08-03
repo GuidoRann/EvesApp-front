@@ -20,7 +20,7 @@ import {
   DrawerDescription,
 } from "@/components/ui/drawer";
 import type { EscuelaDTO } from '@/types/EscuelaTypes';
-import type { MaestraDTO } from '@/types/MaestraTypes';
+import type { MaestraType } from '@/types/MaestraTypes';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface EscuelaDetailViewProps {
@@ -33,7 +33,7 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
   const [ maestrasSearch, setMaestrasSearch ] = useState( "" );
   const [ gradosOpen, setGradosOpen ] = useState( false );
   const [ gradosSearch, setGradosSearch ] = useState( "" );
-  const [ availableMaestras, setAvailableMaestras ] = useState< MaestraDTO[] >( [] );
+  const [ availableMaestras, setAvailableMaestras ] = useState< MaestraType[] >( [] );
 
 
   useEffect(() => {

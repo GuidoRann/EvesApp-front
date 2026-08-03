@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, User, Trash2, ArrowLeft } from "lucide-react";
+import { Plus, ArrowLeft, ChevronLeft } from "lucide-react";
 import CreateAlumnoView from './CreateAlumnoView';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGradoStore } from '@/stores/Grado.store';
@@ -14,7 +14,7 @@ export default function AlumnosListView() {
   if( !grado ) return null
   const alumnos = grado.listaAlumnos ?? [];
 
-  const { gradoId } = useParams()
+  const { gradoId } = useParams();
   const navigate = useNavigate();
 
   const handleCreateAlumno = () => {
@@ -65,7 +65,7 @@ export default function AlumnosListView() {
               </div>
             </div>
             <button
-              onClick={() => handleCreateAlumno()}
+              onClick={ () => handleCreateAlumno() }
               className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-white transition-colors hover:bg-purple-500'>
               <Plus className='h-5 w-5' />
             </button>
@@ -73,46 +73,25 @@ export default function AlumnosListView() {
         </div>
       </div>
 
-      {/* Lista de alumnos */}
-      <div className='flex-1 px-4 py-6'>
-        { alumnos.length === 0 ? (
-          <div className='flex flex-col items-center justify-center py-12 text-center'>
-            <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-900/30'>
-              <User className='h-8 w-8 text-purple-400' />
-            </div>
-            <p className='text-lg font-medium text-purple-200'>Sin alumnos</p>
-            <p className='mt-1 text-sm text-purple-300/50'>Toca el boton + para agregar alumnos</p>
-          </div>
-        ) : (
-          <div className='space-y-3'>
-            { alumnos.map(( alumno, index ) => (
-              <div
-                key={ alumno.alumnoId }
-                className='flex items-center justify-between rounded-lg border border-purple-500/20 bg-purple-900/20 px-4 py-3'>
-                <div className='flex items-center gap-3'>
-                  <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/50'>
+      <div className="mt-4 flex flex-col gap-2 px-4">
+        { alumnos.map(( alumno, index ) => (
+          <button
+            type="button"
+            onClick={ () => navigate( `/grades/${ gradoId }/students/${ alumno.alumnoId }` ) }
+            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-purple-600/50'>
                     <span className='text-sm font-medium text-white'>{ index + 1 }</span>
                   </div>
-                  <div>
-                    <p className='font-medium text-white'>
-                      { alumno.apellidoPaterno } { alumno.nombre }
-                    </p>
-                  </div>
-                </div>
+              <div>
+                <p className="font-bold text-white">{ alumno.apellidoPaterno }, { alumno.nombre }</p>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
+          </button>
+        ))}
       </div>
-
-      {/* Boton Guardar */}
-      {/* <div className='sticky bottom-0 border-t border-purple-500/20 bg-background/95 p-4 backdrop-blur-sm'>
-        <Button
-          onClick={ handleBack }
-          className='w-full bg-linear-to-r from-purple-600 to-purple-500 py-6 text-base font-semibold text-white hover:from-purple-500 hover:to-purple-400'>
-          Guardar Lista
-        </Button>
-      </div> */}
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
     onSubmit( newAlumno );
   };
 
-  const formatDocumento = ( value: string ) => {
+  const formatNumber = ( value: string ) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
@@ -140,7 +140,7 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
               inputMode="numeric"
               placeholder="Ingrese el número de documento"
               className="w-full rounded-lg border border-purple-500/30 bg-purple-900/20 px-4 py-5 text-white placeholder:text-purple-300/50 focus:border-purple-400 focus:ring-purple-400"
-              value={ formatDocumento( numeroDocumento ) }
+              value={ formatNumber( numeroDocumento ) }
               onChange={ ( e ) => setNumeroDocumento( e.target.value.replace(/\D/g, "") ) }
             />
         </Field>

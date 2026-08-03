@@ -11,6 +11,7 @@ import CreateGradoForm from './pages/grades/components/gradosComponents/CreateGr
 import { Toaster } from 'sonner'
 import AlumnosListView from './pages/grades/components/alumnosComponents/AlumnosListView';
 import GradeDetailView from './pages/grades/components/gradosComponents/GradeDetailView';
+import AlumnosDetailView from './pages/grades/components/alumnosComponents/AlumnosDetailView';
 
 function App() {  
 
@@ -36,7 +37,8 @@ function App() {
               <Route index element={<Grados />} />
               <Route path="create" element={<CreateGradoForm />} />
               <Route path="details/:gradoId" element={<GradeDetailView />} />
-              <Route path=":gradoId/studentList" element={<AlumnosListView />} />
+              <Route path=":gradoId/students" element={<AlumnosListView />} />
+              <Route path=":gradoId/students/:alumnoId" element={<AlumnosDetailView />} />
             </Route>
 
             <Route path="/schools" element={<Schools />} />

@@ -1,15 +1,15 @@
 import type { EscuelaDTO } from './EscuelaTypes';
-import type { GradoDTO } from './GradoTypes';
+import type { GradoType } from './GradoTypes';
 
-export interface MaestraDTO {
+export interface MaestraType {
   maestraId: string;
   supabaseUserId: string;
   nombre: string;
   apellido: string;
   email: string;
   escuelas: EscuelaDTO[];
-  gradosComoTitular: GradoDTO[];
-  gradosGeneral: GradoDTO[];
+  gradosComoTitular: GradoType[];
+  gradosGeneral: GradoType[];
   avatar_url: string;
   created_at: string;
   updated_at: string;

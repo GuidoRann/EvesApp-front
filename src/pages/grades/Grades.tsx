@@ -5,7 +5,7 @@ import GradeCard from './components/gradosComponents/GradesCard';
 import GradesHeader from './components/gradosComponents/GradesHeader';
 import { useManagementGrados } from './hooks/useManagementGrados';
 import { useMaestraStore } from '@/stores/Maestra.store';
-import type { GradoDTO } from '@/types/GradoTypes';
+import type { GradoType } from '@/types/GradoTypes';
 import { useNavigate } from "react-router-dom";
 
 type ViewState = "list" | "detail" | "create" | "join";
@@ -16,7 +16,7 @@ export default function Grades() {
   const { crearGrado } = useManagementGrados();
   const navigate = useNavigate();
 
-  const maestra = useMaestraStore(( state ) => state.maestra);
+  const maestra = useMaestraStore( ( state ) => state.maestra );
   const gradosTitular = maestra?.gradosComoTitular || [];
   const gradosMaestra = maestra?.gradosGeneral || [];
 
@@ -28,7 +28,7 @@ export default function Grades() {
     setCurrentView( "join" );
   };
 
-  const handleGradeClick = ( grade: GradoDTO ) => {
+  const handleGradeClick = ( grade: GradoType ) => {
     navigate( `/grades/details/${ grade.gradoId }` );
   };
 

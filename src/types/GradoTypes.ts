@@ -1,16 +1,16 @@
 import type { AlumnoType } from './AlumnoTypes';
 import type { EscuelaDTO } from './EscuelaTypes';
-import type { MaestraDTO } from './MaestraTypes';
+import type { MaestraType } from './MaestraTypes';
 
-export interface GradoDTO {
+export interface GradoType {
   gradoId: string;
   numero: number;
   letra: string;
   turno: "mañana" | "tarde";
   divisionAnual: "bimestre" | "trimestre";
   escuela: EscuelaDTO;
-  maestraTitular: MaestraDTO;
-  maestrasAdicionales: MaestraDTO[];
+  maestraTitular: MaestraType;
+  maestrasAdicionales: MaestraType[];
   listaAlumnos: AlumnoType[];
 }
 
@@ -21,4 +21,5 @@ export interface CreateGradoDTO {
   turno: string;
   divisionAnual: string;
   maestraTitularId: string;
+  listaAlumnos: AlumnoType[];
 }

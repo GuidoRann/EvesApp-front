@@ -1,13 +1,13 @@
-import type { MaestraDTO } from '@/types/MaestraTypes';
+import type { MaestraType } from '@/types/MaestraTypes';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 
 interface MaestraStore {
-  maestra: MaestraDTO | null;
+  maestra: MaestraType | null;
   loading: boolean;
 
-  setMaestra: ( maestra: MaestraDTO| null ) => void;
+  setMaestra: ( maestra: MaestraType| null ) => void;
 
   clearAll: () => void;
 }
@@ -18,7 +18,7 @@ export const useMaestraStore = create<MaestraStore>()(
       maestra: null,
       loading: false,
 
-      setMaestra: ( maestra: MaestraDTO | null ) => set( { maestra } ),
+      setMaestra: ( maestra: MaestraType | null ) => set( { maestra } ),
       
       clearAll: () => set({
         maestra: null,

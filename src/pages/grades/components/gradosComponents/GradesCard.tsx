@@ -40,7 +40,7 @@ export default function GradeCard({ numero, letra, turno, nombreEscuela, cantida
             { cantidadEstudiantes !== undefined && (
               <div className="flex items-center gap-1 text-emerald-400/70 text-xs font-medium">
                 <Users className="h-3 w-3" />
-                <span>{ cantidadEstudiantes } alumnos</span>
+                <span>{ cantidadEstudiantes } alumno{ cantidadEstudiantes === 1 ? "" : "s" } </span>
               </div>
             )}
           </div>

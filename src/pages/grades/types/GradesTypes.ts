@@ -1,5 +1,5 @@
 import type { AlumnoType } from '@/types/AlumnoTypes';
-import type { MaestraDTO } from '@/types/MaestraTypes';
+import type { MaestraType } from '@/types/MaestraTypes';
 
 export interface GradoType {
   gradoId: string
@@ -8,8 +8,8 @@ export interface GradoType {
   letra: string
   turno: string
   divisionAnual: string
-  maestraTitular: MaestraDTO
-  maestras: MaestraDTO[]
+  maestraTitular: MaestraType
+  maestras: MaestraType[]
   listaAlumnos: AlumnoType[]
 }
 

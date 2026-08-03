@@ -6,11 +6,9 @@ import {
   Clock,
   Calendar,
   Users,
-  UserPlus,
-  Search,
   ArrowLeft,
 } from "lucide-react";
-import type { GradoDTO } from '@/types/GradoTypes';
+import type { GradoType } from '@/types/GradoTypes';
 import { useManagementGrados } from '../../hooks/useManagementGrados';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGradoStore } from '@/stores/Grado.store';
@@ -26,7 +24,7 @@ export default function GradeDetailView() {
     if( !gradoId ) return;
 
     const traerGrado = async () => {
-      const gradoData: GradoDTO = await obtenerGrado( gradoId );
+      const gradoData: GradoType = await obtenerGrado( gradoId );
 
       setGrado( gradoData );
     }
@@ -41,7 +39,7 @@ export default function GradeDetailView() {
   }
 
   const handleListaAlumnos = () => {
-    navigate(`/grades/${ gradoId }/studentList`);    
+    navigate(`/grades/${ gradoId }/students`);    
   };
 
 
@@ -154,7 +152,7 @@ export default function GradeDetailView() {
                 <p className="font-medium text-white">Lista de Alumnos</p>
                 <p className="text-sm text-purple-300/60">
                   { grado.listaAlumnos.length > 0
-                    ? `${ grado.listaAlumnos.length } alumno${ grado.listaAlumnos.length === 1 ? "s" : "" } registrado${ grado.listaAlumnos.length === 1 ? "s" : "" }`
+                    ? `${ grado.listaAlumnos.length } alumno${ grado.listaAlumnos.length === 1 ? "" : "s" } registrado${ grado.listaAlumnos.length === 1 ? "" : "s" }`
                     : "Gestionar lista de alumnos del grado" }
                 </p>
               </div>
