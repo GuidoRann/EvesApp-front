@@ -1,14 +1,13 @@
-import type { CreateAlumnoFamiliarDTO } from '@/types/AlumnoFamiliarTypes';
 import axios from 'axios';
 
-export default class AlumnoFamiliarService {
-  static BASE_URL = "http://localhost:3000/api/alumno-familiar";
+export default class MateriaService{
+  static BASE_URL = "http://localhost:3000/api/materia"
 
-  static async crearAlumnoFamiliar( token: string | null, alumnoFamiliar: CreateAlumnoFamiliarDTO ) {
+  static async crearMateria( token: string | null, materia: any ){
     try {
       const response = await axios.post( 
-        `${ this.BASE_URL }/crearAlumnoFamiliar`,
-        alumnoFamiliar ,
+        `${ this.BASE_URL }`,
+        materia,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -22,10 +21,10 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async obtenerAlumnoFamiliar( token: string | null, alumnoFamiliarId: string ) {
+  static async obtenerMateria( token: string | null, materiaId: string ){
     try {
       const response = await axios.get( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
+        `${ this.BASE_URL }/${ materiaId }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -39,11 +38,11 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async actualizarAlumnoFamiliar( token: string | null, alumnoFamiliarId: string, alumnoFamiliar: CreateAlumnoFamiliarDTO ) {
+  static async actualizarMateria( token: string | null, materiaId: string, data: any ){
     try {
       const response = await axios.put( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
-        alumnoFamiliar,
+        `${ this.BASE_URL }/${ materiaId }`,
+        data,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -57,10 +56,10 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async eliminarAlumnoFamiliar( token: string | null, alumnoFamiliarId: string ) {
+  static async eliminarMateria( token: string | null, materiaId: string ){
     try {
       const response = await axios.delete( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
+        `${ this.BASE_URL }/${ materiaId }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`

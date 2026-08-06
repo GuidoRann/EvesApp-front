@@ -1,14 +1,13 @@
-import type { CreateAlumnoFamiliarDTO } from '@/types/AlumnoFamiliarTypes';
 import axios from 'axios';
 
-export default class AlumnoFamiliarService {
-  static BASE_URL = "http://localhost:3000/api/alumno-familiar";
+export default class AsistenciaService {
+  static BASE_URL = "http://localhost:8080/api/asistencia";
 
-  static async crearAlumnoFamiliar( token: string | null, alumnoFamiliar: CreateAlumnoFamiliarDTO ) {
+  static async crearAsistencia( token: string | null, asistencia: any ) {
     try {
       const response = await axios.post( 
-        `${ this.BASE_URL }/crearAlumnoFamiliar`,
-        alumnoFamiliar ,
+        `${ this.BASE_URL }`,
+        asistencia,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -22,10 +21,10 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async obtenerAlumnoFamiliar( token: string | null, alumnoFamiliarId: string ) {
+  static async obtenerAsistencia( token: string | null, asistenciaId: string ) {
     try {
       const response = await axios.get( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
+        `${ this.BASE_URL }/${ asistenciaId }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -39,11 +38,11 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async actualizarAlumnoFamiliar( token: string | null, alumnoFamiliarId: string, alumnoFamiliar: CreateAlumnoFamiliarDTO ) {
+  static async actualizarAsistencia( token: string | null, asistenciaId: string, data: any ) {
     try {
       const response = await axios.put( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
-        alumnoFamiliar,
+        `${ this.BASE_URL }/${ asistenciaId }`,
+        data,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -57,10 +56,10 @@ export default class AlumnoFamiliarService {
     }
   }
 
-  static async eliminarAlumnoFamiliar( token: string | null, alumnoFamiliarId: string ) {
+  static async eliminarAsistencia( token: string | null, asistenciaId: string ) {
     try {
       const response = await axios.delete( 
-        `${ this.BASE_URL }/${ alumnoFamiliarId }`,
+        `${ this.BASE_URL }/${ asistenciaId }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
