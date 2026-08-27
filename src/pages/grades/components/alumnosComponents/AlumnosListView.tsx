@@ -75,6 +75,7 @@ export default function AlumnosListView() {
       <div className="mt-4 flex flex-col gap-2 px-4">
         { alumnos.map(( alumno, index ) => (
           <button
+            key={ alumno.alumnoId }
             type="button"
             onClick={ () => navigate( `/grades/${ gradoId }/students/${ alumno.alumnoId }` ) }
             className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
@@ -89,7 +90,7 @@ export default function AlumnosListView() {
             </div>
             <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
           </button>
-        ))}
+        )) }
       </div>
     </div>
   );

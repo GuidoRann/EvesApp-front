@@ -1,13 +1,14 @@
+import type { CreateAlumnoFamiliarDTO } from '@/types/AlumnoFamiliarTypes';
 import axios from 'axios';
 
 export default class FamiliarService {
   static BASE_URL = "http://localhost:3000/api/familiar";
 
-  static async crearFamiliar( token: string | null, familiar: any ) {
+  static async crearFamiliar( token: string | null, alumnoFamiliar: CreateAlumnoFamiliarDTO ) {
     try {
       const response = await axios.post( 
-        `${ this.BASE_URL }`,
-        familiar,
+        `${ this.BASE_URL }/crearFamiliar`,
+        alumnoFamiliar,
         {
           headers: {
             Authorization: `Bearer ${ token }`

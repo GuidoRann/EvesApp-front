@@ -22,7 +22,7 @@ export default function AlumnosDetailView() {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  const handleSubmit = async ( familiar: FamiliarType ) => {
+  const handleSubmit = async () => {
     setCurrentView( "list" );
   }
 

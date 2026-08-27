@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import type { FamiliarType } from '@/types/FamiliarTypes';
+import type { CreateFamiliarDTO, FamiliarType } from '@/types/FamiliarTypes';
 import ParentescoSwitch from './ParentescoSwitch';
+import { useParams } from 'react-router-dom';
+import { useManagementFamiliar } from '../../hooks/useManagementFamiliar';
 
 interface CreateFamiliarViewProps {
   onBack: () => void;
@@ -20,38 +22,40 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
   const [ ocupacion, setOcupacion ] = useState("");
   const [ numeroDocumento, setNumeroDocumento ] = useState("");
   const [ parentesco, setParentesco ] = useState(""); // TODO: agregar un switch para elegir Madre, Padre, Tutor
+  const { crearFamiliar } = useManagementFamiliar();
 
-  const isFormValid = nombre.trim() !== "" && apellido.trim() !== "" && direccion.trim() !== "" &&  numeroTelefono.trim() !== "" && ocupacion.trim() !== "";
+  const { alumnoId } = useParams();
 
+  const isFormValid = nombre.trim() !== "" && apellido.trim() !== "" && direccion.trim() !== "" &&  numeroTelefono.trim() !== "" && ocupacion.trim() !== "" && numeroDocumento.trim() !== "";
 
   const formatNumber = ( value: string ) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  console.log( parentesco );
-
-
-  // const handleSubmit = async () => {
-  //   if (!fechaNacimiento) return;
+  const handleSubmit = async () => {
+    if (!parentesco || !alumnoId) return;
     
-  //   const alumno: CreateAlumnoDTO = {
-  //     nombre,
-  //     apellidoPaterno,
-  //     apellidoMaterno,
-  //     numeroDocumento,
-  //     direccion,
-  //     barrio,
-  //     fechaNacimiento,
-  //     grado: grado
-  //   };
+    const familiar: CreateFamiliarDTO = {
+      nombre,
+      apellido,
+      direccion,
+      numeroTelefono,
+      ocupacion,
+      numeroDocumento,
+    };
+
+    console.log("Familiar a crear: ", familiar);
 
 
-  //   const newAlumno: AlumnoType = await crearAlumno( alumno );
+    const newFamiliar: FamiliarType = await crearFamiliar( familiar, parentesco, alumnoId );
 
-  //   toast.success('✅ Alumno creado exitosamente!');
+    console.log("Familiar creado: ", newFamiliar);
+    console.log("alumnoId: ", alumnoId);
+
+    toast.success('✅ Familiar creado exitosamente!');
     
-  //   onSubmit( newAlumno );
-  // };
+    onSubmit( newFamiliar );
+  };
 
   return (
     <div className="mx-auto flex h-dvh bg-background max-w-md flex-col">
@@ -179,7 +183,7 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
       {/* Footer button */}
       <div className="p-4 border-t border-purple-500/10">
         <Button
-          // onClick={ handleSubmit }
+          onClick={ handleSubmit }
           disabled={ !isFormValid }
           className="w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >

@@ -1,5 +1,5 @@
 import type { AlumnoType } from './AlumnoTypes';
-import type { FamiliarType } from './FamiliarTypes';
+import type { CreateFamiliarDTO, FamiliarType } from './FamiliarTypes';
 
 export interface AlumnoFamiliarType {
   alumnoFamiliarId: string;
@@ -9,7 +9,7 @@ export interface AlumnoFamiliarType {
 }
 
 export interface CreateAlumnoFamiliarDTO {
-  alumno: AlumnoType;
-  familiar: FamiliarType;
+  familiar: CreateFamiliarDTO;
+  alumnoId: string;
   parentesco: string;
 }

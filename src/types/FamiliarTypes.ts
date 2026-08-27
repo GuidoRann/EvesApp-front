@@ -1,4 +1,4 @@
-import type { AlumnoType } from './AlumnoTypes';
+import type { AlumnoFamiliarType } from './AlumnoFamiliarTypes';
 
 export interface FamiliarType {
   familiarId: string;
@@ -7,7 +7,8 @@ export interface FamiliarType {
   direccion: string;
   numeroTelefono: string;
   ocupacion: string;
-  alumno: AlumnoType[];
+  numeroDocumento: string;
+  alumno: AlumnoFamiliarType[];
 }
 
 export interface CreateFamiliarDTO {
@@ -16,5 +17,5 @@ export interface CreateFamiliarDTO {
   direccion: string;
   numeroTelefono: string;
   ocupacion: string;
-  alumno: AlumnoType[];
+  numeroDocumento: string;
 }
