@@ -8,10 +8,10 @@ import { useMaestraStore } from '@/stores/Maestra.store';
 import type { GradoType } from '@/types/GradoTypes';
 import { useNavigate } from "react-router-dom";
 
-type ViewState = "list" | "detail" | "create" | "join";
+type CurrentView = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
-  const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
+  const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const [ searchQuery, setSearchQuery ] = useState("");
   const { crearGrado } = useManagementGrados();
   const navigate = useNavigate();

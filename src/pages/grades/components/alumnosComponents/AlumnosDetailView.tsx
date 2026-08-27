@@ -1,8 +1,14 @@
 import { useGradoStore } from '@/stores/Grado.store';
 import { ArrowLeft, Calendar, Clock, School, User } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import CreateFamiliarView from '../familiarComponents/CreateFamiliarView';
+import type { FamiliarType } from '@/types/FamiliarTypes';
+
+type CurrentView = "list" | "create";
 
 export default function AlumnosDetailView() {
+  const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const { alumnoId } = useParams();
   const { grado } = useGradoStore();
   const navigate = useNavigate();
@@ -15,6 +21,19 @@ export default function AlumnosDetailView() {
   const formatNumber = ( value: string ) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
+
+  const handleSubmit = async ( familiar: FamiliarType ) => {
+    setCurrentView( "list" );
+  }
+
+  if( currentView === "create" ) {
+    return (
+      <CreateFamiliarView 
+        onBack={ () => setCurrentView( "list" ) } 
+        onSubmit={ handleSubmit } 
+      />
+    )
+  }
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
@@ -124,11 +143,18 @@ export default function AlumnosDetailView() {
           <div className="my-6 border-t border-purple-500/20" />
 
           {/* Action buttons */}
-          <p className="text-sm font-medium text-purple-200/70 mb-4">Familiares</p>
+          <div className="flex text-sm font-medium text-purple-200/70 items-center justify-between">
+            <p className="mb-4">Familiares</p>
+            <button 
+              onClick={ () => setCurrentView( "create" ) }
+              className="flex items-center gap-2 rounded-full bg-purple-600/30 px-4 py-2 hover:bg-purple-600/50 mb-4">
+                Agregar Familiar
+            </button>
+          </div>
 
           {/* Lista Familiares */}
           <div>
-            
+
           </div>
 
         </div>

@@ -7,8 +7,6 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { useEscuelaStore } from '@/pages/schools/service/Escuela.store';
 
-// Data de muestra, cambiar por data real del backend
-
 interface CreateGradoFormProps {
   onBack?: () => void;
   onSubmit?: ( data: GradoFormData ) => void;

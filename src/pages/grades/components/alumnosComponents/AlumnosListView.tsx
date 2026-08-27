@@ -29,7 +29,6 @@ export default function AlumnosListView() {
   if ( currentView === "create" ) {
     return (
       <CreateAlumnoView
-        gradoId={ gradoId || "" }
         onBack={ () => setCurrentView( "list" ) }
         onSubmit={ handleSubmit }
       />

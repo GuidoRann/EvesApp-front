@@ -9,13 +9,12 @@ import { useManagementAlumnos } from '../../hooks/useManagementAlumnos';
 import { useGradoStore } from '@/stores/Grado.store';
 import { toast } from 'sonner';
 
-interface CreateAlumnoFormProps {
+interface CreateAlumnoViewProps {
   onBack: () => void;
   onSubmit: ( alumno: AlumnoType ) => void;
-  gradoId: string;
 }
 
-export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormProps) {
+export default function CreateAlumnoView({ onBack, onSubmit }: CreateAlumnoViewProps) {
   const [ nombre, setNombre ] = useState("");
   const [ apellidoPaterno, setApellidoPaterno ] = useState("");
   const [ apellidoMaterno, setApellidoMaterno ] = useState("");
@@ -178,19 +177,12 @@ export default function CreateAlumnoForm({ onBack, onSubmit }: CreateAlumnoFormP
               Selecciona la Fecha de Nacimiento
             </FieldLabel>
             <DateOfBirthPicker
-              value={fechaNacimiento}
-              onChange={setFechaNacimiento}
+              value={ fechaNacimiento }
+              onChange={ setFechaNacimiento }
               placeholder="Toca para elegir una fecha"
             />
         </Field>
       </FieldGroup>
-
-      {/* Esto mostraria la fecha debajo en verde para valida */}
-      {/* {fechaNacimiento && (
-          <p className="mt-6 text-sm text-emerald-400">
-            Fecha seleccionada: {fechaNacimiento.toLocaleDateString("es-MX")}
-          </p>
-      )} */}
 
       </main> 
 
