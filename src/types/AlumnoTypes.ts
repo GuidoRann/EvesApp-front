@@ -11,6 +11,7 @@ export interface AlumnoType {
   numeroDocumento: string;
   direccion: string;
   barrio: string;
+  familiares: AlumnoFamiliarType[];
   fechaNacimiento: Date;
   grado: GradoType;
 }

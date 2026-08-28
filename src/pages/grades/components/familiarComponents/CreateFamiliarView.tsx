@@ -21,7 +21,7 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
   const [ numeroTelefono, setNumeroTelefono ] = useState("");
   const [ ocupacion, setOcupacion ] = useState("");
   const [ numeroDocumento, setNumeroDocumento ] = useState("");
-  const [ parentesco, setParentesco ] = useState(""); // TODO: agregar un switch para elegir Madre, Padre, Tutor
+  const [ parentesco, setParentesco ] = useState("");
   const { crearFamiliar } = useManagementFamiliar();
 
   const { alumnoId } = useParams();
@@ -44,13 +44,7 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
       numeroDocumento,
     };
 
-    console.log("Familiar a crear: ", familiar);
-
-
     const newFamiliar: FamiliarType = await crearFamiliar( familiar, parentesco, alumnoId );
-
-    console.log("Familiar creado: ", newFamiliar);
-    console.log("alumnoId: ", alumnoId);
 
     toast.success('✅ Familiar creado exitosamente!');
     
