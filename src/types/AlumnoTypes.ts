@@ -12,7 +12,7 @@ export interface AlumnoType {
   direccion: string;
   barrio: string;
   familiares: AlumnoFamiliarType[];
-  fechaNacimiento: Date;
+  fechaNacimiento: string;
   grado: GradoType;
 }
 

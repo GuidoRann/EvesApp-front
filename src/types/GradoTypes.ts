@@ -6,8 +6,8 @@ export interface GradoType {
   gradoId: string;
   numero: number;
   letra: string;
-  turno: "mañana" | "tarde";
-  divisionAnual: "bimestre" | "trimestre";
+  turno: string;
+  divisionAnual: string;
   escuela: EscuelaDTO;
   maestraTitular: MaestraType;
   maestrasAdicionales: MaestraType[];

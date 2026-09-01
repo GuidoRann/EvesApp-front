@@ -1,56 +1,74 @@
 import { useState } from "react";
-import { ChevronLeft, Search, School, Check, ArrowLeft, LayoutGrid } from "lucide-react";
+import { ChevronLeft, Search, School, Check, ArrowLeft, LayoutGrid, Loader2 } from "lucide-react";
 import { Button} from "@/components/ui/button";
 import { Input} from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { useEscuelaStore } from '@/pages/schools/service/Escuela.store';
+import type { CreateGradoDTO } from '@/types/GradoTypes';
+import { useManagementGrados } from '../../hooks/useManagementGrados';
+import { useMaestraStore } from '@/stores/Maestra.store';
+import { toast } from 'sonner';
+import type { EscuelaDTO } from '@/types/EscuelaTypes';
 
 interface CreateGradoFormProps {
   onBack?: () => void;
-  onSubmit?: ( data: GradoFormData ) => void;
 }
 
-interface GradoFormData {
-  escuelaId: string;
-  numero: string;
-  letra: string;
-  turno: string;
-  divisionAnual: string;
-}
+export default function CreateGradoForm({ onBack }: CreateGradoFormProps) {
+  const escuelas = useEscuelaStore( state => state.listaDeEscuelas ); //TODO: generar el store de escuelas al entrar en la app
 
-export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormProps) {
-  const escuelas = useEscuelaStore( state => state.listaDeEscuelas ); 
-  const [ formData, setFormData ] = useState<GradoFormData>({
-    escuelaId: "",
-    numero: "",
-    letra: "",
-    turno: "",
-    divisionAnual: "",
-  });
+  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
+
+  const [ escuelaId, setEscuelaId ] = useState<string>("");
+  const [ numero, setNumero ] = useState<string>("");
+  const [ letra, setLetra ] = useState<string>("");
+  const [ turno, setTurno ] = useState<string>("");
+  const [ divisionAnual, setDivisionAnual ] = useState<string>("");
+
+  const [ isCreating, setIsCreating ] = useState(false);
 
   const [ escuelaSearch, setEscuelaSearch ] = useState("");
-  const [ maestraSearch, setMaestraSearch ] = useState("");
   const [ showEscuelaDrawer, setShowEscuelaDrawer ] = useState(false);
-  const [ showMaestraDrawer, setShowMaestraDrawer ] = useState(false);
 
-  const selectedEscuela = escuelas.find(( e ) => e.escuelaId === formData.escuelaId );
+  const { crearGrado } = useManagementGrados();
+
+  const maestra = useMaestraStore( ( state ) => state.maestra );
 
   const filteredEscuelas = escuelas.filter(( e ) => e.nombre.toLowerCase().includes( escuelaSearch.toLowerCase() ));
 
 
-  const isFormValid =
-    formData.escuelaId &&
-    formData.numero &&
-    formData.letra &&
-    formData.turno &&
-    formData.divisionAnual;
+  const isFormValid = escuelaId.trim() !== "" && numero.trim() !== "" && letra.trim() !== "" && turno.trim() !== "" && divisionAnual.trim() !== "";
 
-  const handleSubmit = () => {
-    if ( isFormValid && onSubmit ) {
-      onSubmit( formData );
+
+  const handleSubmit = async () => {
+    if ( !maestra ) return;
+    setIsCreating(true);
+
+    try {
+      const grado: CreateGradoDTO = {
+        escuelaId,
+        numero,
+        letra,
+        turno,
+        divisionAnual,
+        maestraTitularId: maestra.maestraId,
+        listaAlumnos: []
+      };
+
+      await crearGrado( grado );
+
+      toast.success('✅ Grado creado exitosamente!');
+      
+    } catch (error) {
+      console.error("Error al crear grado:", error);
+      toast.error("No se pudo crear el grado");
+    } finally {
+      setIsCreating( false );
     }
+
+    
   };
 
   return (
@@ -109,7 +127,7 @@ export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormPro
           <div className='grid grid-cols-2 gap-4'>
             <Field>
               <FieldLabel className='text-purple-100'>Grado *</FieldLabel>
-              <Select value={ formData.numero } onValueChange={( value ) => setFormData({...formData, numero: value})}>
+              <Select value={ numero } onValueChange={( value ) => setNumero( value ) }>
                 <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Numero' />
                 </SelectTrigger>
@@ -128,7 +146,7 @@ export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormPro
 
             <Field>
               <FieldLabel className='text-purple-100'>Grupo *</FieldLabel>
-              <Select value={ formData.letra } onValueChange={( value ) => setFormData({...formData, letra: value})}>
+              <Select value={ letra } onValueChange={( value ) => setLetra( value )}>
                 <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                   <SelectValue placeholder='Letra' />
                 </SelectTrigger>
@@ -149,7 +167,7 @@ export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormPro
           {/* Turno */}
           <Field>
             <FieldLabel className='text-purple-100'>Turno *</FieldLabel>
-            <Select value={ formData.turno } onValueChange={( value ) => setFormData({...formData, turno: value})}>
+            <Select value={ turno } onValueChange={( value ) => setTurno( value )}>
               <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar turno' />
               </SelectTrigger>
@@ -168,8 +186,8 @@ export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormPro
           <Field>
             <FieldLabel className='text-purple-100'>Division Anual *</FieldLabel>
             <Select
-              value={ formData.divisionAnual }
-              onValueChange={( value ) => setFormData({...formData, divisionAnual: value})}>
+              value={ divisionAnual }
+              onValueChange={( value ) => setDivisionAnual( value )}>
               <SelectTrigger className='w-full border-purple-500/30 bg-purple-900/20 text-white py-5'>
                 <SelectValue placeholder='Seleccionar division' />
               </SelectTrigger>
@@ -188,76 +206,81 @@ export default function CreateGradoForm({ onBack, onSubmit }: CreateGradoFormPro
 
       {/* Submit Button */}
       <div className="p-4 border-t border-purple-500/10">
-        <Button
+         <Button
           onClick={ handleSubmit }
-          disabled={ !isFormValid }
-          className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={ !isFormValid || isCreating }
+          className="w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Crear Grado
+          { isCreating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creando...
+            </>
+          ) : (
+            "Crear Grado"
+          ) }
         </Button>
       </div>
 
       {/* Escuela Drawer */}
-      <Drawer open={ showEscuelaDrawer } onOpenChange={ setShowEscuelaDrawer }>
-        <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
-          <DrawerHeader>
-            <DrawerTitle className='text-white'>Seleccionar Escuela</DrawerTitle>
-          </DrawerHeader>
-          <div className='px-4 pb-4'>
-            <div className='relative'>
-              <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400' />
-              <Input
-                placeholder='Buscar escuela...'
-                value={ escuelaSearch }
-                onChange={(e) => setEscuelaSearch( e.target.value )}
-                className='border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50'
-              />
-            </div>
-          </div>
-          <div className='max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6'>
-            { filteredEscuelas.map(( escuela ) => (
-              <button
-                key={ escuela.escuelaId }
-                onClick={() => {
-                  setFormData({...formData, escuelaId: escuela.escuelaId});
-                  setShowEscuelaDrawer( false );
-                  setEscuelaSearch("");
-                }}
-                className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
-                  formData.escuelaId === escuela.escuelaId
-                    ? "border-purple-500 bg-purple-600/30"
-                    : "border-purple-500/20 bg-purple-900/20 hover:bg-purple-900/40"
-                }`}>
-                <div className='flex items-center gap-3'>
-                  <School className='h-5 w-5 text-purple-400' />
-                  <span className='text-white'>{ escuela.nombre }</span>
-                </div>
-                { formData.escuelaId === escuela.escuelaId && <Check className='h-5 w-5 text-purple-400' />}
-              </button>
-            ))}
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <Drawer
+          open={showEscuelaDrawer}
+          onOpenChange={setShowEscuelaDrawer}
+        >
+          <DrawerContent className="mx-auto max-w-md border-purple-500/30 bg-[#110a24]">
+            
+            <DrawerHeader>
+              <DrawerTitle className="text-white">
+                Seleccionar Escuela
+              </DrawerTitle>
+            </DrawerHeader>
 
-      {/* Maestra Titular Drawer */}
-      <Drawer open={ showMaestraDrawer } onOpenChange={ setShowMaestraDrawer }>
-        <DrawerContent className='mx-auto max-w-md border-purple-500/30 bg-[#110a24]'>
-          <DrawerHeader>
-            <DrawerTitle className='text-white'>Seleccionar Maestra Titular</DrawerTitle>
-          </DrawerHeader>
-          <div className='px-4 pb-4'>
-            <div className='relative'>
-              <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400' />
-              <Input
-                placeholder='Buscar por nombre...'
-                value={ maestraSearch }
-                onChange={(e) => setMaestraSearch( e.target.value )}
-                className='border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50'
-              />
+            <div className="px-4 pb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
+
+                <Input
+                  placeholder="Buscar escuela..."
+                  value={escuelaSearch}
+                  onChange={(e) => setEscuelaSearch(e.target.value)}
+                  className="border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
+                />
+              </div>
             </div>
-          </div>
-        </DrawerContent>
-      </Drawer>
+
+            <div className="max-h-[50vh] space-y-2 overflow-y-auto px-4 pb-6">
+              {filteredEscuelas.map((escuela) => (
+                <button
+                  key={escuela.escuelaId}
+                  onClick={() => {
+                    setEscuelaId(escuela.escuelaId);
+                    setSelectedEscuela(escuela);
+                    setShowEscuelaDrawer(false);
+                    setEscuelaSearch("");
+                  }}
+                  className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
+                    escuelaId === escuela.escuelaId
+                      ? "border-purple-500 bg-purple-600/30"
+                      : "border-purple-500/20 bg-purple-900/20 hover:bg-purple-900/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <School className="h-5 w-5 text-purple-400" />
+
+                    <span className="text-white">
+                      {escuela.nombre}
+                    </span>
+                  </div>
+
+                  {escuelaId === escuela.escuelaId && (
+                    <Check className="h-5 w-5 text-purple-400" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+          </DrawerContent>
+        </Drawer>
     </div>
   );
 }

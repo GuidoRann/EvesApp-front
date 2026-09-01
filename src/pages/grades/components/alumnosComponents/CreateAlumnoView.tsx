@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,8 @@ export default function CreateAlumnoView({ onBack, onSubmit }: CreateAlumnoViewP
   const [ direccion, setDireccion ] = useState("");
   const [ barrio, setBarrio ] = useState("");
   const [ fechaNacimiento, setFechaNacimiento ] = useState<Date>();
+  const [ isCreating, setIsCreating ] = useState(false);
+
   const { crearAlumno } = useManagementAlumnos()
 
   const { grado } = useGradoStore()
@@ -34,24 +36,33 @@ export default function CreateAlumnoView({ onBack, onSubmit }: CreateAlumnoViewP
 
   const handleSubmit = async () => {
     if (!fechaNacimiento) return;
-    
-    const alumno: CreateAlumnoDTO = {
-      nombre,
-      apellidoPaterno,
-      apellidoMaterno,
-      numeroDocumento,
-      direccion,
-      barrio,
-      fechaNacimiento,
-      grado: grado
-    };
 
+    setIsCreating(true);
 
-    const newAlumno: AlumnoType = await crearAlumno( alumno );
+    try {
+      const alumno: CreateAlumnoDTO = {
+        nombre,
+        apellidoPaterno,
+        apellidoMaterno,
+        numeroDocumento,
+        direccion,
+        barrio,
+        fechaNacimiento,
+        grado: grado
+      };
 
-    toast.success('✅ Alumno creado exitosamente!');
-    
-    onSubmit( newAlumno );
+      const newAlumno: AlumnoType = await crearAlumno( alumno );
+
+      toast.success('✅ Alumno creado exitosamente!');
+
+      onSubmit( newAlumno );
+
+    } catch ( error ) {
+      console.error("Error al crear alumno:", error);
+      toast.error("No se pudo crear el alumno");
+    } finally {
+      setIsCreating( false );
+    }
   };
 
   const formatNumber = ( value: string ) => {
@@ -190,10 +201,17 @@ export default function CreateAlumnoView({ onBack, onSubmit }: CreateAlumnoViewP
       <div className="p-4 border-t border-purple-500/10">
         <Button
           onClick={ handleSubmit }
-          disabled={ !isFormValid }
+          disabled={ !isFormValid || isCreating }
           className="w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Crear Alumno
+          { isCreating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creando...
+            </>
+          ) : (
+            "Crear Alumno"
+          ) }
         </Button>
       </div>
     </div>

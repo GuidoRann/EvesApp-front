@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,9 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
   const [ ocupacion, setOcupacion ] = useState("");
   const [ numeroDocumento, setNumeroDocumento ] = useState("");
   const [ parentesco, setParentesco ] = useState("");
+
+  const [ isCreating, setIsCreating ] = useState(false);
+
   const { crearFamiliar } = useManagementFamiliar();
 
   const { alumnoId } = useParams();
@@ -34,21 +37,31 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
 
   const handleSubmit = async () => {
     if (!parentesco || !alumnoId) return;
-    
-    const familiar: CreateFamiliarDTO = {
-      nombre,
-      apellido,
-      direccion,
-      numeroTelefono,
-      ocupacion,
-      numeroDocumento,
-    };
 
-    const newFamiliar: FamiliarType = await crearFamiliar( familiar, parentesco, alumnoId );
+    setIsCreating(true);
 
-    toast.success('✅ Familiar creado exitosamente!');
-    
-    onSubmit( newFamiliar );
+    try {
+      const familiar: CreateFamiliarDTO = {
+        nombre,
+        apellido,
+        direccion,
+        numeroTelefono,
+        ocupacion,
+        numeroDocumento,
+      };
+  
+      const newFamiliar: FamiliarType = await crearFamiliar( familiar, parentesco, alumnoId );
+  
+      toast.success('✅ Familiar creado exitosamente!');
+      
+      onSubmit( newFamiliar );
+
+    } catch ( error ) {
+      console.error("Error al crear familiar:", error);
+      toast.error("No se pudo crear el familiar");
+    } finally {
+      setIsCreating( false );
+    }
   };
 
   return (
@@ -178,10 +191,17 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
       <div className="p-4 border-t border-purple-500/10">
         <Button
           onClick={ handleSubmit }
-          disabled={ !isFormValid }
+          disabled={ !isFormValid || isCreating }
           className="w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Crear Familiar
+          { isCreating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creando...
+            </>
+          ) : (
+            "Crear Familiar"
+          ) }
         </Button>
       </div>
     </div>

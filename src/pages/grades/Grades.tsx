@@ -13,7 +13,6 @@ type CurrentView = "list" | "detail" | "create" | "join";
 export default function Grades() {
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const [ searchQuery, setSearchQuery ] = useState("");
-  const { crearGrado } = useManagementGrados();
   const navigate = useNavigate();
 
   const maestra = useMaestraStore( ( state ) => state.maestra );
@@ -41,10 +40,7 @@ export default function Grades() {
     return (
       <CreateGradoForm
         onBack={ handleBackToList }
-        onSubmit={( data: any ) => {
-          crearGrado( data );
-          handleBackToList();
-        }}
+        onSubmit={() => {}}
       />
     );
   }

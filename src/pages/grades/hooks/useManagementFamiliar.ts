@@ -13,13 +13,11 @@ export const useManagementFamiliar = () => {
       if ( !token ) return;
 
       const alumnoFamiliar: CreateAlumnoFamiliarDTO = {
-        familiar,
         alumnoId,
+        familiar,
         parentesco
       }
 
-      console.log("AlumnoFamiliar en managementFamiliar:", alumnoFamiliar);
-      
       const response = await FamiliarService.crearFamiliar( token, alumnoFamiliar );
 
       return response.body;
@@ -28,7 +26,21 @@ export const useManagementFamiliar = () => {
     } 
   }
 
+  const obtenerFamiliar = async ( familiarId: string ) => {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+            
+      if ( !token ) return;
+
+      return await FamiliarService.obtenerFamiliar( token, familiarId );
+    } catch ( error ) {
+      console.log( error );      
+    }
+  }
+
   return { 
-    crearFamiliar 
+    crearFamiliar,
+    obtenerFamiliar 
   }
 }
