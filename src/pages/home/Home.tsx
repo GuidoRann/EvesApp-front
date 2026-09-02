@@ -1,9 +1,25 @@
+import { useEscuelaStore } from '@/stores/Escuela.store';
 import { BottomNav } from '../../components/BottomNav';
+import { useManagementEscuelas } from '../schools/hooks/useManagementEscuela';
 import { DashboardHeader } from './components/DashboardHeader';
 import { Reminders } from './components/Reminders';
 import { StatsCards } from './components/StatsCards';
+import { useEffect } from 'react';
 
 export default function Home() {
+  const { listarEscuelas } = useManagementEscuelas();
+  const { setListaDeEscuelas } = useEscuelaStore();
+
+  useEffect(() => {
+    const fetchEscuelas = async () => {
+      const escuelas = await listarEscuelas();
+
+      setListaDeEscuelas(escuelas);
+    };
+
+    fetchEscuelas();
+  }, []);
+
   return (
     <div className='min-h-screen bg-background max-w-md mx-auto relative flex flex-col gap-5'>
       <div className='h-46 relative overflow-hidden bg-linear-to-b from-[#4c1d95] via-[#3b0764] to-[#110a24]'>

@@ -7,6 +7,7 @@ import EscuelaCard from './EscuelaCard';
 import { Input } from '@/components/ui/input';
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useMaestraStore } from '@/stores/Maestra.store';
+import { useEscuelaStore } from '@/stores/Escuela.store';
 
 
 interface JoinEscuelaProps {
@@ -14,21 +15,12 @@ interface JoinEscuelaProps {
 }
 
 export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
-  const [ escuelas, setEscuelas ] = useState< EscuelaDTO[] >();
-  const { listarEscuelas, unirmeAEscuela } = useManagementEscuelas();
+  const { unirmeAEscuela } = useManagementEscuelas();
   const [ escuelaSearch, setEscuelaSearch ] = useState("");
   const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
   const maestra = useMaestraStore((state) => state.maestra);
 
-  useEffect(() => {
-    const fetchEscuelas = async () => {
-      const escuelas = await listarEscuelas();
-  
-      setEscuelas( escuelas );
-    };
-  
-    fetchEscuelas();
-  }, []);
+  const escuelas = useEscuelaStore((state) => state.listaDeEscuelas);
 
   const handleSchoolClick = ( escuela: EscuelaDTO ) => {
     setSelectedEscuela( escuela );

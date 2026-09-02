@@ -5,7 +5,7 @@ import { Input} from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { useEscuelaStore } from '@/pages/schools/service/Escuela.store';
+import { useEscuelaStore } from '@/stores/Escuela.store';
 import type { CreateGradoDTO } from '@/types/GradoTypes';
 import { useManagementGrados } from '../../hooks/useManagementGrados';
 import { useMaestraStore } from '@/stores/Maestra.store';
