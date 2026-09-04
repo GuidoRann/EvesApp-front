@@ -8,6 +8,8 @@ import type { AlumnoType } from '@/types/AlumnoTypes';
 import Loading from '@/components/Loading';
 import ParentescoSwitch from '../familiarComponents/ParentescoSwitch';
 import { Field, FieldGroup } from '@/components/ui/field';
+import type { FamiliarType } from '@/types/FamiliarTypes';
+import { useManagementFamiliar } from '../../hooks/useManagementFamiliar';
 
 type CurrentView = "list" | "create";
 
@@ -19,22 +21,33 @@ export default function AlumnosDetailView() {
   const navigate = useNavigate();
 
   const [ modo, setModo ] = useState<'opciones' | 'buscar'>('opciones')
-  const [ modalAbierto, setModalAbierto ] = useState(false)
+  const [ modalAbierto, setModalAbierto ] = useState( false )
   const [ numeroDocumento, setNumeroDocumento ] = useState('')
-  const [ buscado, setBuscado ] = useState(false)
-  const [ seleccionado, setSeleccionado ] = useState(false)
+  const [ buscado, setBuscado ] = useState( false )
+  const [ seleccionado, setSeleccionado ] = useState( false )
   const [ parentesco, setParentesco ] = useState('Madre')
   
-  const [ alumno, setAlumno ] = useState<AlumnoType | null>(null);
-  const [ loading, setLoading ] = useState(true);
+  const [ alumno, setAlumno ] = useState<AlumnoType | null>( null );
+  const [ loading, setLoading ] = useState( true );
+
+  const { obtenerFamiliarPorDni } = useManagementFamiliar();
+  const [familiarEncontrado, setFamiliarEncontrado] = useState<FamiliarType | null>( null );
 
 
-  // TODO: Esta funcion tiene que usar la busqueda en DB para traer el buscado
   const handleSearch = async () => {
-    if (numeroDocumento.trim()) setBuscado(true);
+    const dniBuscado = numeroDocumento.trim();
 
-    
+    if (!dniBuscado) return;
+
+    const encontrado = await obtenerFamiliarPorDni( dniBuscado );
+
+    console.log( "Datos encontrados de Familiar", encontrado );
+
+    setFamiliarEncontrado( encontrado );
+    setBuscado(true);
+    setSeleccionado(false);
   };
+  
   const handleAdd = () => {
     setModo("opciones");
     setModalAbierto(false);
@@ -235,7 +248,6 @@ export default function AlumnosDetailView() {
             </button>
           </div>
 
-          {/* ---------------------- CODIGO EN REVISION ---------------------- */}
           { modalAbierto && (
             <div
               className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm'
@@ -296,6 +308,8 @@ export default function AlumnosDetailView() {
                             onChange={(e) => {
                               setNumeroDocumento( e.target.value.replace(/\D/g, "") );
                               setBuscado(false);
+                              setFamiliarEncontrado(null);
+                              setSeleccionado(false);
                             }}
                             placeholder='Ingresá el DNI'
                             className='h-11 w-full rounded-lg border border-purple-500/30 bg-purple-950/40 pl-9 pr-3 text-sm text-white outline-none focus:border-purple-400'
@@ -308,20 +322,32 @@ export default function AlumnosDetailView() {
                         </button>
                       </div>
                     </label>
-                    { buscado && (
+                    { buscado && familiarEncontrado ? (
                       <button
-                        onClick={() => setSeleccionado(!seleccionado)}
-                        className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${ seleccionado ? "border-purple-400 bg-purple-600/20" : "border-purple-500/20 bg-purple-900/20"}`}>
-                        <div className='flex h-9 w-9 items-center justify-center rounded-full bg-purple-600/50'>
-                          <User className='h-4 w-4 text-white' />
+                        onClick={() => setSeleccionado( !seleccionado )}
+                        className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left ${seleccionado ? "border-purple-400 bg-purple-600/20" : "border-purple-500/20 bg-purple-900/20"}`}
+                      >
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-600/50">
+                          <User className="h-4 w-4 text-white" />
                         </div>
-                        <div className='flex-1'>
-                          <p className='font-semibold text-white'>Carolina Beatriz Gómez</p>
-                          <p className='text-xs text-purple-200/60'>DNI { formatNumber( numeroDocumento ) }</p>
+                        <div className="flex-1">
+                          <p className="font-semibold text-white">
+                            { familiarEncontrado.nombre }{" "}
+                            { familiarEncontrado.apellido }
+                          </p>
+                          <p className="text-xs text-purple-200/60">
+                            DNI { familiarEncontrado.numeroDocumento }
+                          </p>
                         </div>
-                        { seleccionado && <Check className='h-5 w-5 text-emerald-400' /> }
+                        { seleccionado && (
+                          <Check className="h-5 w-5 text-emerald-400" />
+                        )}
                       </button>
-                    )}
+                    ) : buscado ? (
+                      <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-3 text-sm text-red-300">
+                        Familiar no encontrado
+                      </div>
+                    ) : null}
                     { seleccionado && (
                       <div>
                         <FieldGroup>

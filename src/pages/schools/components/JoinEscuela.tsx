@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import type { EscuelaDTO } from '@/types/EscuelaTypes';
 import { ArrowLeft, Hash, MapPin, Phone, School } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useManagementEscuelas } from '../hooks/useManagementEscuela';
 import EscuelaCard from './EscuelaCard';
 import { Input } from '@/components/ui/input';

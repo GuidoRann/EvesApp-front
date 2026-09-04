@@ -3,7 +3,6 @@ import { useState } from "react";
 import CreateGradoForm from './components/gradosComponents/CreateGradoForm';
 import GradeCard from './components/gradosComponents/GradesCard';
 import GradesHeader from './components/gradosComponents/GradesHeader';
-import { useManagementGrados } from './hooks/useManagementGrados';
 import { useMaestraStore } from '@/stores/Maestra.store';
 import type { GradoType } from '@/types/GradoTypes';
 import { useNavigate } from "react-router-dom";
@@ -40,7 +39,6 @@ export default function Grades() {
     return (
       <CreateGradoForm
         onBack={ handleBackToList }
-        onSubmit={() => {}}
       />
     );
   }
@@ -71,7 +69,6 @@ export default function Grades() {
               :
               <span className="text-2xl font-bold text-white">{ 0 }</span>
             }
-            {/* <span className="text-2xl font-bold text-white">{ gradosMaestra.length }</span> */}
             <p className="text-purple-200/50 text-xs mt-0.5">Grados General</p>
           </div>
         </div>

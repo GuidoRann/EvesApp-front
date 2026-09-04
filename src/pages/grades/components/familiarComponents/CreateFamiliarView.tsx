@@ -38,6 +38,8 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
   const handleSubmit = async () => {
     if (!parentesco || !alumnoId) return;
 
+    console.log( "numeroDocumento: ", numeroDocumento );
+
     setIsCreating(true);
 
     try {
@@ -49,7 +51,7 @@ export default function CreateFamiliarView({ onBack, onSubmit }: CreateFamiliarV
         ocupacion,
         numeroDocumento,
       };
-  
+
       const newFamiliar: FamiliarType = await crearFamiliar( familiar, parentesco, alumnoId );
   
       toast.success('✅ Familiar creado exitosamente!');

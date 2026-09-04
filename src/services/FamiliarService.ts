@@ -39,6 +39,23 @@ export default class FamiliarService {
     }
   }
 
+  static async obtenerFamiliarPorDni( token: string | null, dni: string ) {
+    try {
+      const response = await axios.get( 
+        `${ this.BASE_URL }/buscarPorDni/${ dni }`,
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
   static async actualizarFamiliar( token: string | null, familiarId: string, data: any ) {
     try {
       const response = await axios.put( 

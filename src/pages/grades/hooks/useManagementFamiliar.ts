@@ -39,8 +39,22 @@ export const useManagementFamiliar = () => {
     }
   }
 
+  const obtenerFamiliarPorDni = async ( familiarDni: string ) => {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+            
+      if ( !token ) return;
+
+      return await FamiliarService.obtenerFamiliarPorDni( token, familiarDni );
+    } catch ( error ) {
+      console.log( error );      
+    }
+  }
+
   return { 
     crearFamiliar,
-    obtenerFamiliar 
+    obtenerFamiliar,
+    obtenerFamiliarPorDni
   }
 }

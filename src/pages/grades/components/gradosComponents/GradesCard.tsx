@@ -3,7 +3,7 @@ import { Users, BookOpen } from "lucide-react";
 export interface GradeCardProps {
   numero: number;
   letra: string;
-  turno: "mañana" | "tarde";
+  turno: string;
   nombreEscuela: string;
   cantidadEstudiantes?: number;
   onClick?: () => void;
