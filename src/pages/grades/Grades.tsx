@@ -13,8 +13,8 @@ export default function Grades() {
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const [ searchQuery, setSearchQuery ] = useState("");
   const navigate = useNavigate();
-
   const maestra = useMaestraStore( ( state ) => state.maestra );
+
   const gradosTitular = maestra?.gradosComoTitular || [];
   const gradosMaestra = maestra?.gradosGeneral || [];
 

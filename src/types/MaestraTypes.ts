@@ -1,4 +1,4 @@
-import type { EscuelaDTO } from './EscuelaTypes';
+import type { EscuelaType } from './EscuelaTypes';
 import type { GradoType } from './GradoTypes';
 
 export interface MaestraType {
@@ -7,7 +7,7 @@ export interface MaestraType {
   nombre: string;
   apellido: string;
   email: string;
-  escuelas: EscuelaDTO[];
+  escuelas: EscuelaType[];
   gradosComoTitular: GradoType[];
   gradosGeneral: GradoType[];
   avatar_url: string;

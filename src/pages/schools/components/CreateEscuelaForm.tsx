@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
+import type { CreateEscuelaDTO, EscuelaType } from '@/types/EscuelaTypes';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useManagementEscuelas } from '../hooks/useManagementEscuela';
 
 interface CreateEscuelaFormProps {
   onBack: () => void;
-  onSubmit: ( escuela: CreateEscuelaDTO ) => void;
+  onSubmit: ( escuela: EscuelaType ) => void;
 }
 
 export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFormProps) {
@@ -16,10 +18,35 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
   const [ direccion, setDireccion ] = useState("");
   const [ telefono, setTelefono ] = useState("");
 
+  const [ isCreating, setIsCreating ] = useState(false);
+
+  const { crearEscuela } = useManagementEscuelas();
+
   const isFormValid = nombre.trim() !== "" && numero.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "";
 
-  const handleSubmit = () => {
-    onSubmit( { nombre, numero, direccion, telefono } );
+  const handleSubmit = async () => {
+
+    if ( !isFormValid ) return;
+    try {
+      const escuela: CreateEscuelaDTO = {
+        nombre,
+        numero,
+        direccion,
+        telefono
+      }
+  
+      const newEscuela: EscuelaType = await crearEscuela( escuela );
+  
+      toast.success('✅ Escuela creada exitosamente!');
+  
+      onSubmit( newEscuela );
+    } catch (error) {
+      console.error("Error al crear escuela:", error);
+      toast.error("No se pudo crear la escuela");
+    } finally {
+      setIsCreating( false );
+    }
+ 
   };
 
   return (
@@ -110,10 +137,17 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
       <div className="p-4 border-t border-purple-500/10">
         <Button
           onClick={ handleSubmit }
-          disabled={ !isFormValid }
+          disabled={ !isFormValid || isCreating }
           className="w-full h-12 bg-amber-500 hover:bg-amber-600 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Crear Escuela
+          { isCreating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creando...
+            </>
+          ) : (
+            "Crear Escuela"
+          ) }
         </Button>
       </div>
     </div>

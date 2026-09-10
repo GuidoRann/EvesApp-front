@@ -1,13 +1,14 @@
-import type { EscuelaDTO } from '@/types/EscuelaTypes';
+import type { EscuelaType } from '@/types/EscuelaTypes';
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface EscuelaStore {
-  escuela: EscuelaDTO | null;
-  listaDeEscuelas: EscuelaDTO[];
+  escuela: EscuelaType | null;
+  listaDeEscuelas: EscuelaType[];
 
-  setEscuela: ( escuela: EscuelaDTO ) => void;
-  setListaDeEscuelas: ( escuelas: EscuelaDTO[] ) => void;
+  setEscuela: ( escuela: EscuelaType ) => void;
+  setListaDeEscuelas: ( escuelas: EscuelaType[] ) => void;
+  addEscuela: ( escuela: EscuelaType ) => void;
 }
 
 export const useEscuelaStore = create<EscuelaStore>()(
@@ -16,8 +17,24 @@ export const useEscuelaStore = create<EscuelaStore>()(
       escuela: null,
       listaDeEscuelas: [],
 
-      setEscuela: ( escuela: EscuelaDTO ) => set( { escuela } ),
-      setListaDeEscuelas: ( escuelas: EscuelaDTO[] ) => set( { listaDeEscuelas: escuelas } ),
+      setEscuela: ( escuela: EscuelaType ) => set( { escuela } ),
+      setListaDeEscuelas: ( escuelas: EscuelaType[] ) => set( { listaDeEscuelas: escuelas } ),
+
+      addEscuela: ( escuela: EscuelaType ) =>
+        set( ( state ) => {
+          const yaExiste = state.listaDeEscuelas.some(
+            ( e ) => e.escuelaId === escuela.escuelaId
+          );
+
+          if ( yaExiste ) return state;
+
+          return {
+            listaDeEscuelas: [
+              ...state.listaDeEscuelas,
+              escuela
+            ]
+          };
+        }),
     }), 
     { name: "escuelaStore" }
   )

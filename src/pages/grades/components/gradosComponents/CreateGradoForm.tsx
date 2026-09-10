@@ -10,16 +10,17 @@ import type { CreateGradoDTO } from '@/types/GradoTypes';
 import { useManagementGrados } from '../../hooks/useManagementGrados';
 import { useMaestraStore } from '@/stores/Maestra.store';
 import { toast } from 'sonner';
-import type { EscuelaDTO } from '@/types/EscuelaTypes';
+import type { EscuelaType } from '@/types/EscuelaTypes';
+import { useManagementProfile } from '@/pages/profile/hooks/useManagementProfile';
 
 interface CreateGradoFormProps {
   onBack?: () => void;
 }
 
 export default function CreateGradoForm({ onBack }: CreateGradoFormProps) {
-  const escuelas = useEscuelaStore( state => state.listaDeEscuelas ); //TODO: generar el store de escuelas al entrar en la app
+  const escuelas = useEscuelaStore( state => state.listaDeEscuelas );
 
-  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
+  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaType | null>( null );
 
   const [ escuelaId, setEscuelaId ] = useState<string>("");
   const [ numero, setNumero ] = useState<string>("");
@@ -33,6 +34,8 @@ export default function CreateGradoForm({ onBack }: CreateGradoFormProps) {
   const [ showEscuelaDrawer, setShowEscuelaDrawer ] = useState(false);
 
   const { crearGrado } = useManagementGrados();
+  const { obtenerMaestra } = useManagementProfile();
+  const { setMaestra } = useMaestraStore();
 
   const maestra = useMaestraStore( ( state ) => state.maestra );
 
@@ -61,14 +64,18 @@ export default function CreateGradoForm({ onBack }: CreateGradoFormProps) {
 
       toast.success('✅ Grado creado exitosamente!');
       
+      const response = await obtenerMaestra( maestra.maestraId );
+      const newMaestra = response.body;
+
+      setMaestra( newMaestra );
+
+      onBack?.();
     } catch (error) {
       console.error("Error al crear grado:", error);
       toast.error("No se pudo crear el grado");
     } finally {
       setIsCreating( false );
     }
-
-    
   };
 
   return (

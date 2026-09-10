@@ -3,22 +3,22 @@ import CreateEscuelaForm from './components/CreateEscuelaForm';
 import EscuelaDetailView from './components/EscuelaDetailView';
 import EscuelaCard from './components/EscuelaCard';
 import Escuelaheader from './components/EscuelaHeader';
-import type { CreateEscuelaDTO, EscuelaDTO } from '@/types/EscuelaTypes';
-import { useManagementEscuelas } from './hooks/useManagementEscuela';
+import type { EscuelaType } from '@/types/EscuelaTypes';
 import { BottomNav } from '@/components/BottomNav';
 import JoinEscuela from './components/JoinEscuela';
 import { useMaestraStore } from '@/stores/Maestra.store';
+import { useEscuelaStore } from '@/stores/Escuela.store';
 
 type ViewState = "list" | "create" | "detail" | "join";
 
 export default function EscuelaPage() {
-  const [ escuelas, setEscuelas ] = useState< EscuelaDTO[] >( [] );
+  const [ escuelas, setEscuelas ] = useState< EscuelaType[] >( [] );
   const [ currentView, setCurrentView ] = useState<ViewState>( "list" );
-  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
+  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaType | null>( null );
   const [ searchQuery, setSearchQuery ] = useState("");
 
-  const { createEscuela } = useManagementEscuelas();
   const maestra = useMaestraStore( state => state.maestra );
+  const { addEscuela } = useEscuelaStore();
 
   const filteredSchools = escuelas?.filter(( escuela ) => {
     const query = searchQuery.trim().toLowerCase();
@@ -51,7 +51,7 @@ export default function EscuelaPage() {
     setCurrentView( "join" );
   };
 
-  const handleSchoolClick = ( escuela: EscuelaDTO ) => {
+  const handleSchoolClick = ( escuela: EscuelaType ) => {
     setSelectedEscuela( escuela );
     setCurrentView( "detail" );
   };
@@ -62,15 +62,8 @@ export default function EscuelaPage() {
   };
 
 
-  const handleCreateSubmit = async ( escuela: CreateEscuelaDTO ) => {
-    const newSchool: CreateEscuelaDTO = {
-      nombre: escuela.nombre,
-      numero: escuela.numero,
-      direccion: escuela.direccion,
-      telefono: escuela.telefono
-    };
-
-    await createEscuela( newSchool );
+  const handleCreateSubmit = ( escuela: EscuelaType ) => {
+    addEscuela( escuela );
     setCurrentView( "list" );
   };
 

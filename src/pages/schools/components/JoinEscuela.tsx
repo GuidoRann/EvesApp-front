@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import type { EscuelaDTO } from '@/types/EscuelaTypes';
+import type { EscuelaType } from '@/types/EscuelaTypes';
 import { ArrowLeft, Hash, MapPin, Phone, School } from 'lucide-react';
 import { useState } from 'react';
 import { useManagementEscuelas } from '../hooks/useManagementEscuela';
@@ -17,12 +17,12 @@ interface JoinEscuelaProps {
 export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
   const { unirmeAEscuela } = useManagementEscuelas();
   const [ escuelaSearch, setEscuelaSearch ] = useState("");
-  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaDTO | null>( null );
+  const [ selectedEscuela, setSelectedEscuela ] = useState<EscuelaType | null>( null );
   const maestra = useMaestraStore((state) => state.maestra);
 
   const escuelas = useEscuelaStore((state) => state.listaDeEscuelas);
 
-  const handleSchoolClick = ( escuela: EscuelaDTO ) => {
+  const handleSchoolClick = ( escuela: EscuelaType ) => {
     setSelectedEscuela( escuela );
   };
 

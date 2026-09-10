@@ -19,12 +19,12 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import type { EscuelaDTO } from '@/types/EscuelaTypes';
+import type { EscuelaType } from '@/types/EscuelaTypes';
 import type { MaestraType } from '@/types/MaestraTypes';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface EscuelaDetailViewProps {
-  escuela: EscuelaDTO;
+  escuela: EscuelaType;
   onBack: () => void;
 }
 

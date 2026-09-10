@@ -1,5 +1,5 @@
 import type { AlumnoType } from './AlumnoTypes';
-import type { EscuelaDTO } from './EscuelaTypes';
+import type { EscuelaType } from './EscuelaTypes';
 import type { MaestraType } from './MaestraTypes';
 
 export interface GradoType {
@@ -8,7 +8,7 @@ export interface GradoType {
   letra: string;
   turno: string;
   divisionAnual: string;
-  escuela: EscuelaDTO;
+  escuela: EscuelaType;
   maestraTitular: MaestraType;
   maestrasAdicionales: MaestraType[];
   listaAlumnos: AlumnoType[];

@@ -1,7 +1,7 @@
 import type { GradoType } from './GradoTypes';
 import type { MaestraType } from './MaestraTypes';
 
-export interface EscuelaDTO {
+export interface EscuelaType {
   escuelaId: string
   nombre: string
   numero: string

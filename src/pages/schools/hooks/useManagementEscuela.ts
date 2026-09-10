@@ -9,7 +9,7 @@ export const useManagementEscuelas = () => {
   const { setEscuela, setListaDeEscuelas } = useEscuelaStore();
   const { fetchProfileInfo } = useManagementProfile();
 
-  const createEscuela = async ( escuela: CreateEscuelaDTO ) => {
+  const crearEscuela = async ( escuela: CreateEscuelaDTO ) => {
     try {
       const { data } = await supabase.auth.getSession();
       const token = data.session?.access_token;
@@ -23,7 +23,8 @@ export const useManagementEscuelas = () => {
 
         toast.success( 'Escuela creada exitosamente' );
       };
-      
+
+      return response.body
     } catch ( error ) {
       console.log( error );
       toast.error( 'Error al crear la escuela' );
@@ -130,7 +131,7 @@ export const useManagementEscuelas = () => {
 
   return { 
     unirmeAEscuela,
-    createEscuela,
+    crearEscuela,
     obtenerEscuela,
     listarEscuelas,
     actualizarEscuela,
