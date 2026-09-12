@@ -39,7 +39,7 @@ const AuthCallback = () => {
           throw new Error("Error al sincronizar usuario");
         }
 
-        const perfil = await MaestraService.obtenerPerfil(token);
+        const perfil = await MaestraService.obtenerPerfil( token );
 
         setMaestra(perfil.body);
 

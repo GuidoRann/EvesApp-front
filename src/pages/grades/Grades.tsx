@@ -10,13 +10,33 @@ import { useNavigate } from "react-router-dom";
 type CurrentView = "list" | "detail" | "create" | "join";
 
 export default function Grades() {
+  const navigate = useNavigate();
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
   const [ searchQuery, setSearchQuery ] = useState("");
-  const navigate = useNavigate();
+  
   const maestra = useMaestraStore( ( state ) => state.maestra );
-
   const gradosTitular = maestra?.gradosComoTitular || [];
   const gradosMaestra = maestra?.gradosGeneral || [];
+
+  const filteredGradosTitular = gradosTitular?.filter(( grado ) => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if ( !query ) return true;
+
+    return (
+      grado.escuela?.nombre?.toLowerCase().includes( query )
+    );
+  });
+
+  const filteredGradosMaestra = gradosMaestra?.filter(( grado ) => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if ( !query ) return true;
+
+    return (
+      grado.escuela?.nombre?.toLowerCase().includes( query )
+    );
+  });
 
   const handleCreateClick = () => {
     setCurrentView( "create" );
@@ -77,7 +97,7 @@ export default function Grades() {
         <div className="flex flex-col gap-3 pb-24">
           <h1 className="mt-3 font-bold text-center">Grados Como Maestra Titular</h1>
           <div className="mb-3 border-t border-purple-500/20" />
-          { gradosTitular.map(( grado ) => (
+          { filteredGradosTitular.map(( grado ) => (
             <GradeCard
               key={ grado.gradoId }
               numero={ grado.numero }
@@ -90,7 +110,7 @@ export default function Grades() {
           ))}
           <h1 className="mt-3 font-bold text-center">Grados Como Maestra General</h1>
           <div className="mb-3 border-t border-purple-500/20" />
-          { gradosMaestra.map(( grado ) => (
+          { filteredGradosMaestra.map(( grado ) => (
             <GradeCard
               key={ grado.gradoId }
               numero={ grado.numero }

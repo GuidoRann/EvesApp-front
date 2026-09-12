@@ -15,8 +15,7 @@ export const useManagementProfile = () => {
 
       if ( !token ) return;
 
-      const response = await MaestraService.obtenerOCrearMaestra( token );
-      setMaestra( response.body );
+      await MaestraService.obtenerOCrearMaestra( token );
     } catch (error) {
       console.log( error );
     }

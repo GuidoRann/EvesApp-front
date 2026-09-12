@@ -10,14 +10,15 @@ export default function Home() {
   const { listarEscuelas } = useManagementEscuelas();
   const { setListaDeEscuelas } = useEscuelaStore();
 
+  
   useEffect(() => {
-    const fetchEscuelas = async () => {
+    const fetchData = async () => {
       const escuelas = await listarEscuelas();
-
+      
       setListaDeEscuelas(escuelas);
     };
 
-    fetchEscuelas();
+    fetchData();
   }, []);
 
   return (
