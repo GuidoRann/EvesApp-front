@@ -26,6 +26,21 @@ export const useManagementFamiliar = () => {
     } 
   }
 
+  const agregarFamiliar = async ( alumnoId: string, familiarId: string, parentesco: string ) => {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+            
+      if ( !token ) return;
+
+      const response = await FamiliarService.agregarFamiliar( token, familiarId, alumnoId, parentesco );
+
+      return response.body;
+    } catch ( error ) {
+      console.log( error );      
+    } 
+  }
+
   const obtenerFamiliar = async ( familiarId: string ) => {
     try {
       const { data } = await supabase.auth.getSession();
@@ -55,6 +70,7 @@ export const useManagementFamiliar = () => {
   return { 
     crearFamiliar,
     obtenerFamiliar,
+    agregarFamiliar,
     obtenerFamiliarPorDni
   }
 }

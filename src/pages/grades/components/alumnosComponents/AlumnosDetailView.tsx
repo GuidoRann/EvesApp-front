@@ -30,8 +30,8 @@ export default function AlumnosDetailView() {
   const [ alumno, setAlumno ] = useState<AlumnoType | null>( null );
   const [ loading, setLoading ] = useState( true );
 
-  const { obtenerFamiliarPorDni } = useManagementFamiliar();
-  const [familiarEncontrado, setFamiliarEncontrado] = useState<FamiliarType | null>( null );
+  const { obtenerFamiliarPorDni, agregarFamiliar } = useManagementFamiliar();
+  const [ familiarEncontrado, setFamiliarEncontrado ] = useState<FamiliarType | null>( null );
 
 
   const handleSearch = async () => {
@@ -39,16 +39,42 @@ export default function AlumnosDetailView() {
 
     if (!dniBuscado) return;
 
-    const encontrado = await obtenerFamiliarPorDni( dniBuscado );
+    try {
+      const response = await obtenerFamiliarPorDni( dniBuscado );
+  
+      const familiarEncontrado = response.body;
+      setFamiliarEncontrado( familiarEncontrado );
+      setBuscado( true );
+    } catch ( error ) {
+      setFamiliarEncontrado(null);
+      setSeleccionado(false);
+      setBuscado(true);      
+    }
+  };
 
-    console.log( "Datos encontrados de Familiar", encontrado );
+  const agregarNuevoFamiliar = async () => {
+    if (!alumnoId || !familiarEncontrado) return;
+    await agregarFamiliar( alumnoId, familiarEncontrado?.familiarId, parentesco );
+  }
 
-    setFamiliarEncontrado( encontrado );
-    setBuscado(true);
-    setSeleccionado(false);
+  const actualizarAlumno = async () => {
+    if (!alumnoId) return;
+
+    try {
+      const alumnoObtenido = await obtenerAlumno(alumnoId);
+
+      setAlumno(alumnoObtenido.body);
+    } catch (error) {
+      console.error(error);
+    }
   };
   
-  const handleAdd = () => {
+  //TODO: hacer que lo guarde en la DB del alumno con los datos correctos
+  const handleAdd = async () => {
+    await agregarNuevoFamiliar();
+
+    actualizarAlumno();
+
     setModo("opciones");
     setModalAbierto(false);
     setNumeroDocumento("");
@@ -79,7 +105,7 @@ export default function AlumnosDetailView() {
     };
 
    fetchAlumno();
-  }, [ alumnoId ]);
+  }, [ alumnoId, currentView ]);
 
   if (loading) {
     return <Loading />;

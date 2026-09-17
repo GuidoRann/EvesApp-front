@@ -22,10 +22,32 @@ export default class FamiliarService {
     }
   }
 
-  static async obtenerFamiliar( token: string | null, familiarId: string ) {
+  static async agregarFamiliar( token: string | null, familiarId: string, alumnoId: string, parentesco: string ) {
+    try {
+      const response = await axios.post( 
+        `${ this.BASE_URL }/agregarFamiliar`,
+        {
+          familiarId,
+          alumnoId,
+          parentesco
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
+  static async obtenerFamiliar( token: string | null, familiarDni: string ) {
     try {
       const response = await axios.get( 
-        `${ this.BASE_URL }/${ familiarId }`,
+        `${ this.BASE_URL }/buscarPorDni/${ familiarDni }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
@@ -52,6 +74,7 @@ export default class FamiliarService {
 
       return response.data;
     } catch ( error ) {
+
       throw error;
     }
   }
