@@ -1,6 +1,7 @@
 import type { AlumnoType } from './AlumnoTypes';
 import type { EscuelaType } from './EscuelaTypes';
 import type { MaestraType } from './MaestraTypes';
+import type { MateriaType } from './MateriaTypes';
 
 export interface GradoType {
   gradoId: string;
@@ -12,6 +13,7 @@ export interface GradoType {
   maestraTitular: MaestraType;
   maestrasAdicionales: MaestraType[];
   listaAlumnos: AlumnoType[];
+  listaMaterias: MateriaType[];
 }
 
 export interface CreateGradoDTO {
