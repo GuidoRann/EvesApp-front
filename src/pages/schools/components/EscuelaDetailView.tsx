@@ -35,6 +35,7 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
   const [ gradosSearch, setGradosSearch ] = useState( "" );
   const [ availableMaestras, setAvailableMaestras ] = useState< MaestraType[] >( [] );
 
+  console.log("Escuela en detalle: ", escuela);
 
   useEffect(() => {
     setAvailableMaestras( escuela.maestras ?? [] );
@@ -219,15 +220,15 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
                     className="flex items-center gap-3 p-3 rounded-xl transition-all bg-[#110a24] border border-purple-500/10 hover:border-purple-500/30"
                   >
                     <div className="h-8 w-8 rounded-full flex items-center justify-center bg-purple-500/20">
-                      <User className="h-4 w-4 text-purple-300" />
+                      <School className="h-4 w-4 text-purple-300" />
                     </div>
 
                     <div className="flex-1 text-left">
                       <p className="text-white text-sm font-medium">
-                        {grado.letra} {grado.numero}
+                        {grado.numero}º {grado.letra}
                       </p>
-                      <p className="text-white text-sm font-medium">
-                        {grado.turno}
+                      <p className="text-purple-200/40 text-xs">
+                        Turno: {grado.turno}
                       </p>
                     </div>
                   </div>
