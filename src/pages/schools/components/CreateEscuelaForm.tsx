@@ -34,7 +34,7 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
         direccion,
         telefono
       }
-  
+
       const newEscuela: EscuelaType = await crearEscuela( escuela );
   
       toast.success('✅ Escuela creada exitosamente!');

@@ -4,7 +4,8 @@ import axios from "axios";
 export default class EscuelaService {
   static BASE_URL = "http://localhost:3000/api/escuela";
 
-  static async crearEscuela( token: string | null, escuela: any ) {
+  static async crearEscuela( token: string | null, escuela: CreateEscuelaDTO ) {
+    console.log("Escuela enviada en el servicio: ", escuela );
     try {
       const response = await axios.post( 
         `${ this.BASE_URL }/crearEscuela`,
