@@ -37,12 +37,6 @@ export function BottomNav() {
           label="Inicio"
         />
         <NavItem
-          to="/profile"
-          icon={ <User className="h-6 w-6" /> }
-          label="Perfil"
-          active
-        />
-        <NavItem
           to="/grades"
           icon={ <LayoutGrid className="h-6 w-6" /> }
           label="Mis Grados"
@@ -52,6 +46,12 @@ export function BottomNav() {
           to="/schools"
           icon={ <School className="h-6 w-6" /> }
           label="Escuela"
+        />
+        <NavItem
+          to="/profile"
+          icon={ <User className="h-6 w-6" /> }
+          label="Perfil"
+          active
         />
       </div>
     </nav>

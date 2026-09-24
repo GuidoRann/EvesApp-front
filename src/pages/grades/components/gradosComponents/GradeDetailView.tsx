@@ -42,9 +42,23 @@ export default function GradeDetailView() {
     navigate(`/grades/${ gradoId }/students`);    
   };
 
-  //TODO: actualizar con el endpoint correcto
+  //TODO: actualizar con el endpoint correspondiente
+  const handleListaMaestras = () => {
+    navigate(`/grades/${ gradoId }/teachers`);    
+  };
+
   const handleListaNaterias = () => {
     navigate(`/grades/${ gradoId }/subject`);    
+  };
+
+  //TODO: actualizar con el endpoint correspondiente
+  const handleNotas = () => {
+    navigate(`/grades/${ gradoId }/grades`);    
+  };
+  
+  //TODO: actualizar con el endpoint correspondiente
+  const handleAsistencias = () => {
+    navigate(`/grades/${ gradoId }/grades`);    
   };
 
 
@@ -140,6 +154,49 @@ export default function GradeDetailView() {
           {/* Divider */}
           <div className="my-6 border-t border-purple-500/20" />
 
+          {/* Boton de Asistencias */}
+          <button
+            type="button"
+            onClick={ () => handleAsistencias() }
+            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
+                <Users className="h-5 w-5 text-purple-300" />
+              </div>
+              <div>
+                <p className="font-medium text-white">Asistencias</p>
+                <p className="text-sm text-purple-300/60">
+                  Gestionar las asistencias de los alumnos
+                </p>
+              </div>
+            </div>
+            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
+          </button>
+
+          {/* Boton de Notas */}
+          <button
+            type="button"
+            onClick={ () => handleNotas() }
+            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
+                <Users className="h-5 w-5 text-purple-300" />
+              </div>
+              <div>
+                <p className="font-medium text-white">Notas</p>
+                <p className="text-sm text-purple-300/60">
+                  Gestionar las notas de los alumnos
+                </p>
+              </div>
+            </div>
+            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
+          </button>
+
+          {/* Divider */}
+          <div className="my-6 border-t border-purple-500/20" />
+
           {/* Action buttons */}
           <p className="text-sm font-medium text-purple-200/70 mb-4">Gestionar</p>
 
@@ -164,6 +221,28 @@ export default function GradeDetailView() {
             </div>
             <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
           </button>
+         
+          {/* Boton de Maestras */}
+          <button
+            type="button"
+            onClick={ () => handleListaMaestras() }
+            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
+                <Users className="h-5 w-5 text-purple-300" />
+              </div>
+              <div>
+                <p className="font-medium text-white">Lista de Maestras</p>
+                <p className="text-sm text-purple-300/60">
+                  { grado.listaAlumnos.length > 0
+                    ? `${ grado.listaAlumnos.length } maestra${ grado.listaAlumnos.length === 1 ? "" : "s" } registrada${ grado.listaAlumnos.length === 1 ? "" : "s" }`
+                    : "Gestionar lista de maestras del grado" }
+                </p>
+              </div>
+            </div>
+            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
+          </button>
 
           {/* Boton de Materias */}
           <button
@@ -180,55 +259,8 @@ export default function GradeDetailView() {
                 <p className="text-sm text-purple-300/60">
                   { grado.listaAlumnos.length > 0
                     ? `${ grado.listaAlumnos.length } materia${ grado.listaAlumnos.length === 1 ? "" : "s" } registrado${ grado.listaAlumnos.length === 1 ? "" : "s" }`
-                    : "Gestionar lista de alumnos del grado" }
+                    : "Gestionar lista de materias del grado" }
                 </p>
-              </div>
-            </div>
-            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
-          </button>
-
-          {/* Divider */}
-          <div className="my-6 border-t border-purple-500/20" />
-
-          {/* Boton de Asistencias */}
-          <button
-            type="button"
-            onClick={ () => handleListaAlumnos() }
-            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
-                <Users className="h-5 w-5 text-purple-300" />
-              </div>
-              <div>
-                <p className="font-medium text-white">Asistencias</p>
-                {/* <p className="text-sm text-purple-300/60">
-                  { grado.listaAlumnos.length > 0
-                    ? `${ grado.listaAlumnos.length } alumno${ grado.listaAlumnos.length === 1 ? "" : "s" } registrado${ grado.listaAlumnos.length === 1 ? "" : "s" }`
-                    : "Gestionar lista de alumnos del grado" }
-                </p> */}
-              </div>
-            </div>
-            <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
-          </button>
-
-          {/* Boton de Notas */}
-          <button
-            type="button"
-            onClick={ () => handleListaAlumnos() }
-            className="flex w-full items-center justify-between rounded-xl border border-purple-500/30 bg-purple-900/20 px-4 py-4 text-left transition-colors hover:bg-purple-900/30"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600/30">
-                <Users className="h-5 w-5 text-purple-300" />
-              </div>
-              <div>
-                <p className="font-medium text-white">Notas</p>
-                {/* <p className="text-sm text-purple-300/60">
-                  { grado.listaAlumnos.length > 0
-                    ? `${ grado.listaAlumnos.length } alumno${ grado.listaAlumnos.length === 1 ? "" : "s" } registrado${ grado.listaAlumnos.length === 1 ? "" : "s" }`
-                    : "Gestionar lista de alumnos del grado" }
-                </p> */}
               </div>
             </div>
             <ChevronLeft className="h-5 w-5 rotate-180 text-purple-400" />
