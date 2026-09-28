@@ -3,7 +3,6 @@ import { useManagementProfile } from '@/pages/profile/hooks/useManagementProfile
 import EscuelaService from '@/services/EscuelaService';
 import { useEscuelaStore } from '@/stores/Escuela.store';
 import type { CreateEscuelaDTO } from '@/types/EscuelaTypes';
-import { toast } from 'sonner';
 
 export const useManagementEscuelas = () => {
   const { setEscuela, setListaDeEscuelas } = useEscuelaStore();
@@ -18,16 +17,10 @@ export const useManagementEscuelas = () => {
 
       const response = await EscuelaService.crearEscuela( token, escuela );
 
-      if ( response ) {
-        setEscuela( response.body );
-
-        toast.success( 'Escuela creada exitosamente' );
-      };
-
       return response.body
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al crear la escuela' );
+      throw error;
     }
   };
 
@@ -38,17 +31,13 @@ export const useManagementEscuelas = () => {
 
       if ( !token ) return;
 
-      const response = await EscuelaService.unirmeEscuela( token, escuelaId );
-
-      if ( response ) {
-        toast.success( 'Te has unido a la escuela exitosamente' );
-      };
+      await EscuelaService.unirmeEscuela( token, escuelaId );
 
       await fetchProfileInfo();
 
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al unirme a la escuela' );
+      throw error;
     }
   };
 
@@ -59,16 +48,12 @@ export const useManagementEscuelas = () => {
 
       if ( !token ) return;
 
-      const response = await EscuelaService.obtenerEscuela( token, escuelaId );
+      await EscuelaService.obtenerEscuela( token, escuelaId );
 
-      if ( response ) {
-        toast.success( 'Escuela obtenida exitosamente' );
-        setEscuela( response.body );
-      };
 
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al obtener la escuela' );
+      throw error;
     }
   };
 
@@ -85,7 +70,7 @@ export const useManagementEscuelas = () => {
       return response.body
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al listar las escuelas' );
+      throw error;
     }
   };
 
@@ -100,12 +85,11 @@ export const useManagementEscuelas = () => {
 
       if ( response ) {
         setEscuela( response.body );
-        toast.success( 'Escuela actualizada exitosamente' );
       };
 
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al actualizar la escuela' );
+      throw error;
     }
   };
 
@@ -116,18 +100,13 @@ export const useManagementEscuelas = () => {
 
       if ( !token ) return;
 
-      const response = await EscuelaService.eliminarEscuela( token, escuelaId );
-
-      if ( response ) {
-        toast.success( 'Escuela eliminada exitosamente' );
-      };
+      await EscuelaService.eliminarEscuela( token, escuelaId );
 
     } catch ( error ) {
       console.log( error );
-      toast.error( 'Error al eliminar la escuela' );
+      throw error;
     }
   };
-
 
   return { 
     unirmeAEscuela,

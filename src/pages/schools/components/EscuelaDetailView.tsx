@@ -225,7 +225,7 @@ export default function EscuelaDetailView({ escuela, onBack }: EscuelaDetailView
 
                     <div className="flex-1 text-left">
                       <p className="text-white text-sm font-medium">
-                        {grado.numero}º {grado.letra}
+                        {grado.numero}º Grado - Grupo {grado.letra}
                       </p>
                       <p className="text-purple-200/40 text-xs">
                         Turno: {grado.turno}

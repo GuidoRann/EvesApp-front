@@ -6,6 +6,7 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { useManagementEscuelas } from '../hooks/useManagementEscuela';
+import axios from 'axios';
 
 interface CreateEscuelaFormProps {
   onBack: () => void;
@@ -37,10 +38,15 @@ export default function CreateEscuelaForm({ onBack, onSubmit }: CreateEscuelaFor
 
       const newEscuela: EscuelaType = await crearEscuela( escuela );
   
-      toast.success('✅ Escuela creada exitosamente!');
+      toast.success('Escuela creada exitosamente!');
   
       onSubmit( newEscuela );
     } catch (error) {
+      if ( axios.isAxiosError( error ) && error.response?.status === 500 ) {
+        toast.error("Ya existe una escuela con ese número");
+        return;
+      }
+
       console.error("Error al crear escuela:", error);
       toast.error("No se pudo crear la escuela");
     } finally {
