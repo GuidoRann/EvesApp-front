@@ -13,7 +13,7 @@ export const useManagementGrados = () => {
 
       return await GradoService.crearGrado( token, grado );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 
@@ -26,7 +26,7 @@ export const useManagementGrados = () => {
 
       return await GradoService.obtenerGrado( token, gradoId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 
@@ -39,7 +39,7 @@ export const useManagementGrados = () => {
 
       return await GradoService.listarGrados( token );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 
@@ -52,7 +52,7 @@ export const useManagementGrados = () => {
 
       return await GradoService.actualizarGrado( token, gradoId, grado );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 
@@ -65,7 +65,7 @@ export const useManagementGrados = () => {
 
       return await GradoService.eliminarGrado( token, gradoId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 

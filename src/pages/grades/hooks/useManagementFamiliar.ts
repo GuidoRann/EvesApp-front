@@ -22,7 +22,7 @@ export const useManagementFamiliar = () => {
 
       return response.body;
     } catch ( error ) {
-      console.log( error );      
+      throw error;     
     } 
   }
 
@@ -37,7 +37,7 @@ export const useManagementFamiliar = () => {
 
       return response.body;
     } catch ( error ) {
-      console.log( error );      
+      throw error;     
     } 
   }
 
@@ -50,7 +50,7 @@ export const useManagementFamiliar = () => {
 
       return await FamiliarService.obtenerFamiliar( token, familiarId );
     } catch ( error ) {
-      console.log( error );      
+      throw error;     
     }
   }
 
@@ -63,7 +63,7 @@ export const useManagementFamiliar = () => {
 
       return await FamiliarService.obtenerFamiliarPorDni( token, familiarDni );
     } catch ( error ) {
-      console.log( error );      
+      throw error;     
     }
   }
 

@@ -15,7 +15,7 @@ export const useManagementAlumnos = () => {
 
       return response.body;
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -28,7 +28,7 @@ export const useManagementAlumnos = () => {
 
       return await AlumnoService.obtenerAlumno( token, alumnoId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -41,7 +41,7 @@ export const useManagementAlumnos = () => {
 
       return await AlumnoService.actualizarAlumno( token, alumnoId, alumno );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -54,7 +54,7 @@ export const useManagementAlumnos = () => {
 
       return await AlumnoService.eliminarAlumno( token, alumnoId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 

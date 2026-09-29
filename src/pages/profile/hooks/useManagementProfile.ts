@@ -17,7 +17,7 @@ export const useManagementProfile = () => {
 
       await MaestraService.obtenerOCrearMaestra( token );
     } catch (error) {
-      console.log( error );
+      throw error;
     }
   };
   
@@ -31,7 +31,7 @@ export const useManagementProfile = () => {
       const response = await MaestraService.obtenerPerfil( token );
       setMaestra( response.body );
     } catch (error) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -44,7 +44,7 @@ export const useManagementProfile = () => {
   
       return await MaestraService.obtenerMaestra( token, maestraId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -58,7 +58,7 @@ export const useManagementProfile = () => {
       const response =await MaestraService.actualizarMaestra( token, maestraId, maestra );
       setMaestra( response.body );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   };
 
@@ -71,7 +71,7 @@ export const useManagementProfile = () => {
   
       await MaestraService.eliminarMaestra( token, maestraId );
     } catch ( error ) {
-      console.log( error );
+      throw error;
     }
   }
 
