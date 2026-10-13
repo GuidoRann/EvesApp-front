@@ -53,7 +53,7 @@ export default function CreateAlumnoView({ onBack, onSubmit }: CreateAlumnoViewP
 
       const newAlumno: AlumnoType = await crearAlumno( alumno );
 
-      toast.success('✅ Alumno creado exitosamente!');
+      toast.success('Alumno creado exitosamente!');
 
       onSubmit( newAlumno );
 

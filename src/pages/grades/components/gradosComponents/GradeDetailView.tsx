@@ -58,7 +58,7 @@ export default function GradeDetailView() {
   
   //TODO: actualizar con el endpoint correspondiente
   const handleAsistencias = () => {
-    navigate(`/grades/${ gradoId }/grades`);    
+    navigate(`/grades/${ gradoId }/asistences`);    
   };
 
 

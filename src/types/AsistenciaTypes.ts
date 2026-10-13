@@ -8,8 +8,12 @@ export interface AsistenciaType {
   alumno: AlumnoType;
 }
 
+export interface AsistenciaAlumnoDTO {
+  alumnoId: string;
+  asistio: boolean;
+}
+
 export interface CreateAsistenciaDTO {
   fecha: Date;
-  asistio: boolean;
-  alumno: AlumnoType;
+  alumnos: AsistenciaAlumnoDTO[];
 }

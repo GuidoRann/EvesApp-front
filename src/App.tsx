@@ -13,6 +13,9 @@ import AlumnosListView from './pages/grades/components/alumnosComponents/Alumnos
 import GradeDetailView from './pages/grades/components/gradosComponents/GradeDetailView';
 import AlumnosDetailView from './pages/grades/components/alumnosComponents/AlumnosDetailView';
 import MateriasListView from './pages/grades/components/materiasComponents/MateriasListView';
+import NotasListView from './pages/grades/components/notasComponents/NotasListView';
+import AsistenciasListView from './pages/grades/components/asistenciasComponents/CreateAsistenciaView';
+import MaestrasListView from './pages/grades/components/maestrasComponents/MaestrasListView';
 
 function App() {  
 
@@ -45,6 +48,15 @@ function App() {
               
               {/* Vista de materias */}
               <Route path=":gradoId/subject" element={<MateriasListView />} />
+              
+              {/* Vista de notas */}
+              <Route path=":gradoId/grades" element={<NotasListView />} />
+              
+              {/* Vista de asistencias */}
+              <Route path=":gradoId/asistences" element={<AsistenciasListView />} />
+              
+              {/* Vista de maestras */}
+              <Route path=":gradoId/teachers" element={<MaestrasListView />} />
             </Route>
 
             <Route path="/schools" element={<Schools />} />

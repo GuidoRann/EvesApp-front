@@ -1,13 +1,31 @@
+import type { CreateAsistenciaDTO } from '@/types/AsistenciaTypes';
 import axios from 'axios';
 
 export default class AsistenciaService {
-  static BASE_URL = "http://localhost:8080/api/asistencia";
+  static BASE_URL = "http://localhost:3000/api/asistencia";
 
-  static async crearAsistencia( token: string | null, asistencia: any ) {
+  static async crearAsistencia( token: string | null, asistencias: CreateAsistenciaDTO ) {
     try {
       const response = await axios.post( 
-        `${ this.BASE_URL }`,
-        asistencia,
+        `${ this.BASE_URL }/crearAsistencias`,
+        asistencias,
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
+  static async obtenerAsistenciasPorFecha( token: string | null, fecha: string ) {
+    try {
+      const response = await axios.get( 
+        `${ this.BASE_URL }/obtenerAsistenciasPorFecha/${ fecha }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
