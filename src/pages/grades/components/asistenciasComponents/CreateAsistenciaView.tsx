@@ -4,8 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGradoStore } from '@/stores/Grado.store';
 import type { AlumnoType } from '@/types/AlumnoTypes';
 import { useManagementAsistencias } from '../../hooks/useManagementAsistencias';
-import type { CreateAsistenciaDTO } from '@/types/AsistenciaTypes';
+import type { AsistenciaType, CreateAsistenciaDTO } from '@/types/AsistenciaTypes';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 type AttendanceRecord = AlumnoType & {
  asistio: boolean
@@ -21,17 +22,24 @@ export default function CreateAsistenciaView() {
   const { crearAsistencias, obtenerAsistenciasPorFecha } = useManagementAsistencias();
   
   const [ attendance, setAttendance ] = useState<Record<string, boolean>>({})
-  const [ saved, setSaved ] = useState( false )
 
   useEffect(() => {
     const fetchAttendance = async () => {
-      if( !grado ) return;
-      const asistencias = await obtenerAsistenciasPorFecha( grado.gradoId );
-      setAttendance( asistencias );
-      console.log("Asistencias obtenidas: ", asistencias);
+      const fecha = new Date().toISOString().split('T')[0];
+
+      const respuesta = await obtenerAsistenciasPorFecha( fecha );
+      
+      const asistencias = respuesta.body;
+
+      const attendanceMap: Record<string, boolean> = {};
+
+      asistencias.forEach(( asistencia: AsistenciaType ) => {
+        attendanceMap[ asistencia.alumno.alumnoId ] = asistencia.asistio;
+      });
+
+      setAttendance( attendanceMap );
     };
 
-    console.log("EJECUTANDO EL USEEFFECT");
     fetchAttendance();
   }, [ grado ]);
 
@@ -50,7 +58,6 @@ export default function CreateAsistenciaView() {
   }));
 
   function toggleAttendance( alumnoId: string ) {
-    setSaved(false)
     setAttendance((current) => ({
       ...current,
       [alumnoId]: !(current[alumnoId] ?? false),
@@ -154,11 +161,12 @@ export default function CreateAsistenciaView() {
           ))}
         </div>
 
-        <div>
-          <button
-            type='button'
+      </div>
+        <div className="p-4 border-t border-purple-500/10">
+          <Button
             onClick={ handleSubmit }
-            className='mt-6 w-full rounded-xl bg-fuchsia-500 px-4 py-3.5 font-semibold text-white shadow-lg shadow-fuchsia-950/30 transition hover:bg-fuchsia-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300'>
+            className='w-full h-12 bg-purple-500 hover:bg-purple-600 text-white font-semibold'>
+            
             { isCreating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -167,20 +175,8 @@ export default function CreateAsistenciaView() {
             ) : (
               "Enviar Asistencias"
             ) }
-          </button>
-
-          {/* <details className='mt-6 rounded-xl border border-purple-300/10 bg-black/10 p-3 text-xs text-purple-200/60'>
-            <summary className='cursor-pointer font-medium text-purple-200/80'>Ver array que se enviará a la API</summary>
-            <pre className='mt-3 overflow-x-auto whitespace-pre-wrap'>
-              {JSON.stringify(
-                attendanceArray.map(({alumnoId, asistio}) => ({alumnoId, asistio})),
-                null,
-                2,
-              )}
-            </pre>
-          </details> */}
+          </Button>
         </div>
-      </div>
     </div>
   );
 }

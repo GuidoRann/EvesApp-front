@@ -25,7 +25,7 @@ export default class AsistenciaService {
   static async obtenerAsistenciasPorFecha( token: string | null, fecha: string ) {
     try {
       const response = await axios.get( 
-        `${ this.BASE_URL }/obtenerAsistenciasPorFecha/${ fecha }`,
+        `${ this.BASE_URL }/obtenerPorFecha/${ fecha }`,
         {
           headers: {
             Authorization: `Bearer ${ token }`
