@@ -12,10 +12,10 @@ import { Toaster } from 'sonner'
 import AlumnosListView from './pages/grades/components/alumnosComponents/AlumnosListView';
 import GradeDetailView from './pages/grades/components/gradosComponents/GradeDetailView';
 import AlumnosDetailView from './pages/grades/components/alumnosComponents/AlumnosDetailView';
-import MateriasListView from './pages/grades/components/materiasComponents/MateriasListView';
-import NotasListView from './pages/grades/components/notasComponents/NotasListView';
+import MateriasListView from './pages/grades/components/notasComponents/NotasListView';
 import AsistenciasListView from './pages/grades/components/asistenciasComponents/CreateAsistenciaView';
 import MaestrasListView from './pages/grades/components/maestrasComponents/MaestrasListView';
+import NotasListView from './pages/grades/components/notasComponents/NotasListView';
 
 function App() {  
 

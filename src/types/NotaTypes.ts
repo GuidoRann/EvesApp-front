@@ -10,6 +10,11 @@ export interface NotaType {
   materia: MateriaType;
 }
 
+export type NotaAlumnoDTO = {
+  alumnoId: string;
+  nota: string;
+};
+
 export interface CreateNotaDTO {
   plazo: string;
   letra: string;
@@ -17,3 +22,8 @@ export interface CreateNotaDTO {
   alumno: AlumnoType;
   materia: MateriaType;
 }
+
+export type CreateListadoNotasDTO = {
+  plazo: string;
+  notas: Record<string, NotaAlumnoDTO[]>;
+};

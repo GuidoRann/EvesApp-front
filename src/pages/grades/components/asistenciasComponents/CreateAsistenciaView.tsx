@@ -80,8 +80,6 @@ export default function CreateAsistenciaView() {
   
       await crearAsistencias( listaAsistencia );
 
-      //TODO: Arreglar el problema de que crea asistencias repetidas el mismo dia para el mismo alumno en lugar de actualizarla
-  
       toast.success( 'Asistencia creada exitosamente!' );
     } catch ( error ) {
       console.log("Error al crear asistencia:", error);
