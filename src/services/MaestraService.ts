@@ -1,3 +1,4 @@
+import type { updateMaestraDTO } from '@/types/MaestraTypes';
 import axios from "axios";
 
 export default class MaestraService {
@@ -37,6 +38,23 @@ export default class MaestraService {
     }
   }
 
+  static async listarMaestras( token: string | null ){
+    try {
+      const response = await axios.get( 
+        `${ this.BASE_URL }/listarMaestras`,
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
   static async obtenerPerfil( token: string | null ){
     try {
       const response = await axios.get( 
@@ -54,8 +72,24 @@ export default class MaestraService {
     }
   }
 
-  // TODO: Revisar tipo de data para no enviar "any"
-  static async actualizarMaestra( token: string | null, maestraId: string, data: any ){
+  static async agregarMaestra ( token: string | null, maestraId: string ){
+    try {
+      const response = await axios.post( 
+        `${ this.BASE_URL }/${ maestraId }`,
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
+
+  static async actualizarMaestra( token: string | null, maestraId: string, data: updateMaestraDTO ){
     try {
       const response = await axios.put( 
         `${ this.BASE_URL }/${ maestraId }`,

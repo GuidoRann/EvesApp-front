@@ -21,3 +21,10 @@ export interface CreateMaestraDTO {
   email: string;
   password: string;
 }
+
+export interface updateMaestraDTO {
+  nombre: string;
+  apellido: string;
+  email: string;
+  gradosGeneral: GradoType[];
+}

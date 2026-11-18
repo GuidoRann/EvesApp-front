@@ -95,7 +95,7 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
       </main>
       <Drawer
         open={ !!selectedEscuela }
-        onOpenChange={ ( open ) => { if ( !open ) setSelectedEscuela( null ); } }>
+        onOpenChange={ ( open ) => { if ( !open ) setSelectedEscuela( null ) } }>
         <DrawerContent className='bg-[#1a1025] border-purple-500/20 max-w-md mx-auto h-[85vh]'>
           <DrawerHeader className='sr-only'>
             <DrawerTitle>{ selectedEscuela?.nombre }</DrawerTitle>

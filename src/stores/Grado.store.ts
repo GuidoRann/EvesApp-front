@@ -1,11 +1,14 @@
 import type {AlumnoType} from "@/types/AlumnoTypes";
 import type {GradoType} from "@/types/GradoTypes";
+import type { MaestraType } from '@/types/MaestraTypes';
 import type { MateriaType } from '@/types/MateriaTypes';
 import {create} from "zustand";
 import {persist} from "zustand/middleware";
 
 interface GradoStore {
   grado: GradoType | null;
+  titular: MaestraType | null;
+  maestras: MaestraType[];
   loading: boolean;
 
   // Seccion Grado
@@ -15,6 +18,11 @@ interface GradoStore {
   addAlumno: ( alumno: AlumnoType ) => void;
   updateAlumno: ( alumno: AlumnoType ) => void;
   deleteAlumno: ( alumnoId: string ) => void;
+
+  // Seccion Maestras
+  addMaestra: ( maestra: MaestraType ) => void;
+  updateMaestra: ( maestra: MaestraType ) => void;
+  deleteMaestra: ( maestraId: string ) => void;
 
   // Seccion Materias
   addMateria: ( materia: MateriaType ) => void;
@@ -29,12 +37,17 @@ export const useGradoStore = create<GradoStore>()(
     ( set ) => ({
       grado: null,
 
+      titular: null,
+      maestras: [],
+
       alumnos: [],
       materias: [],
       
       loading: false,
 
       setGrado: ( grado: GradoType | null ) => set({ grado }),
+
+      // Seccion de alumnos
 
       setAlumnos: ( listaAlumnos: AlumnoType[] ) =>
         set(( state ) => {
@@ -84,6 +97,58 @@ export const useGradoStore = create<GradoStore>()(
           };
         }),
 
+      // Seccion de maestras
+
+      setMaestras: ( maestras: MaestraType[] ) =>
+        set(( state ) => {
+          if ( !state.grado ) return state;
+
+          return {
+            grado: {
+              ...state.grado,
+              maestras,
+            },
+          };
+        }),
+
+      addMaestra: ( maestra: MaestraType ) =>
+        set(( state ) => {
+          if ( !state.grado ) return state;
+
+          return {
+            grado: {
+              ...state.grado,
+              maestras: [...( state.grado.maestrasAdicionales ?? [] ), maestra ],
+            },
+          };
+        }),
+
+      updateMaestra: ( maestra: MaestraType ) =>
+        set(( state ) => {
+          if ( !state.grado ) return state;
+
+          return {
+            grado: {
+              ...state.grado,
+              maestras: ( state.grado.maestrasAdicionales ?? [] ).map(( m ) => ( m.maestraId === maestra.maestraId ? maestra : m )),
+            },
+          };
+        }),
+
+      deleteMaestra: ( maestraId: string ) =>
+        set(( state ) => {
+          if ( !state.grado ) return state;
+
+          return {
+            grado: {
+              ...state.grado,
+              maestras: ( state.grado.maestrasAdicionales ?? [] ).filter( ( m ) => m.maestraId !== maestraId ),
+            },
+          };
+        }),
+
+      // Seccion de materias
+
       setMaterias: ( materias: MateriaType[] ) =>
         set(( state ) => {
           if ( !state.grado ) return state;
@@ -131,6 +196,8 @@ export const useGradoStore = create<GradoStore>()(
             },
           };
         }),
+
+      // Seccion de limpieza
 
       clearAll: () =>
         set({

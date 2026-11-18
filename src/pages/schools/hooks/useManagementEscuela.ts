@@ -87,6 +87,7 @@ export const useManagementEscuelas = () => {
         setEscuela( response.body );
       };
 
+      return response.body
     } catch ( error ) {
       console.log( error );
       throw error;

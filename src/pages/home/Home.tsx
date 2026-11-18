@@ -1,21 +1,19 @@
-import { useEscuelaStore } from '@/stores/Escuela.store';
 import { BottomNav } from '../../components/BottomNav';
 import { useManagementEscuelas } from '../schools/hooks/useManagementEscuela';
 import { DashboardHeader } from './components/DashboardHeader';
 import { Reminders } from './components/Reminders';
 import { StatsCards } from './components/StatsCards';
 import { useEffect } from 'react';
+import { useManagementMaestra } from '../grades/hooks/useManagementMaestra';
 
 export default function Home() {
   const { listarEscuelas } = useManagementEscuelas();
-  const { setListaDeEscuelas } = useEscuelaStore();
+  const { obtenerListaMaestras } = useManagementMaestra();
 
-  
   useEffect(() => {
     const fetchData = async () => {
-      const escuelas = await listarEscuelas();
-      
-      setListaDeEscuelas(escuelas);
+      await listarEscuelas();
+      await obtenerListaMaestras();
     };
 
     fetchData();
