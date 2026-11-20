@@ -6,19 +6,6 @@ import type { updateMaestraDTO } from '@/types/MaestraTypes';
 export const useManagementMaestra = () => {
   const { setMaestra, setListaDeMaestras } = useMaestraStore();
 
-  const agregarMaestra = async ( maestraId: string ) => {
-    try {
-      const { data } = await supabase.auth.getSession();
-      const token = data.session?.access_token;
-
-      if ( !token ) return;
-
-      return await MaestraService.agregarMaestra( token, maestraId );
-    } catch ( error ) {
-      throw error;
-    }
-  };
-
   const obtenerMaestra = async ( maestraId: string ) => {
     try {
       const { data } = await supabase.auth.getSession();
@@ -81,7 +68,6 @@ export const useManagementMaestra = () => {
   };
 
   return {
-    agregarMaestra,
     obtenerMaestra,
     obtenerListaMaestras,
     actualizarMaestra,

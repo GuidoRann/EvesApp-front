@@ -90,4 +90,23 @@ export default class GradoService {
       throw error;
     }
   }
+
+  // Seccion de maestras
+  static async agregarMaestra( token: string | null, gradoId: string, maestraId: string ){
+    try {
+      const response = await axios.put( 
+        `${ this.BASE_URL }/agregarMaestra/${ gradoId }`,
+        { maestraId },
+        {
+          headers: {
+            Authorization: `Bearer ${ token }`
+          }
+        }
+      );
+
+      return response.data;
+    } catch ( error ) {
+      throw error;
+    }
+  }
 }

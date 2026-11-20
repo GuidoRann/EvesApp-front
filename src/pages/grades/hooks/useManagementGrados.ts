@@ -69,11 +69,27 @@ export const useManagementGrados = () => {
     }
   }
 
+  // Seccion de maestras
+
+  const agregarMaestra = async ( gradoId: string, maestraId: string ) => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        const token = data.session?.access_token;
+  
+        if ( !token ) return;
+  
+       return await GradoService.agregarMaestra( token, gradoId, maestraId );
+     } catch ( error ) {
+       throw error;
+    }
+  };
+
   return { 
     crearGrado, 
     obtenerGrado,
     listarGrados, 
     actualizarGrado, 
-    eliminarGrado 
+    eliminarGrado,
+    agregarMaestra
   }
 }

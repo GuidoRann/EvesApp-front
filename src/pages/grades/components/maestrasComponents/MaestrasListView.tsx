@@ -1,6 +1,5 @@
 import { useGradoStore } from '@/stores/Grado.store';
-import type { MaestraType } from '@/types/MaestraTypes';
-import { ArrowLeft, Plus, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AddMaestraView from './AddMaestraView';
@@ -9,7 +8,7 @@ type CurrentView = "list" | "add";
 
 export default function MaestrasListView() {
   const [ currentView, setCurrentView ] = useState<CurrentView>( "list" );
-  const { grado, addMaestra } = useGradoStore();
+  const grado = useGradoStore(state => state.grado);
   
   if( !grado ) return null
   const maestras = grado.maestrasAdicionales ?? [];
@@ -21,14 +20,8 @@ export default function MaestrasListView() {
       setCurrentView( "add" );
   };
 
-  const handleSubmit = async ( maestra: MaestraType ) => {
-    addMaestra( maestra )
-    setCurrentView( "list" );
-  };
-
   if ( currentView === "add" ) {
     return (
-      // TODO: crear un desplegable para que aparezcan las maestras y se agreguen al grado
       <AddMaestraView
         onBack={ () => setCurrentView( "list" ) }
       />

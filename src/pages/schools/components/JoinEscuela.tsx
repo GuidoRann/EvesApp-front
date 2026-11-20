@@ -27,7 +27,13 @@ export default function JoinEscuela( { onBack }: JoinEscuelaProps ) {
   };
 
   const handleUnirme = async () => {
-    await unirmeAEscuela( selectedEscuela?.escuelaId! );
+    if ( !selectedEscuela ) return;
+
+    try {
+      await unirmeAEscuela( selectedEscuela?.escuelaId );
+    } catch ( error ) {
+      console.log( error );
+    }
     
     setSelectedEscuela( null );
   };

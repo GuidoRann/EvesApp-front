@@ -72,23 +72,6 @@ export default class MaestraService {
     }
   }
 
-  static async agregarMaestra ( token: string | null, maestraId: string ){
-    try {
-      const response = await axios.post( 
-        `${ this.BASE_URL }/${ maestraId }`,
-        {
-          headers: {
-            Authorization: `Bearer ${ token }`
-          }
-        }
-      );
-
-      return response.data;
-    } catch ( error ) {
-      throw error;
-    }
-  }
-
   static async actualizarMaestra( token: string | null, maestraId: string, data: updateMaestraDTO ){
     try {
       const response = await axios.put( 

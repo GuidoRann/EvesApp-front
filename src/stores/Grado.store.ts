@@ -8,7 +8,7 @@ import {persist} from "zustand/middleware";
 interface GradoStore {
   grado: GradoType | null;
   titular: MaestraType | null;
-  maestras: MaestraType[];
+  maestrasAdicionales : MaestraType[];
   loading: boolean;
 
   // Seccion Grado
@@ -38,7 +38,7 @@ export const useGradoStore = create<GradoStore>()(
       grado: null,
 
       titular: null,
-      maestras: [],
+      maestrasAdicionales : [],
 
       alumnos: [],
       materias: [],

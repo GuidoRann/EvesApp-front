@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Hash, MapPin, Phone, School } from 'lucide-react';
+import { ArrowLeft, Hash, Loader2, MapPin, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useGradoStore } from '@/stores/Grado.store';
@@ -7,6 +7,8 @@ import MaestraCard from './MaestraCard';
 import { useState } from 'react';
 import type { MaestraType } from '@/types/MaestraTypes';
 import { useMaestraStore } from '@/stores/Maestra.store';
+import { useManagementGrados } from '../../hooks/useManagementGrados';
+import { toast } from 'sonner';
 
 interface addMaestraProps {
   onBack: () => void
@@ -16,20 +18,46 @@ export default function AddMaestraView( { onBack }: addMaestraProps ) {
   const [ maestraSearch, setMaestraSearch ] = useState("");
   const [ selectedMaestra, setSelectedMaestra ] = useState<MaestraType | null>( null );
 
+  const [ isCreating, setIsCreating ] = useState( false );
+
+  const { agregarMaestra } = useManagementGrados();
+
   const listaMaestras = useMaestraStore( ( state ) => state.listaMaestras ?? [] );
 
-  console.log("maestras: ", listaMaestras);
-  console.log("selectedMaestra: ", selectedMaestra);
+  const { addMaestra } = useGradoStore();
 
   const grado = useGradoStore( ( state ) => state.grado );
 
   const filteredMaestras = listaMaestras.filter(
-    ( e ) => e.nombre.toLowerCase().includes( maestraSearch.toLowerCase() )
+    ( e ) =>
+      `${ e.nombre } ${ e.apellido }`
+        .toLowerCase()
+        .includes( maestraSearch.toLowerCase() )
   );
 
   const handleMaestraClick = ( maestra: MaestraType ) => {
     setSelectedMaestra( maestra );
   };
+
+  const handleSubmit = async () => {
+    if ( !selectedMaestra || !grado?.gradoId ) return;
+    setIsCreating(true);
+
+    try {
+      await agregarMaestra( grado.gradoId, selectedMaestra.maestraId );  
+      
+      addMaestra( selectedMaestra! );
+      
+      toast.success( 'Maestra agregada exitosamente!' );
+
+      onBack();
+    } catch ( error ) {
+      console.log("Error al agregar maestra: ", error );
+      toast.error( "No se pudo agregar la maestra" );
+    } finally {
+      setIsCreating( false );
+    }
+  }
   
   return (
     <div className='mx-auto flex h-dvh bg-background max-w-md flex-col'>
@@ -64,21 +92,23 @@ export default function AddMaestraView( { onBack }: addMaestraProps ) {
         <Input
           value={ maestraSearch }
           onChange={ ( e ) => setMaestraSearch( e.target.value ) }
-          placeholder='Buscar escuela'
+          placeholder='Buscar maestra'
           className="py-5 border-purple-500/30 bg-purple-900/20 pl-10 text-white placeholder:text-purple-300/50"
         />
         <div className='flex flex-col gap-3 pt-5 pb-24'>
           { filteredMaestras?.map(( maestra ) => {
+            const maestraTitular = grado?.maestraTitular?.maestraId === maestra.maestraId;
+            
             const yaUnida = grado?.maestrasAdicionales?.some(
               ( gradoMaestra ) => gradoMaestra.maestraId === maestra.maestraId
             );
 
+
             return(
               <MaestraCard
                 key={ maestra.maestraId }
-                name={ maestra.nombre }
-                gradesCount={ 0 }
-                alreadyJoined={ yaUnida }
+                maestra={ maestra }
+                alreadyJoined={ yaUnida || maestraTitular }
                 onClick={ () => handleMaestraClick( maestra ) }
               />
             )
@@ -91,42 +121,35 @@ export default function AddMaestraView( { onBack }: addMaestraProps ) {
         <DrawerContent className='bg-[#1a1025] border-purple-500/20 max-w-md mx-auto h-[85vh]'>
           <DrawerHeader className='sr-only'>
             <DrawerTitle>{ selectedMaestra?.nombre }</DrawerTitle>
-            <DrawerDescription>Datos de la escuela</DrawerDescription>
+            <DrawerDescription>Datos de la maestra</DrawerDescription>
           </DrawerHeader>
 
           <div className='flex flex-1 flex-col overflow-y-auto px-6 pt-6'>
             {/* Hero */}
             <div className='flex flex-col items-center text-center'>
-              <div className='h-20 w-60 rounded-2xl bg-amber-500/15 flex items-center justify-center'>
-                <School className='h-10 w-10 text-amber-400' />
+              <div className='h-20 w-60 rounded-2xl bg-cyan-500/15 flex items-center justify-center'>
+                <User className='h-10 w-10 text-cyan-400' />
               </div>
               <h2 className='mt-4 text-2xl font-bold text-white text-balance'>
-                { selectedMaestra?.nombre }
+                { selectedMaestra?.nombre } { selectedMaestra?.apellido }
               </h2>
-              <p className='mt-1 text-sm text-purple-200/50'>Datos de la escuela</p>
+              <p className='mt-1 text-sm text-purple-200/50'>Datos de la maestra</p>
             </div>
 
             {/* Detalles como lista limpia */}
             <div className='mt-8 flex flex-col'>
               <div className='flex items-center gap-4 py-4 border-b border-purple-500/10'>
-                <Hash className='h-5 w-5 text-amber-400/80 shrink-0' />
-                <span className='text-sm text-purple-200/50 w-20'>Número</span>
+                <Hash className='h-5 w-5 text-cyan-400/80 shrink-0' />
+                <span className='text-sm text-purple-200/50 w-20'>Email</span>
                 <span className='flex-1 text-right text-white font-medium truncate'>
-                  {/* { selectedEscuela?.numero } */}
+                  { selectedMaestra?.email }
                 </span>
               </div>
               <div className='flex items-center gap-4 py-4'>
-                <MapPin className='h-5 w-5 text-amber-400/80 shrink-0' />
-                <span className='text-sm text-purple-200/50 w-20'>Dirección</span>
+                <MapPin className='h-5 w-5 text-cyan-400/80 shrink-0' />
+                <span className='text-sm text-purple-200/50 w-20'>Escuelas como titular</span>
                 <span className='flex-1 text-right text-white font-medium truncate'>
-                  {/* { selectedEscuela?.direccion } */}
-                </span>
-              </div>
-              <div className='flex items-center gap-4 py-4'>
-                <Phone className='h-5 w-5 text-amber-400/80 shrink-0' />
-                <span className='text-sm text-purple-200/50 w-20'>Teléfono</span>
-                <span className='flex-1 text-right text-white font-medium truncate'>
-                  {/* { selectedEscuela?.telefono } */}
+                  { selectedMaestra?.gradosComoTitular?.length }
                 </span>
               </div>
             </div>
@@ -135,9 +158,16 @@ export default function AddMaestraView( { onBack }: addMaestraProps ) {
           {/* Footer button */}
           <div className='p-6'>
             <Button
-              // onClick={  }
-              className='w-full h-12 bg-amber-500 hover:bg-amber-600 text-white font-semibold'>
-              Unirme
+              onClick={ handleSubmit }
+              className='w-full h-12 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold'>
+              { isCreating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creando...
+                </>
+              ) : (
+                "Agregar maestra"
+              ) }
             </Button>
           </div>
         </DrawerContent>
